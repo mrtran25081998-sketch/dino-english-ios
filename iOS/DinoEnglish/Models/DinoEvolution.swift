@@ -2,6 +2,7 @@ import SwiftUI
 
 /// Cột mốc trưởng thành của khủng long Dino (20 cấp độ)
 public struct DinoMilestone: Identifiable, Hashable {
+    public var id: Int { level }
     public let level: Int
     public let title: String
     public let stageName: String
