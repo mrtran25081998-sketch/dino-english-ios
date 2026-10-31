@@ -28,7 +28,7 @@ jobs:
           mkdir -p build_output
           xcodebuild clean build \
             -project DinoEnglish.xcodeproj \
-            -scheme DinoEnglish \
+            -target DinoEnglish \
             -configuration Release \
             -sdk iphoneos \
             -derivedDataPath build_output \
