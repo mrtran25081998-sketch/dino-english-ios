@@ -20,8 +20,12 @@ const htmlTemplate = `<!doctype html>
 <html lang="vi">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>Dino English — iOS 3D Simulator (Windows Preview)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Dino English">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/mrtran25081998-sketch/dino-english-ios/main/iOS/DinoEnglish/Assets.xcassets/AppIcon.appiconset/AppIcon.png">
+  <title>Dino English — Ứng dụng tiếng Anh 3D cho bé</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;0,900;1,700;1,800&display=swap" rel="stylesheet">
@@ -499,6 +503,41 @@ const htmlTemplate = `<!doctype html>
       0% { transform: scale(1); }
       50% { transform: scale(1.1); }
       100% { transform: scale(1); }
+    }
+
+    /* Tối ưu toàn màn hình khi mở trên iPhone thực tế */
+    @media (max-width: 600px) {
+      body {
+        padding: 0 !important;
+        margin: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        overflow: hidden !important;
+        background: #83d9ff !important;
+      }
+      .header-bar {
+        display: none !important;
+      }
+      .iphone-frame {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .screen-wrapper {
+        border-radius: 0 !important;
+      }
+      .dynamic-island {
+        display: none !important;
+      }
+      .home-bar {
+        display: none !important;
+      }
     }
   </style>
 </head>
