@@ -104,24 +104,12 @@
       background: #111;
     }
 
-    /* Status Bar (Pinned at top) */
-    .status-bar {
-      flex-shrink: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 28px 8px;
-      font-size: 13px;
-      font-weight: 800;
-      color: #1a4a30;
-    }
-
     /* Content Area (The ONLY scrollable container inside iPhone) */
     .app-viewport {
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 10px 18px 24px;
+      padding: 14px 18px 24px;
       display: flex;
       flex-direction: column;
       scrollbar-width: none;
@@ -536,12 +524,6 @@
       <div class="dynamic-island">
         <div class="island-camera"></div>
         <div class="island-sensor"></div>
-      </div>
-
-      <!-- iOS Status Bar -->
-      <div class="status-bar">
-        <span>9:41</span>
-        <span>5G • 100% 🔋</span>
       </div>
 
       <!-- App Screen Content Root -->
