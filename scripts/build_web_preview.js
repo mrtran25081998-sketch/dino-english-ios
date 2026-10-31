@@ -607,13 +607,65 @@ const htmlTemplate = `<!doctype html>
       return \`<img src="\${src}" class="mascot-img \${sizeClass}" alt="\${name}">\`;
     }
 
-    function speakText(text) {
+    let cachedEnVoice = null;
+    let cachedViVoice = null;
+
+    function initVoices() {
       if (!('speechSynthesis' in window)) return;
+      const voices = window.speechSynthesis.getVoices();
+      if (!voices || voices.length === 0) return;
+
+      // Tìm giọng đọc tiếng Anh tự nhiên chất lượng cao (ưu tiên giọng Natural / Google / Studio)
+      const en = voices.filter(v => v.lang && (v.lang === 'en-US' || v.lang.startsWith('en')));
+      cachedEnVoice = en.find(v => v.name.includes('Natural') || v.name.includes('Online')) ||
+                      en.find(v => v.name.includes('Google') || v.name.includes('Premium')) ||
+                      en.find(v => v.name.includes('Samantha') || v.name.includes('Jenny') || v.name.includes('Zira') || v.name.includes('Ava')) ||
+                      en[0] || null;
+
+      // Tìm giọng tiếng Việt khi phát âm câu dịch tiếng Việt
+      const vi = voices.filter(v => v.lang && (v.lang === 'vi-VN' || v.lang.startsWith('vi')));
+      cachedViVoice = vi.find(v => v.name.includes('Natural') || v.name.includes('Online') || v.name.includes('Google')) ||
+                      vi.find(v => v.name.includes('An') || v.name.includes('Linh') || v.name.includes('HoaiMy')) ||
+                      vi[0] || null;
+    }
+
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.onvoiceschanged = initVoices;
+      initVoices();
+    }
+
+    let speechTimer = null;
+    function speakText(text) {
+      if (!('speechSynthesis' in window) || !text) return;
+      
+      // Chống rè / vấp âm do cancel() đột ngột
+      clearTimeout(speechTimer);
       window.speechSynthesis.cancel();
-      const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'en-US';
-      u.rate = state.speechRate;
-      window.speechSynthesis.speak(u);
+
+      speechTimer = setTimeout(() => {
+        try {
+          initVoices();
+          const cleanText = text.toString().trim();
+          const u = new SpeechSynthesisUtterance(cleanText);
+
+          // Nhận diện ngôn ngữ thông minh: Tiếng Anh đọc giọng bản ngữ Mỹ, Tiếng Việt đọc giọng Việt
+          const isVi = /[àáảãạăắằẳẵặâấầẩẫậèéẻẽẹêếềểễệìíỉĩịòóỏõọôốồổỗộơớờởỡợùúủũụưứừửữựỳýỷỹỵđ]/i.test(cleanText);
+          if (isVi) {
+            u.lang = 'vi-VN';
+            if (cachedViVoice) u.voice = cachedViVoice;
+          } else {
+            u.lang = 'en-US';
+            if (cachedEnVoice) u.voice = cachedEnVoice;
+          }
+
+          u.rate = state.speechRate || 0.88;
+          u.pitch = 1.0;
+          u.volume = 1.0;
+          window.speechSynthesis.speak(u);
+        } catch(e) {
+          console.warn("Speech error:", e);
+        }
+      }, 40);
     }
 
     function getTopic(id) {
