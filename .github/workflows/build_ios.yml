@@ -14,40 +14,45 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Select Xcode Version
+      - name: Select Xcode 15
         run: sudo xcode-select -s /Applications/Xcode_15.4.app
 
-      - name: Inspect Project & Schemes
+      - name: Verify Project Structure
         run: |
           cd iOS
           xcodebuild -list -project DinoEnglish.xcodeproj
 
-      - name: Build and Archive
+      - name: Compile Native iOS App
         run: |
           cd iOS
-          xcodebuild clean archive \
+          mkdir -p build_output
+          xcodebuild clean build \
             -project DinoEnglish.xcodeproj \
             -scheme DinoEnglish \
-            -destination "generic/platform=iOS" \
-            -archivePath build/DinoEnglish.xcarchive \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build_output \
             CODE_SIGNING_ALLOWED=NO \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGN_IDENTITY="" \
             AD_HOC_CODE_SIGNING_ALLOWED=YES
 
-      - name: Package .app into .ipa for Sideloading
+      - name: Package .ipa
         run: |
           cd iOS
-          mkdir -p build/Payload
-          cp -r build/DinoEnglish.xcarchive/Products/Applications/DinoEnglish.app build/Payload/
-          cd build
-          zip -r DinoEnglish.ipa Payload
-          echo "IPA build completed successfully!"
+          mkdir -p ipa_package/Payload
+          APP_PATH=$(find build_output -name "DinoEnglish.app" -type d | head -n 1)
+          echo "Found compiled app at: $APP_PATH"
+          cp -r "$APP_PATH" ipa_package/Payload/
+          cd ipa_package
+          zip -qr ../DinoEnglish.ipa Payload
+          cd ..
+          echo "DinoEnglish.ipa successfully created!"
           ls -lh DinoEnglish.ipa
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
         with:
           name: DinoEnglish-iOS-IPA
-          path: iOS/build/DinoEnglish.ipa
+          path: iOS/DinoEnglish.ipa
           retention-days: 14
