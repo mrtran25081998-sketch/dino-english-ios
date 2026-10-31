@@ -330,18 +330,33 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 12px;
+      margin-bottom: 14px;
+      padding: 6px 0 10px;
+      min-height: 48px;
+      position: relative;
+      z-index: 50;
     }
     .back-btn {
       background: #fff;
-      border: 2px solid #fff;
-      border-radius: 14px;
-      padding: 8px 14px;
+      border: 2px solid #bfe4cb;
+      border-radius: 16px;
+      min-width: 46px;
+      min-height: 46px;
+      padding: 0 14px;
       font-weight: 900;
-      font-size: 16px;
+      font-size: 22px;
       color: #1e7a3d;
-      box-shadow: 0 3px 0 #bfe4cb;
+      box-shadow: 0 4px 0 #a2d8b3, 0 4px 10px rgba(30, 122, 61, 0.15);
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: manipulation;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    .back-btn:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 #a2d8b3;
     }
 
     .badge-star {
@@ -501,6 +516,10 @@
       }
       .screen-wrapper {
         border-radius: 0 !important;
+        padding-top: max(env(safe-area-inset-top), 52px) !important;
+      }
+      .app-viewport {
+        padding-top: 4px !important;
       }
       .dynamic-island {
         display: none !important;
@@ -657,6 +676,45 @@
     function getLesson(topicId, lessonId) {
       const t = getTopic(topicId);
       return t.lessons.find(l => l.lessonId === lessonId) || t.lessons[0];
+    }
+
+    function getNextLessonInfo() {
+      const currentTopic = getTopic(state.currentTopicId);
+      const currentLesson = getLesson(state.currentTopicId, state.currentLessonId);
+
+      // Tìm bài học kế tiếp trong cùng chủ đề
+      const nextL = currentTopic.lessons.find(l => l.lessonId === state.currentLessonId + 1);
+      if (nextL) {
+        return {
+          topic: currentTopic,
+          lesson: nextL,
+          isNewTopic: false
+        };
+      }
+
+      // Nếu đã hết 10 bài của chủ đề này, tự động chuyển sang Bài 1 của Chủ đề tiếp theo
+      const curTopicIdx = DINO_DB.topics.findIndex(t => t.id === state.currentTopicId);
+      if (curTopicIdx >= 0 && curTopicIdx + 1 < DINO_DB.topics.length) {
+        const nextT = DINO_DB.topics[curTopicIdx + 1];
+        if (nextT.lessons && nextT.lessons.length > 0) {
+          return {
+            topic: nextT,
+            lesson: nextT.lessons[0],
+            isNewTopic: true
+          };
+        }
+      }
+      return null;
+    }
+
+    function startNextLesson(topicId, lessonId) {
+      state.currentTopicId = topicId;
+      state.currentLessonId = lessonId;
+      state.cardIndex = 0;
+      state.songLine = 0;
+      state.recognizedText = '';
+      saveState();
+      navigate('activity_hub');
     }
 
     function getEvolutionLevel() {
@@ -1063,16 +1121,52 @@
           break;
 
         case 'reward':
+          const nextInfo = getNextLessonInfo();
+          const curTopic = getTopic(state.currentTopicId);
+          const curLesson = getLesson(state.currentTopicId, state.currentLessonId);
+
           html = `
-            <div style="text-align:center; padding:20px 0;">
+            <div style="text-align:center; padding:10px 0 20px;">
               ${getDinoImg('reward', 'big')}
-              <div class="dino-card">
-                <h2 style="color:#28a44c; font-size:26px; margin:0 0 6px;">Chúc Mừng Bé! 🎉</h2>
-                <p style="color:#577464; font-size:14px; margin:0 0 12px;">Bé đã hoàn thành xuất sắc hoạt động này!</p>
-                <div class="badge-star" style="font-size:20px; padding:8px 20px;">⭐ +5 Ngôi Sao Vàng</div>
+              
+              <div class="dino-card" style="margin-bottom:14px;">
+                <h2 style="color:#28a44c; font-size:24px; margin:0 0 6px;">Chúc Mừng Bé! 🎉</h2>
+                <p style="color:#577464; font-size:14px; margin:0 0 10px;">Bé vừa hoàn thành bài học tại <b>${curTopic.nameVi}</b></p>
+                <div class="badge-star" style="font-size:18px; padding:6px 18px;">⭐ +5 Ngôi Sao Vàng</div>
               </div>
-              <button class="dino-btn" onclick="navigate('activity_hub')">Học Tiếp Bài Này ➔</button>
-              <button class="dino-outline-btn" onclick="navigate('growth')">Xem Dino Lớn Khôn 🦖</button>
+
+              ${nextInfo ? `
+                <!-- THẺ GỢI Ý BÀI HỌC TIẾP THEO -->
+                <div class="dino-card" style="background:linear-gradient(135deg, #fffbee 0%, #fff 100%); border:2.5px solid #ffbe2e; box-shadow:0 6px 0 #d9990e; text-align:left; margin-bottom:16px;">
+                  <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                    <span style="font-size:22px;">🚀</span>
+                    <b style="color:#a86900; font-size:14px; text-transform:uppercase; letter-spacing:0.5px;">Gợi Ý Bài Học Tiếp Theo:</b>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <div>
+                      <div style="font-size:18px; font-weight:900; color:#1e6a39;">Bài ${nextInfo.lesson.lessonId}: ${nextInfo.lesson.title}</div>
+                      <div style="font-size:13px; color:#557563; font-weight:700;">
+                        Chủ đề: ${nextInfo.topic.nameVi} ${nextInfo.isNewTopic ? '✨ (Chủ đề mới)' : ''} · 10 từ vựng
+                      </div>
+                    </div>
+                    <span style="font-size:32px;">${nextInfo.topic.icon || '📖'}</span>
+                  </div>
+                  <button class="dino-btn" style="margin-top:6px; background:linear-gradient(180deg, #ffae11, #f59e0b); color:#3d2402; font-weight:900; font-size:17px; box-shadow:0 5px 0 #c77700;" onclick="startNextLesson('${nextInfo.topic.id}', ${nextInfo.lesson.lessonId})">
+                    Bắt Đầu Bài Tiếp Theo ➔
+                  </button>
+                </div>
+              ` : `
+                <div class="dino-card" style="background:#eafbee; border-color:#84d89a; margin-bottom:14px;">
+                  <b style="color:#1e7a3d;">🏆 Bé thật tuyệt vời! Đã hoàn thành tất cả 120 bài học!</b>
+                </div>
+              `}
+
+              <!-- Các nút phụ trợ -->
+              <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <button class="dino-outline-btn" style="flex:1;" onclick="navigate('activity_hub')">↺ Ôn Lại Bài Này</button>
+                <button class="dino-outline-btn" style="flex:1;" onclick="navigate('lesson_list')">📋 Danh Sách Bài</button>
+              </div>
+              <button class="dino-outline-btn" style="width:100%;" onclick="navigate('growth')">🦖 Xem Dino Lớn Khôn</button>
             </div>
           `;
           speakText("Awesome! You earned stars!");

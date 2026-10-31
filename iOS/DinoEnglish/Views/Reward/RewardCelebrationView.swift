@@ -2,6 +2,8 @@ import SwiftUI
 
 /// Màn hình nhận thưởng và chúc mừng bé hoàn thành bài học
 public struct RewardCelebrationView: View {
+    @EnvironmentObject var model: LearningViewModel
+    
     public let title: String
     public let subtitle: String
     public let points: Int
@@ -69,6 +71,28 @@ public struct RewardCelebrationView: View {
                         .padding(.vertical, 10)
                         .background(DinoStyle.yellowLight.opacity(0.8), in: Capsule())
                         .overlay(Capsule().stroke(DinoStyle.yellowDark.opacity(0.5), lineWidth: 1.5))
+                        // Gợi ý bài học tiếp theo nếu có
+                        if let next = model.nextSuggestedLesson {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Text("🚀")
+                                    Text("BÀI HỌC TIẾP THEO:")
+                                        .font(.system(size: 11, weight: .black, design: .rounded))
+                                        .foregroundStyle(Color(red: 0.65, green: 0.42, blue: 0.02))
+                                }
+                                
+                                Text("Bài \(next.lesson.lessonId): \(next.lesson.title)")
+                                    .font(.system(size: 16, weight: .heavy, design: .rounded))
+                                    .foregroundStyle(DinoStyle.green)
+                                
+                                Text("Chủ đề: \(next.topic.nameVi) · 10 từ vựng")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundStyle(DinoStyle.textMuted)
+                            }
+                            .padding(12)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(DinoStyle.greenLight.opacity(0.6), in: RoundedRectangle(cornerRadius: 14))
+                        }
                     }
                     .padding(.vertical, 6)
                 }
@@ -76,8 +100,15 @@ public struct RewardCelebrationView: View {
                 
                 Spacer()
                 
-                // Nút tiếp tục
-                Dino3DButton("Tuyệt Vời! Tiếp Tục Nào ➔", color: DinoStyle.yellow, shadowColor: DinoStyle.yellowDark) {
+                // Nút chuyển bài tiếp theo hoặc tiếp tục
+                Dino3DButton(
+                    model.nextSuggestedLesson != nil ? "Bắt Đầu Bài Tiếp Theo ➔" : "Tuyệt Vời! Tiếp Tục Nào ➔",
+                    color: DinoStyle.yellow,
+                    shadowColor: DinoStyle.yellowDark
+                ) {
+                    if model.nextSuggestedLesson != nil {
+                        model.selectNextLesson()
+                    }
                     onContinue()
                 }
                 .padding(.horizontal, 24)

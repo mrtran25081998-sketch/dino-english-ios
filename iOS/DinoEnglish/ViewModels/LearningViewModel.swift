@@ -148,4 +148,28 @@ public final class LearningViewModel: ObservableObject {
         completedActivityIDs.removeAll()
         dailyStreak = 1
     }
+    
+    /// Gợi ý bài học kế tiếp cho bé (trong cùng chủ đề hoặc bài 1 chủ đề kế tiếp)
+    public var nextSuggestedLesson: (topic: DinoTopic, lesson: DinoLesson)? {
+        guard let currentTopic = currentSelectedTopic, let currentLesson = currentSelectedLesson else { return nil }
+        if let nextL = currentTopic.lessons.first(where: { $0.lessonId == currentLesson.lessonId + 1 }) {
+            return (currentTopic, nextL)
+        }
+        let topics = DinoContentRepository.shared.topics
+        if let curIdx = topics.firstIndex(where: { $0.id == currentTopic.id }), curIdx + 1 < topics.count {
+            let nextT = topics[curIdx + 1]
+            if let firstL = nextT.lessons.first {
+                return (nextT, firstL)
+            }
+        }
+        return nil
+    }
+    
+    /// Tự động chuyển chọn bài học tiếp theo
+    public func selectNextLesson() {
+        if let next = nextSuggestedLesson {
+            currentSelectedTopic = next.topic
+            currentSelectedLesson = next.lesson
+        }
+    }
 }
