@@ -1,0 +1,53 @@
+name: Build iOS IPA (Dino English)
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Cho phép bấm nút Build thủ công trên GitHub
+
+jobs:
+  build-ipa:
+    name: Build Native iOS App (.ipa)
+    runs-on: macos-14 # Chạy trên máy chủ Mac Sonoma trang bị Xcode 15/16
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Select Xcode Version
+        run: sudo xcode-select -s /Applications/Xcode_15.4.app
+
+      - name: Inspect Project & Schemes
+        run: |
+          cd iOS
+          xcodebuild -list -project DinoEnglish.xcodeproj
+
+      - name: Build and Archive
+        run: |
+          cd iOS
+          xcodebuild clean archive \
+            -project DinoEnglish.xcodeproj \
+            -scheme DinoEnglish \
+            -destination "generic/platform=iOS" \
+            -archivePath build/DinoEnglish.xcarchive \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES
+
+      - name: Package .app into .ipa for Sideloading
+        run: |
+          cd iOS
+          mkdir -p build/Payload
+          cp -r build/DinoEnglish.xcarchive/Products/Applications/DinoEnglish.app build/Payload/
+          cd build
+          zip -r DinoEnglish.ipa Payload
+          echo "IPA build completed successfully!"
+          ls -lh DinoEnglish.ipa
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: DinoEnglish-iOS-IPA
+          path: iOS/build/DinoEnglish.ipa
+          retention-days: 14

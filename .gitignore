@@ -1,0 +1,11 @@
+# Xcode & macOS
+build/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.DS_Store
+
+# Node & Temp
+node_modules/
+.temp/
+*.log
