@@ -26,16 +26,28 @@ jobs:
         run: |
           cd iOS
           mkdir -p build_output
+          set +e
           xcodebuild clean build \
             -project DinoEnglish.xcodeproj \
-            -target DinoEnglish \
+            -scheme DinoEnglish \
             -configuration Release \
-            -sdk iphoneos \
+            -destination "generic/platform=iOS" \
             -derivedDataPath build_output \
-            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_IDENTITY="-" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            AD_HOC_CODE_SIGNING_ALLOWED=YES
+            CODE_SIGNING_ALLOWED=YES \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES 2>&1 | tee xcodebuild.log
+          BUILD_STATUS=${PIPESTATUS[0]}
+          if [ $BUILD_STATUS -ne 0 ]; then
+            echo "### ❌ Xcode Build Error Details" >> $GITHUB_STEP_SUMMARY
+            echo '```text' >> $GITHUB_STEP_SUMMARY
+            grep -C 2 -E "error:|fatal:" xcodebuild.log | head -n 60 >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "=== FULL ERROR LOG ==="
+            tail -n 100 xcodebuild.log
+            exit $BUILD_STATUS
+          fi
+          set -e
 
       - name: Package .ipa
         run: |
