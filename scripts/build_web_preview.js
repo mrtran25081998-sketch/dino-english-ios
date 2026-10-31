@@ -1167,7 +1167,7 @@ const htmlTemplate = `<!doctype html>
                         Chủ đề: \${nextInfo.topic.nameVi} \${nextInfo.isNewTopic ? '✨ (Chủ đề mới)' : ''} · 10 từ vựng
                       </div>
                     </div>
-                    <span style="font-size:32px;">\${nextInfo.topic.icon || '📖'}</span>
+                    <span style="font-size:32px;">\${getTopicEmoji(nextInfo.topic.id) || '📖'}</span>
                   </div>
                   <button class="dino-btn" style="margin-top:6px; background:linear-gradient(180deg, #ffae11, #f59e0b); color:#3d2402; font-weight:900; font-size:17px; box-shadow:0 5px 0 #c77700;" onclick="startNextLesson('\${nextInfo.topic.id}', \${nextInfo.lesson.lessonId})">
                     Bắt Đầu Bài Tiếp Theo ➔
