@@ -243,6 +243,114 @@
       box-shadow: 0 1px 0 #bde6cb;
     }
 
+    /* Form Controls */
+    .form-group {
+      text-align: left;
+      margin-bottom: 11px;
+    }
+    .form-label {
+      font-size: 13px;
+      font-weight: 800;
+      color: #26593a;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #a8d6b1;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      color: #1e6a39;
+      background: #fffdf5;
+      outline: none;
+      box-sizing: border-box;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .form-input:focus {
+      border-color: #26a84f;
+      box-shadow: 0 0 0 3px rgba(38, 168, 79, 0.15);
+      background: #ffffff;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      color: #5b7c6b;
+      padding: 0;
+    }
+    .form-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: #557763;
+      cursor: pointer;
+      line-height: 1.4;
+      text-align: left;
+      margin: 10px 0;
+    }
+    .form-checkbox-label input {
+      margin-top: 2px;
+      accent-color: #26a84f;
+      cursor: pointer;
+    }
+    .chip-group {
+      display: flex;
+      gap: 8px;
+    }
+    .chip-btn {
+      flex: 1;
+      padding: 10px 6px;
+      border: 2px solid #bce4c8;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      color: #3b6b4e;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.15s;
+    }
+    .chip-btn.active {
+      border-color: #26a84f;
+      background: #eafbee;
+      color: #1e7a3d;
+      box-shadow: 0 2px 0 #a2d8b3;
+    }
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 8px 0;
+    }
+    .avatar-choice {
+      border: 2.5px solid #d4ede0;
+      border-radius: 16px;
+      background: #fff;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+    .avatar-choice.active {
+      border-color: #26a84f;
+      background: #eafbee;
+      transform: scale(1.05);
+      box-shadow: 0 4px 10px rgba(38, 168, 79, 0.2);
+    }
+
     /* Grids & Lists */
     .grid-2 {
       display: grid;
@@ -526,6 +634,144 @@
       100% { transform: scale(1); }
     }
 
+    /* Form Controls & Auth Styles */
+    .form-group {
+      margin-bottom: 12px;
+      text-align: left;
+    }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 800;
+      color: #235438;
+      margin-bottom: 5px;
+    }
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #bce4c8;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1e6a39;
+      background: #fff;
+      box-sizing: border-box;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-input:focus {
+      border-color: #28a44c;
+      background: #fffdfa;
+      box-shadow: 0 0 0 3px rgba(40, 164, 76, 0.18);
+    }
+    .toggle-pwd-btn {
+      position: absolute;
+      right: 12px;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      font-size: 17px;
+      padding: 4px;
+      color: #557763;
+    }
+    .chip-group {
+      display: flex;
+      gap: 8px;
+    }
+    .chip-btn {
+      flex: 1;
+      padding: 10px 6px;
+      border: 2px solid #bce4c8;
+      border-radius: 14px;
+      background: #fff;
+      color: #346045;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s;
+    }
+    .chip-btn.active {
+      background: #28a44c;
+      color: #fff;
+      border-color: #1e7a3d;
+      box-shadow: 0 3px 0 #185e2f;
+    }
+    .avatar-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin: 10px 0;
+    }
+    .avatar-choice {
+      border: 2.5px solid #cfead6;
+      border-radius: 16px;
+      padding: 6px;
+      cursor: pointer;
+      background: #fff;
+      transition: all 0.2s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .avatar-choice.active {
+      border-color: #28a44c;
+      background: #eafbee;
+      box-shadow: 0 4px 0 #185e2f;
+      transform: translateY(-2px);
+    }
+    .terms-checkbox {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 12px;
+      color: #4c6f5a;
+      text-align: left;
+      margin: 12px 0;
+      line-height: 1.4;
+    }
+    .error-banner {
+      background: #ffe8ea;
+      border: 1.5px solid #ff7a88;
+      color: #b81427;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .success-banner {
+      background: #eafbee;
+      border: 1.5px solid #63c983;
+      color: #166933;
+      font-size: 13px;
+      font-weight: 700;
+      padding: 8px 12px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .stat-card {
+      background: #fff;
+      border: 2px solid #d4ecd9;
+      border-radius: 16px;
+      padding: 10px 8px;
+      text-align: center;
+      box-shadow: 0 3px 0 #b3dfbe;
+    }
+
     /* Tối ưu toàn màn hình khi mở trên iPhone thực tế */
     @media (max-width: 600px) {
       body {
@@ -628,7 +874,7 @@
 
     // App State
     let state = {
-      view: 'onboard', // onboard, login, home, topics, lessons, activity_hub, vocab, pron, game, song, reward, growth, profile
+      view: 'onboard', // onboard, login, signup, verify_email, forgot_password, reset_password, child_setup, parent_dashboard, home, topics, lessons, activity_hub, vocab, pron, game, song, reward, growth, profile
       onboardStep: 0,
       kidName: localStorage.getItem('dino_kid_name') || 'Bé Na',
       stars: parseInt(localStorage.getItem('dino_stars') || '15', 10),
@@ -652,7 +898,16 @@
       supabaseKey: localStorage.getItem('dino_supabase_key') || '',
       supabaseUser: JSON.parse(localStorage.getItem('dino_supabase_user') || 'null'),
       supabaseClient: null,
-      loginTab: 'kid', // 'kid' or 'parent'
+      parentProfile: null,
+      children: [],
+      activeChildId: localStorage.getItem('dino_active_child_id') || null,
+      activeChild: null,
+      showPassword: false,
+      showConfirmPassword: false,
+      pendingVerifyEmail: '',
+      selectedAvatar: 'welcome',
+      selectedAgeGroup: '6-8',
+      isSubmitting: false,
       syncStatus: ''
     };
 
@@ -662,6 +917,7 @@
       localStorage.setItem('dino_completed_lessons', JSON.stringify(state.completedLessons));
       localStorage.setItem('dino_completed_activities', JSON.stringify(state.completedActivities));
       if (state.supabaseKey) localStorage.setItem('dino_supabase_key', state.supabaseKey);
+      if (state.activeChildId) localStorage.setItem('dino_active_child_id', state.activeChildId);
       if (state.supabaseUser) {
         localStorage.setItem('dino_supabase_user', JSON.stringify(state.supabaseUser));
       } else {
@@ -672,80 +928,127 @@
     function initSupabase() {
       if (window.supabase && state.supabaseKey) {
         try {
-          state.supabaseClient = window.supabase.createClient(state.supabaseUrl, state.supabaseKey);
+          state.supabaseClient = window.supabase.createClient(state.supabaseUrl, state.supabaseKey, {
+            auth: {
+              persistSession: true,
+              autoRefreshToken: true,
+              detectSessionInUrl: true
+            }
+          });
         } catch (e) {
           console.warn('Supabase client error:', e);
         }
       }
     }
 
-    async function syncLessonToSupabase(topicId, lessonId) {
-      if (!state.supabaseClient || !state.supabaseUser) return;
-      try {
-        const lessonKey = `${topicId}_l${lessonId}`;
-        await state.supabaseClient
-          .from('lesson_progress')
-          .upsert({
-            user_id: state.supabaseUser.id,
-            topic_id: topicId,
-            lesson_id: lessonId,
-            lesson_key: lessonKey,
-            stars_earned: 5,
-            is_completed: true,
-            completed_at: new Date().toISOString()
-          }, { onConflict: 'user_id,lesson_key' });
+    async function initSessionAndRouting() {
+      if (window.location.hash.includes('type=recovery')) {
+        state.view = 'reset_password';
+        render();
+        return;
+      }
 
-        await state.supabaseClient
-          .from('profiles')
-          .update({
-            stars: state.stars,
-            streak: state.streak,
-            current_topic_id: topicId,
-            current_lesson_id: lessonId,
-            updated_at: new Date().toISOString()
-          })
-          .eq('id', state.supabaseUser.id);
-      } catch (err) {
-        console.warn('Sync lesson to Supabase error:', err);
+      initSupabase();
+      if (state.supabaseClient) {
+        try {
+          const { data: { session } } = await state.supabaseClient.auth.getSession();
+          if (session && session.user) {
+            await handleSessionSuccess(session.user);
+          }
+        } catch (err) {
+          console.warn("Session check error:", err);
+        }
+
+        state.supabaseClient.auth.onAuthStateChange(async (event, session) => {
+          if (event === 'SIGNED_IN' && session && session.user) {
+            await handleSessionSuccess(session.user);
+          } else if (event === 'SIGNED_OUT') {
+            state.supabaseUser = null;
+            state.parentProfile = null;
+            state.children = [];
+            state.activeChild = null;
+            saveState();
+            navigate('login');
+          } else if (event === 'PASSWORD_RECOVERY') {
+            state.view = 'reset_password';
+            render();
+          }
+        });
       }
     }
 
-    async function loadCloudProgress() {
-      if (!state.supabaseClient || !state.supabaseUser) return;
+    async function handleSessionSuccess(user) {
+      state.supabaseUser = { id: user.id, email: user.email };
+      saveState();
+
       try {
-        state.syncStatus = 'Đang đồng bộ từ Supabase...';
-        
-        // 1. Tải Profile
         const { data: profile } = await state.supabaseClient
           .from('profiles')
           .select('*')
-          .eq('id', state.supabaseUser.id)
+          .eq('id', user.id)
           .maybeSingle();
-
-        if (profile) {
-          if (profile.kid_name) state.kidName = profile.kid_name;
-          if (profile.stars) state.stars = Math.max(state.stars, profile.stars);
-          if (profile.streak) state.streak = Math.max(state.streak, profile.streak);
-        }
-
-        // 2. Tải các bài học đã học
-        const { data: lessons } = await state.supabaseClient
-          .from('lesson_progress')
-          .select('lesson_key')
-          .eq('user_id', state.supabaseUser.id);
-
-        if (lessons && lessons.length > 0) {
-          const keys = lessons.map(l => l.lesson_key);
-          state.completedLessons = Array.from(new Set([...state.completedLessons, ...keys]));
-        }
-
-        state.syncStatus = `Đã đồng bộ ${state.completedLessons.length} bài học thành công!`;
-        saveState();
-        render();
-      } catch (err) {
-        state.syncStatus = 'Lỗi đồng bộ: ' + (err.message || err);
-        render();
+        state.parentProfile = profile || { id: user.id, email: user.email, full_name: 'Phụ huynh' };
+      } catch (e) {
+        console.warn("Load profile error:", e);
       }
+
+      try {
+        const { data: kids } = await state.supabaseClient
+          .from('children')
+          .select('*')
+          .eq('parent_id', user.id)
+          .order('created_at', { ascending: true });
+        state.children = kids || [];
+      } catch (e) {
+        console.warn("Load children error:", e);
+      }
+
+      if (!state.children || state.children.length === 0) {
+        navigate('child_setup');
+      } else {
+        const savedChildId = state.activeChildId || localStorage.getItem('dino_active_child_id');
+        const currentKid = state.children.find(k => k.id === savedChildId) || state.children[0];
+        await setActiveChild(currentKid.id);
+        navigate('home');
+      }
+    }
+
+    async function setActiveChild(childId) {
+      state.activeChildId = childId;
+      const kid = state.children.find(k => k.id === childId);
+      if (kid) {
+        state.activeChild = kid;
+        state.kidName = kid.display_name;
+      }
+      localStorage.setItem('dino_active_child_id', childId);
+
+      if (state.supabaseClient) {
+        try {
+          const { data: dino } = await state.supabaseClient
+            .from('dino_progress')
+            .select('*')
+            .eq('child_id', childId)
+            .maybeSingle();
+
+          if (dino) {
+            state.stars = dino.total_stars;
+          }
+
+          const { data: progress } = await state.supabaseClient
+            .from('learning_progress')
+            .select('lesson_id, status')
+            .eq('child_id', childId)
+            .eq('status', 'completed');
+
+          if (progress) {
+            state.completedLessons = progress.map(p => p.lesson_id);
+          }
+        } catch (e) {
+          console.warn("Load child progress error:", e);
+        }
+      }
+      saveState();
+      render();
     }
 
     function getDinoImg(name, sizeClass = '') {
@@ -982,57 +1285,361 @@
           break;
 
         case 'login':
-          const isKidTab = state.loginTab === 'kid';
           html = `
-            <div style="text-align:center; padding:30px 0 10px;">
+            <div style="text-align:center; padding:24px 0 16px;">
               <div class="brand-title">Dino <em>English</em></div>
-              <div class="mascot-box" style="margin:6px 0;">${getDinoImg('welcome', 'small')}</div>
+              <div class="mascot-box" style="margin:4px 0 8px;">${getDinoImg('welcome', 'small')}</div>
               
-              <!-- Tab chuyển đổi Bé học / Phụ huynh -->
-              <div style="display:flex; background:#e2f3e7; border-radius:14px; padding:3px; margin:0 0 12px; border:1px solid #bce4c8;">
-                <button onclick="setLoginTab('kid')" style="flex:1; padding:8px 0; border:0; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer; background:${isKidTab ? '#28a44c' : 'transparent'}; color:${isKidTab ? '#fff' : '#457256'}; transition:all 0.2s;">
-                  👶 Bé Học Nhanh
-                </button>
-                <button onclick="setLoginTab('parent')" style="flex:1; padding:8px 0; border:0; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer; background:${!isKidTab ? '#28a44c' : 'transparent'}; color:${!isKidTab ? '#fff' : '#457256'}; transition:all 0.2s;">
-                  ☁️ Phụ Huynh (Cloud)
-                </button>
-              </div>
+              <div class="dino-card" style="text-align:left;">
+                <h3 style="color:#1d703b; margin:0 0 4px; font-size:20px; text-align:center; font-weight:900;">Đăng Nhập Phụ Huynh</h3>
+                <p style="color:#577464; font-size:13px; margin:0 0 14px; text-align:center;">Ghi nhớ bài học & đồng bộ tiến độ của bé trên đám mây</p>
 
-              ${isKidTab ? `
-                <!-- TAB 1: BÉ HỌC NHANH (OFFLINE / LOCAL) -->
-                <div class="dino-card" style="text-align:center;">
-                  <h3 style="color:#2a974b; margin:0 0 6px; font-size:19px;">Đồng Hành Cùng Bé</h3>
-                  <p style="color:#577464; font-size:13px; margin:0 0 12px;">Nhập tên gọi thân mật của bé để bắt đầu hành trình học:</p>
-                  <input id="kidNameInput" value="${state.kidName}" placeholder="Ví dụ: Bé Na, Bé Bon..." style="width:100%; padding:12px; border:2px solid #a8d6b1; border-radius:14px; font-size:16px; font-weight:800; color:#1e7a3d; outline:none; text-align:center; background:#fffdf5; margin-bottom:12px; box-sizing:border-box;">
-                  <button class="dino-btn green" onclick="loginSubmit()">Vào Học Ngay 🌟</button>
-                  <button class="dino-outline-btn" style="margin-top:8px;" onclick="loginSubmit()">Dùng thử không cần mật khẩu ➔</button>
+                ${state.authError ? `<div class="error-banner"><span>⚠️</span> ${state.authError}</div>` : ''}
+                ${state.authSuccess ? `<div class="success-banner"><span>✅</span> ${state.authSuccess}</div>` : ''}
+
+                <div class="form-group">
+                  <label class="form-label">Email Phụ Huynh</label>
+                  <input id="loginEmail" type="email" class="form-input" placeholder="ba_me@example.com" value="${state.pendingVerifyEmail || ''}">
                 </div>
-              ` : `
-                <!-- TAB 2: ĐĂNG NHẬP / ĐĂNG KÝ PHỤ HUYNH SUPABASE -->
-                <div class="dino-card" style="text-align:left;">
-                  <h3 style="color:#1d703b; margin:0 0 4px; font-size:18px; text-align:center;">Tài Khoản Supabase</h3>
-                  <p style="color:#577464; font-size:12px; margin:0 0 10px; text-align:center;">Ghi nhớ bài học & đồng bộ trên mọi thiết bị</p>
-                  
-                  <div style="font-size:12px; font-weight:800; color:#3a654c; margin-bottom:3px;">Email Phụ Huynh:</div>
-                  <input id="sbEmailInput" type="email" placeholder="ba_me@gmail.com" style="width:100%; padding:10px 12px; border:1.5px solid #a8d6b1; border-radius:12px; font-size:14px; margin-bottom:8px; box-sizing:border-box;">
 
-                  <div style="font-size:12px; font-weight:800; color:#3a654c; margin-bottom:3px;">Mật Khẩu:</div>
-                  <input id="sbPasswordInput" type="password" placeholder="Tối thiểu 6 ký tự" style="width:100%; padding:10px 12px; border:1.5px solid #a8d6b1; border-radius:12px; font-size:14px; margin-bottom:8px; box-sizing:border-box;">
-
-                  <div style="font-size:12px; font-weight:800; color:#3a654c; margin-bottom:3px;">Tên Bé:</div>
-                  <input id="sbKidNameInput" value="${state.kidName}" placeholder="Tên bé" style="width:100%; padding:10px 12px; border:1.5px solid #a8d6b1; border-radius:12px; font-size:14px; margin-bottom:8px; box-sizing:border-box;">
-
-                  <div style="font-size:11px; font-weight:800; color:#3a654c; margin-bottom:3px;">Supabase Anon Key:</div>
-                  <input id="sbKeyInput" value="${state.supabaseKey}" placeholder="Dán anon public key từ Supabase" style="width:100%; padding:8px 10px; border:1.5px dashed #a8d6b1; border-radius:10px; font-size:11px; font-family:monospace; margin-bottom:12px; box-sizing:border-box; background:#fafdfb;">
-
-                  <div style="display:flex; gap:8px;">
-                    <button class="dino-btn green" style="flex:1; font-size:14px; padding:10px;" onclick="handleParentAuth(false)">Đăng Nhập ➔</button>
-                    <button class="dino-btn blue" style="flex:1; font-size:14px; padding:10px;" onclick="handleParentAuth(true)">Đăng Ký Mới</button>
+                <div class="form-group">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
+                    <label class="form-label" style="margin:0;">Mật Khẩu</label>
+                    <a href="javascript:void(0)" onclick="state.authError=''; navigate('forgot_password')" style="font-size:12px; color:#239446; font-weight:800; text-decoration:none;">Quên mật khẩu?</a>
+                  </div>
+                  <div class="input-wrapper">
+                    <input id="loginPassword" type="${state.showPassword ? 'text' : 'password'}" class="form-input" placeholder="Nhập mật khẩu" style="padding-right:42px;">
+                    <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('password')">
+                      ${state.showPassword ? '🙈' : '👁️'}
+                    </button>
                   </div>
                 </div>
-              `}
 
-              <p style="color:#6e8b7b; font-size:12px; margin-top:10px;">🛡️ Kết nối Supabase: Project wsaalmeuduiyqbptnrmy</p>
+                <!-- Anon Key Settings (pre-filled or customizable) -->
+                <div style="margin:10px 0 14px; background:#f4fbf5; border:1px dashed #9dd8ad; border-radius:12px; padding:8px 10px;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:800; color:#2d6342;">
+                    <span>🛡️ Supabase Project: <b>wsaalmeuduiyqbptnrmy</b></span>
+                  </div>
+                  <input id="loginAnonKey" type="text" class="form-input" style="font-size:11px; font-family:monospace; padding:6px 8px; margin-top:4px; height:32px;" placeholder="Dán publishable anon key từ Supabase" value="${state.supabaseKey}">
+                </div>
+
+                <button class="dino-btn green" style="width:100%; margin-top:4px;" onclick="handleLogin()" ${state.isSubmitting ? 'disabled' : ''}>
+                  ${state.isSubmitting ? '⏳ Đang Đăng Nhập...' : 'Đăng Nhập ➔'}
+                </button>
+
+                <div style="text-align:center; margin-top:14px; font-size:13px; color:#5c7e6c;">
+                  Chưa có tài khoản? <a href="javascript:void(0)" onclick="state.authError=''; navigate('signup')" style="color:#239446; font-weight:900; text-decoration:none;">Đăng Ký Ngay</a>
+                </div>
+              </div>
+
+              <!-- Nút vào nhanh cho bé -->
+              <div style="margin-top:12px; padding:0 8px;">
+                <button class="dino-outline-btn" style="width:100%; background:#fff; font-size:14px;" onclick="guestLogin()">
+                  👶 Dùng Thử Nhanh Cho Bé (Không cần tài khoản) ➔
+                </button>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'signup':
+          html = `
+            <div style="text-align:center; padding:20px 0 16px;">
+              <div class="brand-title">Dino <em>English</em></div>
+              <div class="mascot-box" style="margin:2px 0 6px;">${getDinoImg('welcome', 'small')}</div>
+              
+              <div class="dino-card" style="text-align:left;">
+                <h3 style="color:#1d703b; margin:0 0 4px; font-size:20px; text-align:center; font-weight:900;">Đăng Ký Tài Khoản</h3>
+                <p style="color:#577464; font-size:12px; margin:0 0 12px; text-align:center;">Dành cho phụ huynh để đồng bộ tiến độ học cho bé</p>
+
+                ${state.authError ? `<div class="error-banner"><span>⚠️</span> ${state.authError}</div>` : ''}
+
+                <div class="form-group">
+                  <label class="form-label">Họ và Tên Phụ Huynh</label>
+                  <input id="signupFullName" type="text" class="form-input" placeholder="Ví dụ: Nguyễn Văn A">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Email Phụ Huynh</label>
+                  <input id="signupEmail" type="email" class="form-input" placeholder="ba_me@example.com">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Mật Khẩu</label>
+                  <div class="input-wrapper">
+                    <input id="signupPassword" type="${state.showPassword ? 'text' : 'password'}" class="form-input" placeholder="Tối thiểu 6 ký tự" style="padding-right:42px;">
+                    <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('password')">
+                      ${state.showPassword ? '🙈' : '👁️'}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Xác Nhận Mật Khẩu</label>
+                  <div class="input-wrapper">
+                    <input id="signupConfirmPassword" type="${state.showConfirmPassword ? 'text' : 'password'}" class="form-input" placeholder="Nhập lại mật khẩu" style="padding-right:42px;">
+                    <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('confirm')">
+                      ${state.showConfirmPassword ? '🙈' : '👁️'}
+                    </button>
+                  </div>
+                </div>
+
+                <div class="terms-checkbox">
+                  <input id="signupTerms" type="checkbox" checked style="margin-top:2px; accent-color:#28a44c; width:18px; height:18px; cursor:pointer;">
+                  <label for="signupTerms" style="cursor:pointer;">
+                    Tôi đồng ý với <b>Điều khoản sử dụng</b> và cam kết bảo vệ quyền riêng tư cho trẻ em.
+                  </label>
+                </div>
+
+                <button class="dino-btn green" style="width:100%; margin-top:6px;" onclick="handleSignUp()" ${state.isSubmitting ? 'disabled' : ''}>
+                  ${state.isSubmitting ? '⏳ Đang Tạo Tài Khoản...' : 'Tạo Tài Khoản 🚀'}
+                </button>
+
+                <div style="text-align:center; margin-top:14px; font-size:13px; color:#5c7e6c;">
+                  Đã có tài khoản? <a href="javascript:void(0)" onclick="state.authError=''; navigate('login')" style="color:#239446; font-weight:900; text-decoration:none;">Đăng Nhập</a>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'verify_email':
+          html = `
+            <div style="text-align:center; padding:32px 0 16px;">
+              <div class="mascot-box">${getDinoImg('happy', 'big')}</div>
+              <div class="dino-card" style="text-align:center;">
+                <h2 style="color:#1e7a3d; margin:6px 0 8px; font-size:22px;">Kiểm Tra Email ✉️</h2>
+                <p style="color:#577464; font-size:14px; line-height:1.5; margin:0 0 12px;">
+                  Chúng tôi đã gửi email xác thực đến địa chỉ:<br>
+                  <b style="color:#1b6334; font-size:15px;">${state.pendingVerifyEmail || 'email của bạn'}</b>
+                </p>
+                <div style="background:#f4fbf5; border:1px solid #a8e5be; border-radius:14px; padding:12px; margin-bottom:14px; font-size:13px; color:#3d6550; text-align:left; line-height:1.4;">
+                  👉 <b>Hướng dẫn:</b> Vui lòng mở hòm thư của bạn (kiểm tra cả mục Thư rác / Spam) và nhấn vào nút <b>Confirm your mail</b> để kích hoạt tài khoản.
+                </div>
+                <button class="dino-btn green" style="width:100%; margin-bottom:8px;" onclick="handleResendVerification()">
+                  Gửi Lại Email Xác Thực 🔄
+                </button>
+                <button class="dino-outline-btn" style="width:100%;" onclick="navigate('login')">
+                  Quay Lại Đăng Nhập ➔
+                </button>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'forgot_password':
+          html = `
+            <div style="text-align:center; padding:30px 0 16px;">
+              <div class="mascot-box">${getDinoImg('study', 'medium')}</div>
+              <div class="dino-card" style="text-align:left;">
+                <h3 style="color:#1d703b; margin:0 0 6px; font-size:20px; text-align:center; font-weight:900;">Khôi Phục Mật Khẩu 🔑</h3>
+                <p style="color:#577464; font-size:13px; margin:0 0 14px; text-align:center;">Nhập email phụ huynh để nhận liên kết đặt lại mật khẩu mới</p>
+
+                ${state.authError ? `<div class="error-banner"><span>⚠️</span> ${state.authError}</div>` : ''}
+                ${state.authSuccess ? `<div class="success-banner"><span>✅</span> ${state.authSuccess}</div>` : ''}
+
+                <div class="form-group">
+                  <label class="form-label">Email Của Bạn</label>
+                  <input id="forgotEmail" type="email" class="form-input" placeholder="ba_me@example.com">
+                </div>
+
+                <button class="dino-btn green" style="width:100%; margin-top:8px;" onclick="handleForgotPassword()" ${state.isSubmitting ? 'disabled' : ''}>
+                  ${state.isSubmitting ? '⏳ Đang Gửi...' : 'Gửi Liên Kết Khôi Phục ➔'}
+                </button>
+
+                <div style="text-align:center; margin-top:14px; font-size:13px;">
+                  <a href="javascript:void(0)" onclick="state.authError=''; navigate('login')" style="color:#239446; font-weight:900; text-decoration:none;">Quay Lại Đăng Nhập</a>
+                </div>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'reset_password':
+          html = `
+            <div style="text-align:center; padding:30px 0 16px;">
+              <div class="mascot-box">${getDinoImg('study', 'medium')}</div>
+              <div class="dino-card" style="text-align:left;">
+                <h3 style="color:#1d703b; margin:0 0 6px; font-size:20px; text-align:center; font-weight:900;">Đặt Lại Mật Khẩu Mới 🔒</h3>
+                <p style="color:#577464; font-size:13px; margin:0 0 14px; text-align:center;">Vui lòng nhập mật khẩu mới cho tài khoản phụ huynh</p>
+
+                ${state.authError ? `<div class="error-banner"><span>⚠️</span> ${state.authError}</div>` : ''}
+                ${state.authSuccess ? `<div class="success-banner"><span>✅</span> ${state.authSuccess}</div>` : ''}
+
+                <div class="form-group">
+                  <label class="form-label">Mật Khẩu Mới</label>
+                  <input id="resetPassword" type="password" class="form-input" placeholder="Tối thiểu 6 ký tự">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Xác Nhận Mật Khẩu Mới</label>
+                  <input id="resetConfirmPassword" type="password" class="form-input" placeholder="Nhập lại mật khẩu mới">
+                </div>
+
+                <button class="dino-btn green" style="width:100%; margin-top:8px;" onclick="handleResetPassword()" ${state.isSubmitting ? 'disabled' : ''}>
+                  ${state.isSubmitting ? '⏳ Đang Cập Nhật...' : 'Cập Nhật Mật Khẩu ➔'}
+                </button>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'child_setup':
+          html = `
+            <div style="text-align:center; padding:20px 0 16px;">
+              <div class="brand-title">Dino <em>English</em></div>
+              <div class="mascot-box" style="margin:2px 0 6px;">${getDinoImg(state.selectedAvatar || 'welcome', 'small')}</div>
+              
+              <div class="dino-card" style="text-align:left;">
+                <h3 style="color:#1d703b; margin:0 0 4px; font-size:20px; text-align:center; font-weight:900;">Tạo Hồ Sơ Cho Bé 👶</h3>
+                <p style="color:#577464; font-size:12px; margin:0 0 12px; text-align:center;">Thiết lập hồ sơ để Dino đồng hành và theo dõi học tập cho con</p>
+
+                ${state.authError ? `<div class="error-banner"><span>⚠️</span> ${state.authError}</div>` : ''}
+
+                <div class="form-group">
+                  <label class="form-label">Tên Thân Mật Của Bé</label>
+                  <input id="setupChildName" type="text" class="form-input" placeholder="Ví dụ: Bé Na, Bon, Bi, Bắp..." value="${state.kidName || ''}">
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Nhóm Tuổi</label>
+                  <div class="chip-group">
+                    <button type="button" class="chip-btn ${state.selectedAgeGroup === '3-5' ? 'active' : ''}" onclick="state.selectedAgeGroup='3-5'; render();">3–5 tuổi</button>
+                    <button type="button" class="chip-btn ${state.selectedAgeGroup === '6-8' ? 'active' : ''}" onclick="state.selectedAgeGroup='6-8'; render();">6–8 tuổi</button>
+                    <button type="button" class="chip-btn ${state.selectedAgeGroup === '9-12' ? 'active' : ''}" onclick="state.selectedAgeGroup='9-12'; render();">9–12 tuổi</button>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Chọn Linh Vật Dino Đại Diện</label>
+                  <div class="avatar-grid">
+                    ${['welcome', 'study', 'game', 'level3'].map(av => `
+                      <div class="avatar-choice ${state.selectedAvatar === av ? 'active' : ''}" onclick="state.selectedAvatar='${av}'; render();">
+                        <img src="${DINO_ASSETS[av]}" style="width:46px; height:46px; object-fit:contain;">
+                      </div>
+                    `).join('')}
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label class="form-label">Cấp Độ Tiếng Anh Ban Đầu</label>
+                  <div class="chip-group">
+                    <button type="button" class="chip-btn ${state.selectedLevel === 'beginner' ? 'active' : ''}" onclick="state.selectedLevel='beginner'; render();">Mới Bắt Đầu</button>
+                    <button type="button" class="chip-btn ${state.selectedLevel === 'intermediate' ? 'active' : ''}" onclick="state.selectedLevel='intermediate'; render();">Đã Biết Cơ Bản</button>
+                  </div>
+                </div>
+
+                <button class="dino-btn green" style="width:100%; margin-top:8px;" onclick="handleCreateChild()" ${state.isSubmitting ? 'disabled' : ''}>
+                  ${state.isSubmitting ? '⏳ Đang Lưu...' : 'Bắt Đầu Học Ngay 🚀'}
+                </button>
+              </div>
+            </div>
+          `;
+          break;
+
+        case 'parent_dashboard':
+          const totalCompleted = state.completedLessons.length;
+          const totalWordsLearned = totalCompleted * 10;
+          const estMinutes = Math.round(totalCompleted * 6);
+          const currentEvo = getEvolutionMilestone();
+
+          html = `
+            <div class="top-header" style="display:flex; justify-content:space-between; align-items:center;">
+              <button class="dino-outline-btn" style="padding:6px 12px; font-size:13px; width:auto;" onclick="navigate('profile')">❮ Quay Lại</button>
+              <h2 style="margin:0; font-size:18px; font-weight:900; color:#1e6a39;">Khu Vực Phụ Huynh 👨‍👩‍👧</h2>
+              <span class="badge-star">⭐ ${state.stars}</span>
+            </div>
+
+            <!-- CHỌN / QUẢN LÝ HỒ SƠ BÉ -->
+            <div class="dino-card" style="margin-bottom:12px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <b style="color:#1d703b; font-size:15px;">Hồ Sơ Các Bé Của Bạn:</b>
+                <button class="dino-outline-btn" style="padding:4px 8px; font-size:12px; width:auto; border-color:#84d89a; color:#1e7a3d;" onclick="navigate('child_setup')">+ Thêm Bé</button>
+              </div>
+
+              ${state.children && state.children.length > 0 ? `
+                <div style="display:flex; flex-direction:column; gap:8px;">
+                  ${state.children.map(k => {
+                    const isSelected = k.id === state.activeChildId;
+                    return `
+                      <div style="display:flex; justify-content:space-between; align-items:center; background:${isSelected ? '#eafbee' : '#f9fbf9'}; border:2px solid ${isSelected ? '#28a44c' : '#d5e6da'}; border-radius:14px; padding:8px 12px;">
+                        <div style="display:flex; align-items:center; gap:10px; cursor:pointer;" onclick="handleSwitchChild('${k.id}')">
+                          <img src="${DINO_ASSETS[k.avatar_url || 'welcome'] || DINO_ASSETS['welcome']}" style="width:36px; height:36px; object-fit:contain;">
+                          <div>
+                            <div style="font-weight:900; font-size:15px; color:${isSelected ? '#1e7a3d' : '#335541'};">${k.display_name} ${isSelected ? '🌟 (Đang học)' : ''}</div>
+                            <div style="font-size:11px; color:#5c7e6c;">Nhóm tuổi: ${k.age_group || '6-8'} · ${k.current_level || 'Cơ bản'}</div>
+                          </div>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                          ${!isSelected ? `<button class="dino-btn green" style="padding:4px 8px; font-size:11px; width:auto;" onclick="handleSwitchChild('${k.id}')">Chọn</button>` : ''}
+                          ${state.children.length > 1 ? `<button class="dino-outline-btn" style="padding:4px 8px; font-size:11px; width:auto; color:#d42638; border-color:#f5b0b8;" onclick="handleDeleteChild('${k.id}', '${k.display_name}')">Xóa</button>` : ''}
+                        </div>
+                      </div>
+                    `;
+                  }).join('')}
+                </div>
+              ` : `
+                <div style="font-size:13px; color:#557763; margin-bottom:8px;">Đang sử dụng hồ sơ cục bộ: <b>${state.kidName}</b></div>
+              `}
+            </div>
+
+            <!-- THỐNG KÊ TỔNG QUAN -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+              <div class="stat-card">
+                <div style="font-size:20px;">📖</div>
+                <div style="font-size:20px; font-weight:900; color:#1e7a3d;">${totalCompleted} / 120</div>
+                <div style="font-size:11px; font-weight:800; color:#5c7e6c;">Bài học hoàn thành</div>
+              </div>
+              <div class="stat-card">
+                <div style="font-size:20px;">💡</div>
+                <div style="font-size:20px; font-weight:900; color:#1d7cd6;">${totalWordsLearned}</div>
+                <div style="font-size:11px; font-weight:800; color:#5c7e6c;">Từ vựng đã học</div>
+              </div>
+              <div class="stat-card">
+                <div style="font-size:20px;">⏱️</div>
+                <div style="font-size:20px; font-weight:900; color:#e05424;">${estMinutes} phút</div>
+                <div style="font-size:11px; font-weight:800; color:#5c7e6c;">Thời gian học tập</div>
+              </div>
+              <div class="stat-card">
+                <div style="font-size:20px;">⭐</div>
+                <div style="font-size:20px; font-weight:900; color:#d48a0d;">${state.stars} sao</div>
+                <div style="font-size:11px; font-weight:800; color:#5c7e6c;">Cột mốc Cấp ${currentEvo.level}</div>
+              </div>
+            </div>
+
+            <!-- TIẾN ĐỘ 12 CHỦ ĐỀ HỌC TẬP -->
+            <div class="dino-card" style="margin-bottom:12px;">
+              <b style="color:#1d703b; font-size:15px; display:block; margin-bottom:10px;">Tiến Độ 12 Chủ Đề:</b>
+              <div style="display:flex; flex-direction:column; gap:8px;">
+                ${DINO_DB.topics.map(t => {
+                  const compInTopic = state.completedLessons.filter(l => l.startsWith(t.id + '_l')).length;
+                  const pct = Math.round((compInTopic / 10) * 100);
+                  return `
+                    <div>
+                      <div style="display:flex; justify-content:space-between; font-size:12px; margin-bottom:3px; font-weight:800;">
+                        <span>${getTopicEmoji(t.id)} ${t.nameVi}</span>
+                        <span style="color:#239446;">${compInTopic}/10 bài (${pct}%)</span>
+                      </div>
+                      <div class="progress-bar" style="height:8px; margin:0;"><div class="progress-fill" style="width:${pct}%;"></div></div>
+                    </div>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+
+            <!-- QUẢN LÝ TÀI KHOẢN & BẢO MẬT -->
+            <div class="dino-card">
+              <b style="color:#1d703b; font-size:15px; display:block; margin-bottom:8px;">Tài Khoản Phụ Huynh:</b>
+              <div style="font-size:13px; color:#496d58; margin-bottom:10px;">
+                Email: <b>${state.supabaseUser ? state.supabaseUser.email : 'Chưa đăng nhập'}</b>
+              </div>
+              <div style="display:flex; gap:8px; margin-bottom:12px;">
+                <button class="dino-outline-btn" style="flex:1; font-size:12px; padding:8px;" onclick="handleCloudLogout()">Đăng Xuất</button>
+                <button class="dino-outline-btn" style="flex:1; font-size:12px; padding:8px; color:#d42638; border-color:#f5b0b8;" onclick="handleDeleteAccount()">Xóa Tài Khoản</button>
+              </div>
+              <p style="font-size:11px; color:#849f90; margin:0; line-height:1.4;">
+                🛡️ Cam kết bảo mật: Dino English không thu thập bất kỳ thông tin nhận dạng cá nhân nào của trẻ em.
+              </p>
             </div>
           `;
           break;
@@ -1487,26 +2094,37 @@
               <h2 style="margin:0; font-size:20px; font-weight:900; color:#1e6a39;">Hồ Sơ Của Bé</h2>
               <span class="badge-star">⭐ ${state.stars}</span>
             </div>
-            <div class="dino-card">
-              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <b>Tên bé:</b>
-                <span style="color:#239446; font-weight:900;">${state.kidName}</span>
+
+            <!-- THẺ THÔNG TIN BÉ HIỆN TẠI -->
+            <div class="dino-card" style="text-align:center; padding:16px;">
+              <div class="mascot-box" style="margin:0 auto 8px;">
+                ${getDinoImg(state.activeChild?.avatar_url || 'welcome', 'small')}
               </div>
-              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <b>Tổng sao vàng:</b>
-                <span style="color:#d48a0d; font-weight:900;">⭐ ${state.stars}</span>
+              <h3 style="color:#1e7a3d; margin:0 0 4px; font-size:20px; font-weight:900;">${state.kidName}</h3>
+              <div style="display:inline-block; background:#eafbee; border:1px solid #84d89a; color:#1e7a3d; font-size:12px; font-weight:800; padding:3px 10px; border-radius:12px; margin-bottom:12px;">
+                Nhóm tuổi: ${state.activeChild?.age_group || '6–8 tuổi'} · Cột mốc Cấp ${getEvolutionLevel()} / 20
               </div>
-              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <b>Bài học hoàn thành:</b>
-                <span style="color:#1d7cd6; font-weight:900;">${state.completedLessons.length} bài</span>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+                <div style="background:#f4fbf5; border:1px solid #c8ecd2; border-radius:12px; padding:8px;">
+                  <div style="font-size:16px; font-weight:900; color:#d48a0d;">⭐ ${state.stars}</div>
+                  <div style="font-size:11px; color:#5c7e6c; font-weight:700;">Sao vàng</div>
+                </div>
+                <div style="background:#f4fbf5; border:1px solid #c8ecd2; border-radius:12px; padding:8px;">
+                  <div style="font-size:16px; font-weight:900; color:#1d7cd6;">${state.completedLessons.length} / 120</div>
+                  <div style="font-size:11px; color:#5c7e6c; font-weight:700;">Bài đã học</div>
+                </div>
               </div>
-              <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-                <b>Chuỗi học liên tục:</b>
-                <span style="color:#e05424; font-weight:900;">🔥 ${state.streak} ngày</span>
-              </div>
-              <div style="display:flex; justify-content:space-between;">
-                <b>Cấp độ Dino:</b>
-                <span style="color:#239446; font-weight:900;">Cấp ${getEvolutionLevel()} / 20</span>
+
+              <div style="display:flex; gap:8px;">
+                <button class="dino-btn green" style="flex:1; font-size:13px; padding:10px;" onclick="navigate('parent_dashboard')">
+                  👨‍👩‍👧 Khu Vực Phụ Huynh ➔
+                </button>
+                ${state.children && state.children.length > 1 ? `
+                  <button class="dino-outline-btn" style="font-size:13px; padding:10px;" onclick="navigate('parent_dashboard')">
+                    🔄 Đổi Bé
+                  </button>
+                ` : ''}
               </div>
             </div>
 
@@ -1524,7 +2142,7 @@
                   Tài khoản: <b>${state.supabaseUser.email}</b>
                 </div>
                 <div style="font-size:12px; color:#5c836f; margin-bottom:10px;">
-                  Đã ghi nhớ: <b>${state.completedLessons.length} bài học</b> trên đám mây.
+                  Đã ghi nhớ: <b>${state.completedLessons.length} bài học</b> & <b>${state.stars} sao</b>.
                 </div>
                 ${state.syncStatus ? `<div style="font-size:12px; color:#1e7a3d; margin-bottom:8px; font-weight:700;">${state.syncStatus}</div>` : ''}
                 <div style="display:flex; gap:8px;">
@@ -1535,7 +2153,7 @@
                 <p style="font-size:12px; color:#577464; margin:0 0 10px; line-height:1.4;">
                   Đăng nhập tài khoản phụ huynh để lưu vĩnh viễn tiến độ học của bé và tiếp tục học trên các thiết bị khác!
                 </p>
-                <button class="dino-btn blue" style="font-size:13px; padding:10px;" onclick="state.loginTab='parent'; navigate('login')">
+                <button class="dino-btn blue" style="font-size:13px; padding:10px;" onclick="navigate('login')">
                   🔐 Đăng Nhập / Đăng Ký Supabase ➔
                 </button>
               `}
@@ -1561,24 +2179,30 @@
       root.innerHTML = html;
     }
 
-    // Helper functions
-    function setLoginTab(tab) {
-      state.loginTab = tab;
+    // Helper functions & Supabase Auth Actions
+    function togglePasswordVisibility(which) {
+      if (which === 'confirm') {
+        state.showConfirmPassword = !state.showConfirmPassword;
+      } else {
+        state.showPassword = !state.showPassword;
+      }
       render();
     }
 
-    async function handleParentAuth(isSignUp) {
-      const email = document.getElementById('sbEmailInput')?.value.trim();
-      const password = document.getElementById('sbPasswordInput')?.value.trim();
-      const kidName = document.getElementById('sbKidNameInput')?.value.trim();
-      const anonKey = document.getElementById('sbKeyInput')?.value.trim();
+    function guestLogin() {
+      state.kidName = state.kidName || 'Bé Na';
+      saveState();
+      navigate('home');
+    }
+
+    async function handleLogin() {
+      const email = document.getElementById('loginEmail')?.value.trim();
+      const password = document.getElementById('loginPassword')?.value.trim();
+      const anonKey = document.getElementById('loginAnonKey')?.value.trim();
 
       if (!email || !password) {
-        alert("Vui lòng nhập Email và Mật khẩu!");
-        return;
-      }
-      if (password.length < 6) {
-        alert("Mật khẩu cần tối thiểu 6 ký tự!");
+        state.authError = "Vui lòng nhập đầy đủ Email và Mật khẩu!";
+        render();
         return;
       }
 
@@ -1587,69 +2211,361 @@
         saveState();
       }
 
+      initSupabase();
       if (!state.supabaseClient) {
-        if (!state.supabaseKey) {
-          alert("Vui lòng nhập Supabase Anon Key từ Dashboard để kết nối!");
-          return;
-        }
-        initSupabase();
-      }
-
-      if (!state.supabaseClient) {
-        alert("Không thể khởi tạo kết nối Supabase. Vui lòng kiểm tra lại Anon Key!");
+        state.authError = "Vui lòng nhập Supabase Publishable Anon Key để kết nối!";
+        render();
         return;
       }
 
-      try {
-        let res;
-        if (isSignUp) {
-          res = await state.supabaseClient.auth.signUp({
-            email: email,
-            password: password,
-            options: {
-              data: {
-                kid_name: kidName || state.kidName,
-                stars: state.stars
-              }
-            }
-          });
-        } else {
-          res = await state.supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-          });
-        }
+      state.isSubmitting = true;
+      state.authError = '';
+      state.authSuccess = '';
+      render();
 
-        if (res.error) {
-          alert((isSignUp ? 'Đăng ký' : 'Đăng nhập') + ' thất bại: ' + res.error.message);
+      try {
+        const { data, error } = await state.supabaseClient.auth.signInWithPassword({
+          email: email,
+          password: password
+        });
+
+        if (error) {
+          state.authError = "Đăng nhập thất bại: " + (error.message.includes('Invalid login') ? 'Email hoặc mật khẩu không chính xác' : error.message);
+          state.isSubmitting = false;
+          render();
           return;
         }
 
-        const user = res.data.user;
-        if (user) {
-          state.supabaseUser = { id: user.id, email: user.email };
-          if (kidName) state.kidName = kidName;
-          saveState();
-          await loadCloudProgress();
-          alert((isSignUp ? 'Tạo tài khoản' : 'Đăng nhập') + ' thành công! Dữ liệu bài học đã được đồng bộ với Supabase.');
-          navigate('home');
+        if (data && data.user) {
+          await handleSessionSuccess(data.user);
         }
       } catch (err) {
-        alert("Lỗi: " + (err.message || err));
+        state.authError = "Lỗi kết nối: " + (err.message || err);
+      } finally {
+        state.isSubmitting = false;
+        render();
+      }
+    }
+
+    async function handleSignUp() {
+      const fullName = document.getElementById('signupFullName')?.value.trim();
+      const email = document.getElementById('signupEmail')?.value.trim();
+      const password = document.getElementById('signupPassword')?.value.trim();
+      const confirmPassword = document.getElementById('signupConfirmPassword')?.value.trim();
+      const termsAccepted = document.getElementById('signupTerms')?.checked;
+
+      if (!fullName) {
+        state.authError = "Vui lòng nhập họ và tên phụ huynh!";
+        render();
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        state.authError = "Vui lòng nhập email hợp lệ!";
+        render();
+        return;
+      }
+      if (!password || password.length < 6) {
+        state.authError = "Mật khẩu cần có tối thiểu 6 ký tự!";
+        render();
+        return;
+      }
+      if (password !== confirmPassword) {
+        state.authError = "Mật khẩu xác nhận không khớp!";
+        render();
+        return;
+      }
+      if (!termsAccepted) {
+        state.authError = "Vui lòng đồng ý với Điều khoản sử dụng và Chính sách bảo mật!";
+        render();
+        return;
+      }
+
+      initSupabase();
+      if (!state.supabaseClient) {
+        state.authError = "Vui lòng cấu hình Supabase Publishable Anon Key trước!";
+        render();
+        return;
+      }
+
+      state.isSubmitting = true;
+      state.authError = '';
+      render();
+
+      try {
+        const redirectUrl = window.location.origin + window.location.pathname;
+        const { data, error } = await state.supabaseClient.auth.signUp({
+          email: email,
+          password: password,
+          options: {
+            emailRedirectTo: redirectUrl,
+            data: {
+              full_name: fullName
+            }
+          }
+        });
+
+        if (error) {
+          state.authError = "Đăng ký thất bại: " + error.message;
+          state.isSubmitting = false;
+          render();
+          return;
+        }
+
+        if (data.session) {
+          await handleSessionSuccess(data.user);
+        } else {
+          state.pendingVerifyEmail = email;
+          state.authSuccess = "Đăng ký thành công! Vui lòng xác thực email.";
+          navigate('verify_email');
+        }
+      } catch (err) {
+        state.authError = "Lỗi hệ thống: " + (err.message || err);
+      } finally {
+        state.isSubmitting = false;
+        render();
+      }
+    }
+
+    async function handleResendVerification() {
+      if (!state.pendingVerifyEmail) return;
+      initSupabase();
+      if (!state.supabaseClient) return;
+      try {
+        const redirectUrl = window.location.origin + window.location.pathname;
+        await state.supabaseClient.auth.resend({
+          type: 'signup',
+          email: state.pendingVerifyEmail,
+          options: { emailRedirectTo: redirectUrl }
+        });
+        alert("Đã gửi lại email xác thực! Vui lòng kiểm tra hòm thư của bạn.");
+      } catch (e) {
+        alert("Lỗi gửi lại email: " + (e.message || e));
+      }
+    }
+
+    async function handleForgotPassword() {
+      const email = document.getElementById('forgotEmail')?.value.trim();
+      if (!email || !email.includes('@')) {
+        state.authError = "Vui lòng nhập email hợp lệ!";
+        render();
+        return;
+      }
+
+      initSupabase();
+      if (!state.supabaseClient) return;
+
+      state.isSubmitting = true;
+      state.authError = '';
+      render();
+
+      try {
+        const redirectUrl = window.location.origin + window.location.pathname;
+        const { error } = await state.supabaseClient.auth.resetPasswordForEmail(email, {
+          redirectTo: redirectUrl
+        });
+        if (error) {
+          state.authError = "Không thể gửi email: " + error.message;
+        } else {
+          state.authSuccess = "Đã gửi hướng dẫn khôi phục mật khẩu đến email " + email;
+        }
+      } catch (err) {
+        state.authError = "Lỗi: " + (err.message || err);
+      } finally {
+        state.isSubmitting = false;
+        render();
+      }
+    }
+
+    async function handleResetPassword() {
+      const pwd = document.getElementById('resetPassword')?.value.trim();
+      const confirmPwd = document.getElementById('resetConfirmPassword')?.value.trim();
+
+      if (!pwd || pwd.length < 6) {
+        state.authError = "Mật khẩu mới phải có ít nhất 6 ký tự!";
+        render();
+        return;
+      }
+      if (pwd !== confirmPwd) {
+        state.authError = "Xác nhận mật khẩu không khớp!";
+        render();
+        return;
+      }
+
+      initSupabase();
+      if (!state.supabaseClient) return;
+
+      state.isSubmitting = true;
+      state.authError = '';
+      render();
+
+      try {
+        const { error } = await state.supabaseClient.auth.updateUser({ password: pwd });
+        if (error) {
+          state.authError = "Lỗi cập nhật mật khẩu: " + error.message;
+        } else {
+          alert("Cập nhật mật khẩu thành công! Vui lòng đăng nhập lại.");
+          navigate('login');
+        }
+      } catch (err) {
+        state.authError = "Lỗi: " + (err.message || err);
+      } finally {
+        state.isSubmitting = false;
+        render();
+      }
+    }
+
+    async function handleCreateChild() {
+      const name = document.getElementById('setupChildName')?.value.trim();
+      if (!name) {
+        state.authError = "Vui lòng nhập tên thân mật của bé!";
+        render();
+        return;
+      }
+
+      state.kidName = name;
+      state.isSubmitting = true;
+      state.authError = '';
+      render();
+
+      if (state.supabaseClient && state.supabaseUser) {
+        try {
+          const { data, error } = await state.supabaseClient.rpc('create_child_profile', {
+            p_display_name: name,
+            p_age_group: state.selectedAgeGroup || '6-8',
+            p_avatar_url: state.selectedAvatar || 'welcome',
+            p_initial_level: state.selectedLevel || 'beginner'
+          });
+
+          if (!error && data) {
+            state.activeChildId = data;
+          }
+
+          // Reload children
+          const { data: kids } = await state.supabaseClient
+            .from('children')
+            .select('*')
+            .eq('parent_id', state.supabaseUser.id)
+            .order('created_at', { ascending: true });
+          state.children = kids || [];
+          const cur = state.children.find(k => k.id === state.activeChildId) || state.children[state.children.length - 1];
+          if (cur) await setActiveChild(cur.id);
+        } catch (e) {
+          console.warn("Create child error:", e);
+        }
+      }
+
+      saveState();
+      state.isSubmitting = false;
+      navigate('home');
+    }
+
+    async function handleSwitchChild(childId) {
+      await setActiveChild(childId);
+      navigate('home');
+    }
+
+    async function handleDeleteChild(childId, name) {
+      if (state.children.length <= 1) {
+        alert("Bạn phải giữ lại ít nhất một hồ sơ bé!");
+        return;
+      }
+      if (!confirm(`Bạn có chắc chắn muốn xóa hồ sơ bé "${name}"? Toàn bộ tiến độ học của bé sẽ bị xóa.`)) {
+        return;
+      }
+
+      if (state.supabaseClient) {
+        try {
+          await state.supabaseClient.from('children').delete().eq('id', childId);
+          state.children = state.children.filter(k => k.id !== childId);
+          if (state.activeChildId === childId) {
+            await setActiveChild(state.children[0].id);
+          }
+          render();
+        } catch (e) {
+          alert("Lỗi khi xóa: " + e.message);
+        }
+      }
+    }
+
+    async function handleDeleteAccount() {
+      const confirmText = prompt("Để xác nhận xóa vĩnh viễn tài khoản và toàn bộ dữ liệu của các bé, vui lòng gõ 'XOA':");
+      if (confirmText === 'XOA') {
+        if (state.supabaseClient && state.supabaseUser) {
+          try {
+            await state.supabaseClient.from('profiles').delete().eq('id', state.supabaseUser.id);
+            await state.supabaseClient.auth.signOut();
+          } catch (e) {
+            console.warn(e);
+          }
+        }
+        localStorage.clear();
+        state.supabaseUser = null;
+        state.children = [];
+        state.activeChild = null;
+        state.completedLessons = [];
+        state.stars = 10;
+        alert("Tài khoản và dữ liệu đã được xóa hoàn tất.");
+        navigate('login');
+      }
+    }
+
+    async function syncLessonToSupabase(topicId, lessonId, activityKey = 'vocab', points = 5) {
+      if (!state.supabaseClient || !state.supabaseUser || !state.activeChildId) return;
+      const lKey = `${topicId}_l${lessonId}`;
+
+      try {
+        const { data, error } = await state.supabaseClient.rpc('complete_lesson_activity', {
+          p_child_id: state.activeChildId,
+          p_lesson_id: lKey,
+          p_activity_type: activityKey,
+          p_score: 100,
+          p_stars_delta: points,
+          p_words_learned: 10,
+          p_duration_seconds: 60
+        });
+
+        if (error) {
+          console.warn("Sync lesson RPC error:", error);
+        } else if (data) {
+          if (data.total_stars !== undefined) {
+            state.stars = data.total_stars;
+            saveState();
+          }
+        }
+      } catch (e) {
+        console.warn("Background sync error:", e);
+      }
+    }
+
+    async function loadCloudProgress() {
+      if (!state.supabaseClient || !state.supabaseUser) return;
+      try {
+        const { data: kids } = await state.supabaseClient
+          .from('children')
+          .select('*')
+          .eq('parent_id', state.supabaseUser.id)
+          .order('created_at', { ascending: true });
+
+        if (kids && kids.length > 0) {
+          state.children = kids;
+          const currentKid = kids.find(k => k.id === state.activeChildId) || kids[0];
+          await setActiveChild(currentKid.id);
+        }
+      } catch (e) {
+        console.warn("loadCloudProgress error:", e);
       }
     }
 
     async function handleCloudSync() {
       if (!state.supabaseUser) return;
       await loadCloudProgress();
-      // Đồng bộ các bài học hiện tại lên cloud
       for (const lKey of state.completedLessons) {
         const parts = lKey.split('_l');
         if (parts.length === 2) {
           await syncLessonToSupabase(parts[0], parseInt(parts[1], 10));
         }
       }
-      state.syncStatus = `Đã đồng bộ đầy đủ ${state.completedLessons.length} bài học!`;
+      state.syncStatus = `Đã đồng bộ an toàn ${state.completedLessons.length} bài học!`;
       render();
     }
 
@@ -1658,6 +2574,9 @@
         try { await state.supabaseClient.auth.signOut(); } catch(e){}
       }
       state.supabaseUser = null;
+      state.parentProfile = null;
+      state.children = [];
+      state.activeChild = null;
       saveState();
       render();
       alert("Đã đăng xuất tài khoản Supabase!");
@@ -1834,10 +2753,7 @@
     }
 
     // Initialize
-    initSupabase();
-    if (state.supabaseUser) {
-      loadCloudProgress();
-    }
+    initSessionAndRouting();
     render();
   </script>
 </body>
