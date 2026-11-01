@@ -354,11 +354,16 @@ const htmlTemplate = `<!doctype html>
       align-items: center;
       justify-content: space-between;
       min-height: 52px;
-      margin: 0 -18px 12px;
-      padding: 46px 18px 12px;
+      margin: 0 -18px 14px;
+      padding: 58px 18px 16px;
       background: #ffffff;
       border-bottom: 1.5px solid #e0ebe4;
       box-shadow: 0 4px 16px rgba(20, 60, 40, 0.05);
+    }
+    .top-header.home-header {
+      background: transparent !important;
+      border-bottom: none !important;
+      box-shadow: none !important;
     }
     .back-btn {
       background: #fff;
@@ -546,8 +551,13 @@ const htmlTemplate = `<!doctype html>
         padding: 0 16px 20px !important;
       }
       .top-header {
-        margin: 0 -16px 10px !important;
-        padding: max(env(safe-area-inset-top), 52px) 16px 12px !important;
+        margin: 0 -16px 12px !important;
+        padding: max(env(safe-area-inset-top), 56px) 16px 16px !important;
+      }
+      .top-header.home-header {
+        background: transparent !important;
+        border-bottom: none !important;
+        box-shadow: none !important;
       }
       .dynamic-island {
         display: none !important;
@@ -841,7 +851,7 @@ const htmlTemplate = `<!doctype html>
           ];
           const curr = slides[state.onboardStep];
           html = \`
-            <div style="text-align:center; padding:48px 0 10px;">
+            <div style="text-align:center; padding:56px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg(curr.mascot, 'big')}</div>
               <div class="dino-card">
@@ -859,7 +869,7 @@ const htmlTemplate = `<!doctype html>
 
         case 'login':
           html = \`
-            <div style="text-align:center; padding:48px 0 10px;">
+            <div style="text-align:center; padding:56px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg('welcome', 'small')}</div>
               <div class="dino-card">
@@ -879,7 +889,7 @@ const htmlTemplate = `<!doctype html>
           const currentLesson = getLesson(state.currentTopicId, state.currentLessonId);
           const lvl = getEvolutionLevel();
           html = \`
-            <div class="top-header">
+            <div class="top-header home-header">
               <div>
                 <span style="font-size:14px; color:#5c7d6b; font-weight:700;">Xin chào,</span>
                 <div style="font-size:26px; font-weight:900; color:#239446;">\${state.kidName}! 👋</div>
@@ -1187,7 +1197,7 @@ const htmlTemplate = `<!doctype html>
           const curLesson = getLesson(state.currentTopicId, state.currentLessonId);
 
           html = \`
-            <div style="text-align:center; padding:48px 0 20px;">
+            <div style="text-align:center; padding:56px 0 20px;">
               \${getDinoImg('reward', 'big')}
               
               <div class="dino-card" style="margin-bottom:14px;">
