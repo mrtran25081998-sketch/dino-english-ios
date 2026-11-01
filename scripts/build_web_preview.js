@@ -96,30 +96,30 @@ const htmlTemplate = `<!doctype html>
     /* Dynamic Island (Floating over header at top) */
     .dynamic-island {
       position: absolute;
-      top: 8px;
+      top: 6px;
       left: 50%;
       transform: translateX(-50%);
-      width: 120px;
-      height: 28px;
+      width: 114px;
+      height: 24px;
       background: #000;
-      border-radius: 18px;
+      border-radius: 14px;
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 10px;
+      padding: 0 8px;
       pointer-events: none;
     }
     .island-camera {
-      width: 10px;
-      height: 10px;
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
       background: #151525;
       border: 1px solid #222;
     }
     .island-sensor {
-      width: 9px;
-      height: 9px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       background: #111;
     }
@@ -345,7 +345,7 @@ const htmlTemplate = `<!doctype html>
       line-height: 1.2;
     }
 
-    /* Header Nav (Sticky / Fixed at top when scrolling, Clean White Background) */
+    /* Header Nav (Sticky / Fixed at top when scrolling, Clean White Background, Exactly 80px Total Height) */
     .top-header {
       position: sticky;
       top: 0;
@@ -353,12 +353,20 @@ const htmlTemplate = `<!doctype html>
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 56px;
-      margin: 0 -18px 14px;
-      padding: 56px 18px 18px;
+      height: 80px !important;
+      min-height: 80px !important;
+      max-height: 80px !important;
+      box-sizing: border-box !important;
+      margin: 0 -18px 12px;
+      padding: 34px 18px 8px;
       background: #ffffff;
       border-bottom: 1.5px solid #e0ebe4;
       box-shadow: 0 4px 16px rgba(20, 60, 40, 0.05);
+    }
+    .top-header h2 {
+      margin: 0;
+      font-size: 19px;
+      line-height: 36px;
     }
     .top-header.home-header {
       background: transparent !important;
@@ -368,14 +376,16 @@ const htmlTemplate = `<!doctype html>
     .back-btn {
       background: #fff;
       border: 2px solid #bfe4cb;
-      border-radius: 16px;
-      min-width: 46px;
-      min-height: 46px;
-      padding: 0 14px;
+      border-radius: 12px;
+      width: 36px;
+      height: 36px;
+      min-width: 36px;
+      min-height: 36px;
+      padding: 0;
       font-weight: 900;
-      font-size: 22px;
+      font-size: 18px;
       color: #1e7a3d;
-      box-shadow: 0 4px 0 #a2d8b3, 0 4px 10px rgba(30, 122, 61, 0.15);
+      box-shadow: 0 2px 0 #a2d8b3;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
@@ -385,20 +395,21 @@ const htmlTemplate = `<!doctype html>
     }
     .back-btn:active {
       transform: translateY(2px);
-      box-shadow: 0 2px 0 #a2d8b3;
+      box-shadow: 0 1px 0 #a2d8b3;
     }
 
     .badge-star {
       background: #fff3c9;
       border: 1.5px solid #f6cf65;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-weight: 900;
-      font-size: 14px;
+      padding: 4px 10px;
+      border-radius: 16px;
+      font-weight: 800;
+      font-size: 13px;
       color: #8c5b05;
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      box-shadow: 0 2px 4px rgba(255, 174, 17, 0.2);
     }
 
     /* Flashcard Style */
@@ -551,8 +562,11 @@ const htmlTemplate = `<!doctype html>
         padding: 0 16px 20px !important;
       }
       .top-header {
-        margin: 0 -16px 14px !important;
-        padding: max(env(safe-area-inset-top), 56px) 16px 18px !important;
+        margin: 0 -16px 10px !important;
+        height: 80px !important;
+        min-height: 80px !important;
+        max-height: 80px !important;
+        padding: 34px 16px 8px !important;
       }
       .top-header.home-header {
         background: transparent !important;
@@ -869,7 +883,7 @@ const htmlTemplate = `<!doctype html>
 
         case 'login':
           html = \`
-            <div style="text-align:center; padding:56px 0 10px;">
+            <div style="text-align:center; padding:40px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg('welcome', 'small')}</div>
               <div class="dino-card">
@@ -891,8 +905,8 @@ const htmlTemplate = `<!doctype html>
           html = \`
             <div class="top-header home-header">
               <div>
-                <span style="font-size:14px; color:#5c7d6b; font-weight:700;">Xin chào,</span>
-                <div style="font-size:26px; font-weight:900; color:#239446;">\${state.kidName}! 👋</div>
+                <span style="font-size:12px; color:#5c7d6b; font-weight:700; line-height:1.1; display:block;">Xin chào,</span>
+                <div style="font-size:20px; font-weight:900; color:#239446; line-height:1.2;">\${state.kidName}! 👋</div>
               </div>
               <div style="display:flex; gap:8px;">
                 <span class="badge-star">⭐ \${state.stars}</span>
@@ -1197,7 +1211,7 @@ const htmlTemplate = `<!doctype html>
           const curLesson = getLesson(state.currentTopicId, state.currentLessonId);
 
           html = \`
-            <div style="text-align:center; padding:56px 0 20px;">
+            <div style="text-align:center; padding:40px 0 20px;">
               \${getDinoImg('reward', 'big')}
               
               <div class="dino-card" style="margin-bottom:14px;">
