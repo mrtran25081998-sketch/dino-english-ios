@@ -96,18 +96,18 @@ const htmlTemplate = `<!doctype html>
     /* Dynamic Island (Floating over header at top) */
     .dynamic-island {
       position: absolute;
-      top: 10px;
+      top: 7px;
       left: 50%;
       transform: translateX(-50%);
-      width: 124px;
-      height: 32px;
+      width: 116px;
+      height: 26px;
       background: #000;
-      border-radius: 20px;
+      border-radius: 16px;
       z-index: 1000;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 12px;
+      padding: 0 10px;
       pointer-events: none;
     }
     .island-camera {
@@ -354,8 +354,8 @@ const htmlTemplate = `<!doctype html>
       align-items: center;
       justify-content: space-between;
       min-height: 52px;
-      margin: 0 -18px 14px;
-      padding: 58px 18px 16px;
+      margin: 0 -18px 12px;
+      padding: 44px 18px 12px;
       background: #ffffff;
       border-bottom: 1.5px solid #e0ebe4;
       box-shadow: 0 4px 16px rgba(20, 60, 40, 0.05);
@@ -551,8 +551,8 @@ const htmlTemplate = `<!doctype html>
         padding: 0 16px 20px !important;
       }
       .top-header {
-        margin: 0 -16px 12px !important;
-        padding: max(env(safe-area-inset-top), 56px) 16px 16px !important;
+        margin: 0 -16px 10px !important;
+        padding: max(env(safe-area-inset-top), 48px) 16px 12px !important;
       }
       .top-header.home-header {
         background: transparent !important;
@@ -851,7 +851,7 @@ const htmlTemplate = `<!doctype html>
           ];
           const curr = slides[state.onboardStep];
           html = \`
-            <div style="text-align:center; padding:56px 0 10px;">
+            <div style="text-align:center; padding:44px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg(curr.mascot, 'big')}</div>
               <div class="dino-card">
@@ -869,7 +869,7 @@ const htmlTemplate = `<!doctype html>
 
         case 'login':
           html = \`
-            <div style="text-align:center; padding:56px 0 10px;">
+            <div style="text-align:center; padding:44px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg('welcome', 'small')}</div>
               <div class="dino-card">
@@ -950,7 +950,7 @@ const htmlTemplate = `<!doctype html>
         case 'topics':
           html = \`
             <div class="top-header">
-              <h2 style="margin:0; font-size:22px; font-weight:900; color:#1e6a39;">12 Chủ Đề Tiếng Anh</h2>
+              <h2 style="margin:0; font-size:20px; font-weight:900; color:#1e6a39;">12 Chủ Đề Tiếng Anh</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
             <p style="margin:0 0 12px; font-size:13px; color:#5b7c6b;">Mỗi chủ đề gồm 10 bài học x 10 từ = 100 từ vựng:</p>
@@ -1197,7 +1197,7 @@ const htmlTemplate = `<!doctype html>
           const curLesson = getLesson(state.currentTopicId, state.currentLessonId);
 
           html = \`
-            <div style="text-align:center; padding:56px 0 20px;">
+            <div style="text-align:center; padding:44px 0 20px;">
               \${getDinoImg('reward', 'big')}
               
               <div class="dino-card" style="margin-bottom:14px;">
@@ -1252,7 +1252,7 @@ const htmlTemplate = `<!doctype html>
 
           html = \`
             <div class="top-header">
-              <h2 style="margin:0; font-size:22px; font-weight:900; color:#1e6a39;">Dino Trưởng Thành</h2>
+              <h2 style="margin:0; font-size:20px; font-weight:900; color:#1e6a39;">Dino Trưởng Thành</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
 
@@ -1331,7 +1331,7 @@ const htmlTemplate = `<!doctype html>
         case 'profile':
           html = \`
             <div class="top-header">
-              <h2 style="margin:0; font-size:22px; font-weight:900; color:#1e6a39;">Hồ Sơ Của Bé</h2>
+              <h2 style="margin:0; font-size:20px; font-weight:900; color:#1e6a39;">Hồ Sơ Của Bé</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
             <div class="dino-card">
