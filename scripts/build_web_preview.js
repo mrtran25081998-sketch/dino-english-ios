@@ -323,6 +323,20 @@ const htmlTemplate = `<!doctype html>
       border-radius: 2px;
       opacity: 0.35;
     }
+    .home-indicator {
+      position: absolute;
+      bottom: 8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 124px;
+      height: 4.5px;
+      background: #1e3a2b;
+      border-radius: 3px;
+      opacity: 0.35;
+      z-index: 600;
+      pointer-events: none;
+      display: none;
+    }
     .tab-btn {
       background: transparent;
       border: 0;
@@ -576,7 +590,8 @@ const htmlTemplate = `<!doctype html>
       .dynamic-island {
         display: none !important;
       }
-      .home-bar {
+      .home-bar,
+      .home-indicator {
         display: none !important;
       }
     }
@@ -615,6 +630,9 @@ const htmlTemplate = `<!doctype html>
           <span>😊</span>Hồ sơ
         </button>
       </div>
+
+      <!-- Home Indicator (Visible when TabBar is hidden) -->
+      <div class="home-indicator" id="homeIndicator"></div>
     </div>
   </div>
 
@@ -829,22 +847,27 @@ const htmlTemplate = `<!doctype html>
       saveState();
     }
 
+    function updateNav() {
+      const tabBar = document.getElementById('tabBar');
+      const homeIndicator = document.getElementById('homeIndicator');
+      const rootTabs = ['home', 'topics', 'growth', 'profile'];
+      const isRootTab = rootTabs.includes(state.view);
+
+      if (tabBar) tabBar.style.display = isRootTab ? 'grid' : 'none';
+      if (homeIndicator) homeIndicator.style.display = isRootTab ? 'none' : 'block';
+
+      // Update active tab button
+      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+        btn.classList.toggle('active', rootTabs[idx] === state.view);
+      });
+    }
+
     function navigate(viewName, params = {}) {
       state.view = viewName;
       if (params.topicId) state.currentTopicId = params.topicId;
       if (params.lessonId) state.currentLessonId = params.lessonId;
       if (params.cardIndex !== undefined) state.cardIndex = params.cardIndex;
       
-      const tabBar = document.getElementById('tabBar');
-      const hideTabsViews = ['onboard', 'login', 'vocab', 'pron', 'game', 'song', 'reward'];
-      tabBar.style.display = hideTabsViews.includes(viewName) ? 'none' : 'grid';
-
-      // Update active tab button
-      document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
-        const views = ['home', 'topics', 'growth', 'profile'];
-        btn.classList.toggle('active', views[idx] === viewName);
-      });
-
       const vp = document.getElementById('appViewport');
       if (vp) vp.scrollTop = 0;
       const sw = document.getElementById('screenWrapper');
@@ -853,6 +876,7 @@ const htmlTemplate = `<!doctype html>
     }
 
     function render() {
+      updateNav();
       const root = document.getElementById('appViewport');
       let html = '';
 
@@ -1249,7 +1273,7 @@ const htmlTemplate = `<!doctype html>
               <!-- Các nút phụ trợ -->
               <div style="display:flex; gap:10px; margin-bottom:10px;">
                 <button class="dino-outline-btn" style="flex:1;" onclick="navigate('activity_hub')">↺ Ôn Lại Bài Này</button>
-                <button class="dino-outline-btn" style="flex:1;" onclick="navigate('lesson_list')">📋 Danh Sách Bài</button>
+                <button class="dino-outline-btn" style="flex:1;" onclick="navigate('lessons', {topicId:'\${curTopic.id}'})">📋 Danh Sách Bài</button>
               </div>
               <button class="dino-outline-btn" style="width:100%;" onclick="navigate('growth')">🦖 Xem Dino Lớn Khôn</button>
             </div>

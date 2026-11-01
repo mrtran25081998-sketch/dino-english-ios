@@ -107,6 +107,7 @@ public struct ActivityHubView: View {
         }
         .navigationTitle("Bài \(lesson.lessonId): \(lesson.title)")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 

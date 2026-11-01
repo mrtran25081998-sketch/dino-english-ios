@@ -70,6 +70,7 @@ public struct LessonListView: View {
         }
         .navigationTitle(topic.nameVi)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar(.hidden, for: .tabBar)
     }
 }
 
