@@ -127,7 +127,7 @@ const htmlTemplate = `<!doctype html>
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 14px 18px 24px;
+      padding: 0 18px 24px;
       display: flex;
       flex-direction: column;
       scrollbar-width: none;
@@ -343,16 +343,22 @@ const htmlTemplate = `<!doctype html>
       line-height: 1.2;
     }
 
-    /* Header Nav */
+    /* Header Nav (Sticky / Fixed at top when scrolling) */
     .top-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 14px;
-      padding: 6px 0 10px;
-      min-height: 48px;
-      position: relative;
-      z-index: 50;
+      min-height: 52px;
+      margin: 0 -18px 12px;
+      padding: 10px 18px 10px;
+      background: rgba(145, 222, 255, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1.5px solid rgba(75, 175, 115, 0.22);
+      box-shadow: 0 4px 14px rgba(25, 85, 50, 0.07);
     }
     .back-btn {
       background: #fff;
@@ -537,7 +543,11 @@ const htmlTemplate = `<!doctype html>
         padding-top: max(env(safe-area-inset-top), 52px) !important;
       }
       .app-viewport {
-        padding-top: 4px !important;
+        padding: 0 16px 20px !important;
+      }
+      .top-header {
+        margin: 0 -16px 10px !important;
+        padding: 8px 16px 10px !important;
       }
       .dynamic-island {
         display: none !important;
@@ -930,8 +940,7 @@ const htmlTemplate = `<!doctype html>
         case 'topics':
           html = \`
             <div class="top-header">
-              <button class="back-btn" onclick="navigate('home')">←</button>
-              <h2 style="margin:0; font-size:20px; color:#1e6a39;">12 Chủ Đề Tiếng Anh</h2>
+              <h2 style="margin:0; font-size:22px; font-weight:900; color:#1e6a39;">12 Chủ Đề Tiếng Anh</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
             <p style="margin:0 0 12px; font-size:13px; color:#5b7c6b;">Mỗi chủ đề gồm 10 bài học x 10 từ = 100 từ vựng:</p>
@@ -1233,8 +1242,7 @@ const htmlTemplate = `<!doctype html>
 
           html = \`
             <div class="top-header">
-              <button class="back-btn" onclick="navigate('home')">←</button>
-              <h2 style="margin:0; font-size:20px; color:#1e6a39;">Dino Trưởng Thành</h2>
+              <h2 style="margin:0; font-size:22px; font-weight:900; color:#1e6a39;">Dino Trưởng Thành</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
 
@@ -1313,8 +1321,7 @@ const htmlTemplate = `<!doctype html>
         case 'profile':
           html = \`
             <div class="top-header">
-              <button class="back-btn" onclick="navigate('home')">←</button>
-              <h2 style="margin:0; font-size:20px; color:#1e6a39;">Hồ Sơ Của Bé</h2>
+              <h2 style="margin:0; font-size:22px; font-weight:900; color:#1e6a39;">Hồ Sơ Của Bé</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
             <div class="dino-card">
