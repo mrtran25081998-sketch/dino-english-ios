@@ -71,15 +71,29 @@ public struct DinoGrowthView: View {
                                 let isUnlocked = model.completedLessonsCount >= milestone.requiredLessons
                                 
                                 HStack(spacing: 14) {
-                                    // Biểu tượng mở khóa
-                                    ZStack {
-                                        Circle()
-                                            .fill(isUnlocked ? DinoStyle.greenLight : Color.gray.opacity(0.15))
-                                            .frame(width: 44, height: 44)
+                                    // Hình ảnh Dino 3D thể hiện sự trưởng thành từng cấp độ
+                                    ZStack(alignment: .bottomTrailing) {
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 16)
+                                                .fill(milestone.level == model.currentMilestone.level ? DinoStyle.greenLight.opacity(0.8) : (isUnlocked ? Color(red: 0.94, green: 0.98, blue: 0.95) : Color.gray.opacity(0.1)))
+                                                .frame(width: 56, height: 56)
+                                                .overlay(
+                                                    RoundedRectangle(cornerRadius: 16)
+                                                        .stroke(milestone.level == model.currentMilestone.level ? DinoStyle.green : (isUnlocked ? DinoStyle.greenLight : Color.gray.opacity(0.2)), lineWidth: 2)
+                                                )
+                                            
+                                            DinoMascotView(milestone.mascot, height: 48, animated: false)
+                                                .opacity(isUnlocked ? 1.0 : 0.6)
+                                                .grayscale(isUnlocked ? 0 : 0.6)
+                                        }
                                         
-                                        Image(systemName: isUnlocked ? "checkmark.seal.fill" : "lock.circle.fill")
-                                            .font(.system(size: 20, weight: .bold))
-                                            .foregroundStyle(isUnlocked ? DinoStyle.green : Color.gray)
+                                        // Biểu tượng huy hiệu nhỏ góc dưới
+                                        Image(systemName: milestone.badgeSymbol)
+                                            .font(.system(size: 10, weight: .bold))
+                                            .foregroundStyle(.white)
+                                            .padding(3)
+                                            .background(isUnlocked ? DinoStyle.green : Color.gray, in: Circle())
+                                            .offset(x: 4, y: 4)
                                     }
                                     
                                     VStack(alignment: .leading, spacing: 2) {

@@ -735,17 +735,51 @@ const htmlTemplate = `<!doctype html>
       navigate('activity_hub');
     }
 
+    const DINO_MILESTONES = [
+      { level: 1, title: "Trứng Vàng Nứt Vỏ", stageName: "Dino Sơ Sinh", requiredLessons: 1, mascot: "level1", badge: "✨", desc: "Dino chào đời và bắt đầu làm quen với những từ vựng đầu tiên!" },
+      { level: 2, title: "Chập Chững Khám Phá", stageName: "Dino Sơ Sinh", requiredLessons: 2, mascot: "level1", badge: "🐾", desc: "Dino biết tập đi và bắt chước tiếng kêu của muôn loài." },
+      { level: 3, title: "Đôi Mắt Tò Mò", stageName: "Dino Sơ Sinh", requiredLessons: 4, mascot: "level1", badge: "👀", desc: "Dino mở to đôi mắt nhìn ngắm muôn màu sắc rực rỡ." },
+      { level: 4, title: "Nụ Cười Rạng Rỡ", stageName: "Dino Sơ Sinh", requiredLessons: 6, mascot: "level1", badge: "😊", desc: "Dino mỉm cười vui sướng khi nhận được thật nhiều ngôi sao." },
+      { level: 5, title: "Đôi Chân Nhanh Nhẹn", stageName: "Dino Sơ Sinh", requiredLessons: 8, mascot: "level1", badge: "⚡", desc: "Dino chạy tung tăng trên đồng cỏ xanh mát." },
+
+      { level: 6, title: "Ba Lô Nhỏ Xinh", stageName: "Dino Năng Động", requiredLessons: 10, mascot: "level2", badge: "🎒", desc: "Dino đeo chiếc ba lô vàng xinh xắn sẵn sàng đến trường." },
+      { level: 7, title: "Người Bạn Thân Thiết", stageName: "Dino Năng Động", requiredLessons: 12, mascot: "level2", badge: "🤝", desc: "Dino kết thêm nhiều người bạn mới trong lớp học." },
+      { level: 8, title: "Phát Âm Rõ Ràng", stageName: "Dino Năng Động", requiredLessons: 15, mascot: "level2", badge: "🎤", desc: "Dino nói tiếng Anh thật tròn vành rõ chữ." },
+      { level: 9, title: "Nhà Thám Hiểm Nhí", stageName: "Dino Năng Động", requiredLessons: 18, mascot: "level2", badge: "🧭", desc: "Dino khám phá thế giới tự nhiên và các phương tiện giao thông." },
+      { level: 10, title: "Vượt Thử Thách", stageName: "Dino Năng Động", requiredLessons: 20, mascot: "level2", badge: "⭐", desc: "Dino hoàn thành xuất sắc 20 bài học đầu tiên!" },
+
+      { level: 11, title: "Tủ Sách Kỳ Diệu", stageName: "Dino Thông Thái", requiredLessons: 25, mascot: "level3", badge: "📚", desc: "Dino mở trang sách thần kỳ chứa đầy từ vựng thú vị." },
+      { level: 12, title: "Ngôi Sao Đố Vui", stageName: "Dino Thông Thái", requiredLessons: 30, mascot: "level3", badge: "🧩", desc: "Dino trả lời đúng mọi câu hỏi trong các trò chơi." },
+      { level: 13, title: "Ca Sĩ Nhí", stageName: "Dino Thông Thái", requiredLessons: 35, mascot: "level3", badge: "🎵", desc: "Dino hát vang những giai điệu tiếng Anh rộn ràng." },
+      { level: 14, title: "Hiệp Sĩ Tử Tế", stageName: "Dino Thông Thái", requiredLessons: 40, mascot: "level3", badge: "🛡️", desc: "Dino luôn biết chia sẻ, cảm ơn và giúp đỡ bạn bè." },
+      { level: 15, title: "Bậc Thầy Trí Nhớ", stageName: "Dino Thông Thái", requiredLessons: 50, mascot: "level3", badge: "🧠", desc: "Dino ghi nhớ hàng trăm từ vựng của nhiều chủ đề khác nhau!" },
+
+      { level: 16, title: "Hành Trình Bứt Phá", stageName: "Dino Trưởng Thành", requiredLessons: 60, mascot: "level4", badge: "🚀", desc: "Dino bước vào giai đoạn trưởng thành vững vàng." },
+      { level: 17, title: "Ngôi Sao Sáng Ngời", stageName: "Dino Trưởng Thành", requiredLessons: 75, mascot: "level4", badge: "🌟", desc: "Dino tự tin giao tiếp và thể hiện tình yêu tiếng Anh." },
+      { level: 18, title: "Nhà Vô Địch Học Tập", stageName: "Dino Trưởng Thành", requiredLessons: 90, mascot: "level4", badge: "🏆", desc: "Dino đạt danh hiệu vô địch với bộ sưu tập sao khổng lồ." },
+      { level: 19, title: "Tiến Đến Đỉnh Cao", stageName: "Dino Trưởng Thành", requiredLessons: 105, mascot: "level4", badge: "🏁", desc: "Chỉ còn một bước nữa là Dino sẽ tốt nghiệp hoàn hảo!" },
+      { level: 20, title: "Thủ Khoa Toàn Năng", stageName: "Dino Trưởng Thành", requiredLessons: 120, mascot: "level4", badge: "👑", desc: "Dino vinh dự đội chiếc mũ cử nhân tốt nghiệp toàn khóa 120 bài học!" }
+    ];
+
+    function getEvolutionMilestone(completedCount) {
+      const count = completedCount !== undefined ? completedCount : state.completedLessons.length;
+      let active = DINO_MILESTONES[0];
+      for (const m of DINO_MILESTONES) {
+        if (count >= m.requiredLessons) {
+          active = m;
+        } else {
+          break;
+        }
+      }
+      return active;
+    }
+
     function getEvolutionLevel() {
-      const completedCount = state.completedLessons.length;
-      return Math.min(20, Math.max(1, 1 + Math.floor(completedCount / 6)));
+      return getEvolutionMilestone().level;
     }
 
     function getMilestoneMascot() {
-      const lvl = getEvolutionLevel();
-      if (lvl <= 5) return 'level1';
-      if (lvl <= 10) return 'level2';
-      if (lvl <= 15) return 'level3';
-      return 'level4';
+      return getEvolutionMilestone().mascot;
     }
 
     function rewardPoints(topicId, lessonId, activityKey, points) {
@@ -1191,35 +1225,88 @@ const htmlTemplate = `<!doctype html>
           break;
 
         case 'growth':
-          const currentLvl = getEvolutionLevel();
+          const curMilestone = getEvolutionMilestone();
+          const currentLvl = curMilestone.level;
+          const nextMilestone = DINO_MILESTONES.find(m => m.level === currentLvl + 1);
+          const completedCount = state.completedLessons.length;
+          const progressPercent = Math.min(100, Math.round((completedCount / 120) * 100));
+
           html = \`
             <div class="top-header">
               <button class="back-btn" onclick="navigate('home')">←</button>
               <h2 style="margin:0; font-size:20px; color:#1e6a39;">Dino Trưởng Thành</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
-            <div class="dino-card" style="text-align:center;">
-              \${getDinoImg(getMilestoneMascot(), 'big')}
-              <h2 style="color:#1b592e; margin:6px 0 2px;">Cột Mốc Cấp \${currentLvl} / 20</h2>
-              <span style="background:#28a44c; color:#fff; font-size:12px; font-weight:800; padding:2px 10px; border-radius:10px;">
-                \${currentLvl <= 5 ? 'Dino Sơ Sinh' : currentLvl <= 10 ? 'Dino Năng Động' : currentLvl <= 15 ? 'Dino Thông Thái' : 'Dino Tốt Nghiệp Đại Tài'}
-              </span>
-              <div class="progress-bar"><div class="progress-fill" style="width:\${(currentLvl/20)*100}%;"></div></div>
-              <p style="font-size:12px; color:#688877; margin:4px 0 0;">Đã hoàn thành \${state.completedLessons.length} / 120 bài học</p>
-            </div>
-            <h4 style="margin:14px 0 8px; color:#1e6a39;">Hành trình 20 cấp độ:</h4>
-            \${Array.from({length:20}, (_, i) => i+1).map(l => {
-              const unlocked = l <= currentLvl;
-              return \`
-                <div class="tile-card" style="margin-bottom:8px; display:flex; justify-content:space-between; align-items:center; opacity:\${unlocked?1:0.6};">
-                  <div>
-                    <b style="color:\${unlocked?'#239446':'#888'};">Cấp \${l} \${l === currentLvl ? '🌟 (Hiện tại)' : ''}</b>
-                    <div style="font-size:12px; color:#688877;">Cần \${l*6} bài học hoàn thành</div>
-                  </div>
-                  <span>\${unlocked ? '🔓' : '🔒'}</span>
+
+            <!-- THẺ HERO DINO CẤP ĐỘ HIỆN TẠI -->
+            <div class="dino-card" style="text-align:center; padding:18px 16px; margin-bottom:16px;">
+              \${getDinoImg(curMilestone.mascot, 'big')}
+              <h2 style="color:#1b592e; margin:8px 0 3px; font-size:22px;">Cột Mốc Cấp \${currentLvl} / 20</h2>
+              <div style="font-size:16px; font-weight:900; color:#239446; margin-bottom:6px;">\${curMilestone.title}</div>
+              
+              <div style="display:inline-flex; align-items:center; gap:6px; background:#eafbee; border:1.5px solid #84d89a; color:#1e7a3d; font-size:12px; font-weight:800; padding:4px 12px; border-radius:12px; margin-bottom:10px;">
+                <span>\${curMilestone.badge}</span>
+                <span>\${curMilestone.stageName}</span>
+              </div>
+
+              <p style="font-size:13px; color:#5b7c6b; margin:0 0 10px; line-height:1.4;">\${curMilestone.desc}</p>
+              
+              <div class="progress-bar"><div class="progress-fill" style="width:\${progressPercent}%;"></div></div>
+              <div style="display:flex; justify-content:space-between; font-size:12px; color:#688877; margin-top:4px; font-weight:700;">
+                <span>Đã hoàn thành \${completedCount} / 120 bài</span>
+                <span>\${progressPercent}% toàn khóa</span>
+              </div>
+
+              \${nextMilestone ? \`
+                <div style="margin-top:10px; padding:8px 12px; background:#fffbee; border-radius:12px; border:1px solid #ffd67a; font-size:12px; color:#855400; font-weight:700; text-align:left;">
+                  🚀 Cần thêm <b>\${Math.max(1, nextMilestone.requiredLessons - completedCount)} bài nữa</b> để đạt <b>Cấp \${nextMilestone.level}: \${nextMilestone.title}</b>!
                 </div>
-              \`;
-            }).join('')}
+              \` : \`
+                <div style="margin-top:10px; padding:8px 12px; background:#f4fbf5; border-radius:12px; border:1px solid #84d89a; font-size:12px; color:#1e7a3d; font-weight:800;">
+                  🏆 Bé đã đưa Dino tiến hóa lên cấp cao nhất! Thủ khoa toàn năng!
+                </div>
+              \`}
+            </div>
+
+            <!-- DANH SÁCH 20 CẤP ĐỘ CÓ HÌNH ẢNH DINO TỪNG GIAI ĐOẠN -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 10px;">
+              <h4 style="margin:0; color:#1e6a39; font-size:16px; font-weight:900;">Hành trình 20 cấp độ:</h4>
+              <span style="font-size:12px; color:#5c7e6c; font-weight:700;">4 giai đoạn tiến hóa</span>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              \${DINO_MILESTONES.map(m => {
+                const isCurrent = m.level === currentLvl;
+                const unlocked = (completedCount >= m.requiredLessons) || (m.level === 1);
+                
+                return \`
+                  <div class="tile-card" style="display:flex; align-items:center; gap:12px; padding:10px 12px; margin-bottom:0; border:2px solid \${isCurrent ? '#28a44c' : unlocked ? '#a8e5be' : '#e0ece5'}; background:\${isCurrent ? '#f2fbf4' : '#fff'}; box-shadow:\${isCurrent ? '0 4px 12px rgba(40,164,76,0.18)' : '0 2px 5px rgba(0,0,0,0.03)'}; border-radius:18px;">
+                    
+                    <!-- HÌNH ẢNH DINO 3D THỂ HIỆN SỰ TRƯỞNG THÀNH TỪNG CẤP ĐỘ -->
+                    <div style="position:relative; width:56px; height:56px; flex-shrink:0; border-radius:16px; background:\${isCurrent ? '#d4f7de' : unlocked ? '#eafbee' : '#f4f6f5'}; border:2px solid \${isCurrent ? '#28a44c' : unlocked ? '#84d89a' : '#d2ded7'}; display:flex; align-items:center; justify-content:center; overflow:hidden;">
+                      <img src="\${DINO_ASSETS[m.mascot]}" style="width:48px; height:48px; object-fit:contain; filter:\${unlocked ? 'none' : 'grayscale(60%) opacity(0.7)'};" alt="\${m.title}">
+                      <span style="position:absolute; bottom:1px; right:1px; font-size:11px; line-height:1; background:rgba(255,255,255,0.95); border-radius:50%; padding:2px; box-shadow:0 1px 3px rgba(0,0,0,0.15);">\${m.badge}</span>
+                    </div>
+
+                    <!-- THÔNG TIN CHI TIẾT CẤP ĐỘ -->
+                    <div style="flex:1; min-width:0;">
+                      <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                        <b style="font-size:15px; color:\${isCurrent ? '#1e7a3d' : unlocked ? '#239446' : '#6b7d73'};">Cấp \${m.level}: \${m.title}</b>
+                        \${isCurrent ? '<span style="background:#28a44c; color:#fff; font-size:10px; font-weight:900; padding:2px 7px; border-radius:10px;">HIỆN TẠI</span>' : ''}
+                      </div>
+                      <div style="font-size:12px; color:\${unlocked ? '#467258' : '#8a9e93'}; font-weight:700; margin-top:2px;">
+                        \${m.stageName} · \${unlocked ? (isCurrent ? 'Đang học 🌟' : 'Đã mở ✨') : \`Cần \${m.requiredLessons} bài\`}
+                      </div>
+                    </div>
+
+                    <!-- TRẠNG THÁI KHÓA / HOÀN THÀNH -->
+                    <div style="flex-shrink:0;">
+                      \${isCurrent ? '<span style="font-size:22px;">🌟</span>' : unlocked ? '<span style="font-size:18px; color:#28a44c; font-weight:900;">✓</span>' : '<span style="font-size:16px; opacity:0.5;">🔒</span>'}
+                    </div>
+                  </div>
+                \`;
+              }).join('')}
+            </div>
           \`;
           break;
 
