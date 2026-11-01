@@ -578,6 +578,7 @@
       }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
@@ -645,7 +646,14 @@
       songLine: 0,
       isListening: false,
       recognizedText: '',
-      speechRate: 0.85
+      speechRate: 0.85,
+      // Supabase Backend Integration (Project: wsaalmeuduiyqbptnrmy)
+      supabaseUrl: 'https://wsaalmeuduiyqbptnrmy.supabase.co',
+      supabaseKey: localStorage.getItem('dino_supabase_key') || '',
+      supabaseUser: JSON.parse(localStorage.getItem('dino_supabase_user') || 'null'),
+      supabaseClient: null,
+      loginTab: 'kid', // 'kid' or 'parent'
+      syncStatus: ''
     };
 
     function saveState() {
@@ -653,6 +661,91 @@
       localStorage.setItem('dino_stars', state.stars);
       localStorage.setItem('dino_completed_lessons', JSON.stringify(state.completedLessons));
       localStorage.setItem('dino_completed_activities', JSON.stringify(state.completedActivities));
+      if (state.supabaseKey) localStorage.setItem('dino_supabase_key', state.supabaseKey);
+      if (state.supabaseUser) {
+        localStorage.setItem('dino_supabase_user', JSON.stringify(state.supabaseUser));
+      } else {
+        localStorage.removeItem('dino_supabase_user');
+      }
+    }
+
+    function initSupabase() {
+      if (window.supabase && state.supabaseKey) {
+        try {
+          state.supabaseClient = window.supabase.createClient(state.supabaseUrl, state.supabaseKey);
+        } catch (e) {
+          console.warn('Supabase client error:', e);
+        }
+      }
+    }
+
+    async function syncLessonToSupabase(topicId, lessonId) {
+      if (!state.supabaseClient || !state.supabaseUser) return;
+      try {
+        const lessonKey = `${topicId}_l${lessonId}`;
+        await state.supabaseClient
+          .from('lesson_progress')
+          .upsert({
+            user_id: state.supabaseUser.id,
+            topic_id: topicId,
+            lesson_id: lessonId,
+            lesson_key: lessonKey,
+            stars_earned: 5,
+            is_completed: true,
+            completed_at: new Date().toISOString()
+          }, { onConflict: 'user_id,lesson_key' });
+
+        await state.supabaseClient
+          .from('profiles')
+          .update({
+            stars: state.stars,
+            streak: state.streak,
+            current_topic_id: topicId,
+            current_lesson_id: lessonId,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', state.supabaseUser.id);
+      } catch (err) {
+        console.warn('Sync lesson to Supabase error:', err);
+      }
+    }
+
+    async function loadCloudProgress() {
+      if (!state.supabaseClient || !state.supabaseUser) return;
+      try {
+        state.syncStatus = 'Đang đồng bộ từ Supabase...';
+        
+        // 1. Tải Profile
+        const { data: profile } = await state.supabaseClient
+          .from('profiles')
+          .select('*')
+          .eq('id', state.supabaseUser.id)
+          .maybeSingle();
+
+        if (profile) {
+          if (profile.kid_name) state.kidName = profile.kid_name;
+          if (profile.stars) state.stars = Math.max(state.stars, profile.stars);
+          if (profile.streak) state.streak = Math.max(state.streak, profile.streak);
+        }
+
+        // 2. Tải các bài học đã học
+        const { data: lessons } = await state.supabaseClient
+          .from('lesson_progress')
+          .select('lesson_key')
+          .eq('user_id', state.supabaseUser.id);
+
+        if (lessons && lessons.length > 0) {
+          const keys = lessons.map(l => l.lesson_key);
+          state.completedLessons = Array.from(new Set([...state.completedLessons, ...keys]));
+        }
+
+        state.syncStatus = `Đã đồng bộ ${state.completedLessons.length} bài học thành công!`;
+        saveState();
+        render();
+      } catch (err) {
+        state.syncStatus = 'Lỗi đồng bộ: ' + (err.message || err);
+        render();
+      }
     }
 
     function getDinoImg(name, sizeClass = '') {
@@ -827,6 +920,7 @@
         state.completedLessons.push(lKey);
       }
       saveState();
+      syncLessonToSupabase(topicId, lessonId);
     }
 
     function updateNav() {
@@ -888,18 +982,57 @@
           break;
 
         case 'login':
+          const isKidTab = state.loginTab === 'kid';
           html = `
-            <div style="text-align:center; padding:40px 0 10px;">
+            <div style="text-align:center; padding:30px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
-              <div class="mascot-box">${getDinoImg('welcome', 'small')}</div>
-              <div class="dino-card">
-                <h2 style="color:#2a974b; margin:0 0 8px; font-size:22px;">Đồng Hành Cùng Bé</h2>
-                <p style="color:#577464; font-size:13px; margin:0 0 14px;">Nhập tên gọi thân mật của bé để bắt đầu hành trình học:</p>
-                <input id="kidNameInput" value="${state.kidName}" style="width:100%; padding:14px; border:2px solid #a8d6b1; border-radius:16px; font-size:17px; font-weight:800; color:#1e7a3d; outline:none; text-align:center; background:#fffdf5; margin-bottom:12px;">
-                <button class="dino-btn green" onclick="loginSubmit()">Vào Học Ngay 🌟</button>
-                <button class="dino-outline-btn" onclick="loginSubmit()">Dùng thử không cần mật khẩu ➔</button>
+              <div class="mascot-box" style="margin:6px 0;">${getDinoImg('welcome', 'small')}</div>
+              
+              <!-- Tab chuyển đổi Bé học / Phụ huynh -->
+              <div style="display:flex; background:#e2f3e7; border-radius:14px; padding:3px; margin:0 0 12px; border:1px solid #bce4c8;">
+                <button onclick="setLoginTab('kid')" style="flex:1; padding:8px 0; border:0; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer; background:${isKidTab ? '#28a44c' : 'transparent'}; color:${isKidTab ? '#fff' : '#457256'}; transition:all 0.2s;">
+                  👶 Bé Học Nhanh
+                </button>
+                <button onclick="setLoginTab('parent')" style="flex:1; padding:8px 0; border:0; border-radius:12px; font-weight:800; font-size:13px; cursor:pointer; background:${!isKidTab ? '#28a44c' : 'transparent'}; color:${!isKidTab ? '#fff' : '#457256'}; transition:all 0.2s;">
+                  ☁️ Phụ Huynh (Cloud)
+                </button>
               </div>
-              <p style="color:#6e8b7b; font-size:12px; margin-top:14px;">🛡️ Chế độ an toàn cho trẻ nhỏ · Dữ liệu lưu cục bộ</p>
+
+              ${isKidTab ? `
+                <!-- TAB 1: BÉ HỌC NHANH (OFFLINE / LOCAL) -->
+                <div class="dino-card" style="text-align:center;">
+                  <h3 style="color:#2a974b; margin:0 0 6px; font-size:19px;">Đồng Hành Cùng Bé</h3>
+                  <p style="color:#577464; font-size:13px; margin:0 0 12px;">Nhập tên gọi thân mật của bé để bắt đầu hành trình học:</p>
+                  <input id="kidNameInput" value="${state.kidName}" placeholder="Ví dụ: Bé Na, Bé Bon..." style="width:100%; padding:12px; border:2px solid #a8d6b1; border-radius:14px; font-size:16px; font-weight:800; color:#1e7a3d; outline:none; text-align:center; background:#fffdf5; margin-bottom:12px; box-sizing:border-box;">
+                  <button class="dino-btn green" onclick="loginSubmit()">Vào Học Ngay 🌟</button>
+                  <button class="dino-outline-btn" style="margin-top:8px;" onclick="loginSubmit()">Dùng thử không cần mật khẩu ➔</button>
+                </div>
+              ` : `
+                <!-- TAB 2: ĐĂNG NHẬP / ĐĂNG KÝ PHỤ HUYNH SUPABASE -->
+                <div class="dino-card" style="text-align:left;">
+                  <h3 style="color:#1d703b; margin:0 0 4px; font-size:18px; text-align:center;">Tài Khoản Supabase</h3>
+                  <p style="color:#577464; font-size:12px; margin:0 0 10px; text-align:center;">Ghi nhớ bài học & đồng bộ trên mọi thiết bị</p>
+                  
+                  <div style="font-size:12px; font-weight:800; color:#3a654c; margin-bottom:3px;">Email Phụ Huynh:</div>
+                  <input id="sbEmailInput" type="email" placeholder="ba_me@gmail.com" style="width:100%; padding:10px 12px; border:1.5px solid #a8d6b1; border-radius:12px; font-size:14px; margin-bottom:8px; box-sizing:border-box;">
+
+                  <div style="font-size:12px; font-weight:800; color:#3a654c; margin-bottom:3px;">Mật Khẩu:</div>
+                  <input id="sbPasswordInput" type="password" placeholder="Tối thiểu 6 ký tự" style="width:100%; padding:10px 12px; border:1.5px solid #a8d6b1; border-radius:12px; font-size:14px; margin-bottom:8px; box-sizing:border-box;">
+
+                  <div style="font-size:12px; font-weight:800; color:#3a654c; margin-bottom:3px;">Tên Bé:</div>
+                  <input id="sbKidNameInput" value="${state.kidName}" placeholder="Tên bé" style="width:100%; padding:10px 12px; border:1.5px solid #a8d6b1; border-radius:12px; font-size:14px; margin-bottom:8px; box-sizing:border-box;">
+
+                  <div style="font-size:11px; font-weight:800; color:#3a654c; margin-bottom:3px;">Supabase Anon Key:</div>
+                  <input id="sbKeyInput" value="${state.supabaseKey}" placeholder="Dán anon public key từ Supabase" style="width:100%; padding:8px 10px; border:1.5px dashed #a8d6b1; border-radius:10px; font-size:11px; font-family:monospace; margin-bottom:12px; box-sizing:border-box; background:#fafdfb;">
+
+                  <div style="display:flex; gap:8px;">
+                    <button class="dino-btn green" style="flex:1; font-size:14px; padding:10px;" onclick="handleParentAuth(false)">Đăng Nhập ➔</button>
+                    <button class="dino-btn blue" style="flex:1; font-size:14px; padding:10px;" onclick="handleParentAuth(true)">Đăng Ký Mới</button>
+                  </div>
+                </div>
+              `}
+
+              <p style="color:#6e8b7b; font-size:12px; margin-top:10px;">🛡️ Kết nối Supabase: Project wsaalmeuduiyqbptnrmy</p>
             </div>
           `;
           break;
@@ -1377,6 +1510,37 @@
               </div>
             </div>
 
+            <!-- THẺ ĐỒNG BỘ CLOUD SUPABASE (PROJECT: wsaalmeuduiyqbptnrmy) -->
+            <div class="dino-card" style="border:2px solid ${state.supabaseUser ? '#28a44c' : '#57a0d3'}; background:${state.supabaseUser ? '#f2fbf5' : '#f4faff'};">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <b style="color:${state.supabaseUser ? '#1e7a3d' : '#1d6fa5'}; font-size:16px;">☁️ Supabase Cloud Sync</b>
+                <span style="font-size:11px; font-weight:800; background:${state.supabaseUser ? '#28a44c' : '#57a0d3'}; color:#fff; padding:2px 8px; border-radius:10px;">
+                  ${state.supabaseUser ? 'ĐÃ KẾT NỐI' : 'CHƯA ĐĂNG NHẬP'}
+                </span>
+              </div>
+
+              ${state.supabaseUser ? `
+                <div style="font-size:13px; color:#3d6550; margin-bottom:6px;">
+                  Tài khoản: <b>${state.supabaseUser.email}</b>
+                </div>
+                <div style="font-size:12px; color:#5c836f; margin-bottom:10px;">
+                  Đã ghi nhớ: <b>${state.completedLessons.length} bài học</b> trên đám mây.
+                </div>
+                ${state.syncStatus ? `<div style="font-size:12px; color:#1e7a3d; margin-bottom:8px; font-weight:700;">${state.syncStatus}</div>` : ''}
+                <div style="display:flex; gap:8px;">
+                  <button class="dino-btn green" style="flex:2; font-size:13px; padding:8px;" onclick="handleCloudSync()">🔄 Đồng Bộ Ngay</button>
+                  <button class="dino-outline-btn" style="flex:1; font-size:13px; padding:8px; color:#d42638; border-color:#f09ea7;" onclick="handleCloudLogout()">Đăng Xuất</button>
+                </div>
+              ` : `
+                <p style="font-size:12px; color:#577464; margin:0 0 10px; line-height:1.4;">
+                  Đăng nhập tài khoản phụ huynh để lưu vĩnh viễn tiến độ học của bé và tiếp tục học trên các thiết bị khác!
+                </p>
+                <button class="dino-btn blue" style="font-size:13px; padding:10px;" onclick="state.loginTab='parent'; navigate('login')">
+                  🔐 Đăng Nhập / Đăng Ký Supabase ➔
+                </button>
+              `}
+            </div>
+
             <div class="dino-card">
               <h4 style="margin:0 0 10px; color:#1e6a39;">Cài đặt tốc độ giọng đọc</h4>
               <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
@@ -1398,6 +1562,107 @@
     }
 
     // Helper functions
+    function setLoginTab(tab) {
+      state.loginTab = tab;
+      render();
+    }
+
+    async function handleParentAuth(isSignUp) {
+      const email = document.getElementById('sbEmailInput')?.value.trim();
+      const password = document.getElementById('sbPasswordInput')?.value.trim();
+      const kidName = document.getElementById('sbKidNameInput')?.value.trim();
+      const anonKey = document.getElementById('sbKeyInput')?.value.trim();
+
+      if (!email || !password) {
+        alert("Vui lòng nhập Email và Mật khẩu!");
+        return;
+      }
+      if (password.length < 6) {
+        alert("Mật khẩu cần tối thiểu 6 ký tự!");
+        return;
+      }
+
+      if (anonKey) {
+        state.supabaseKey = anonKey;
+        saveState();
+      }
+
+      if (!state.supabaseClient) {
+        if (!state.supabaseKey) {
+          alert("Vui lòng nhập Supabase Anon Key từ Dashboard để kết nối!");
+          return;
+        }
+        initSupabase();
+      }
+
+      if (!state.supabaseClient) {
+        alert("Không thể khởi tạo kết nối Supabase. Vui lòng kiểm tra lại Anon Key!");
+        return;
+      }
+
+      try {
+        let res;
+        if (isSignUp) {
+          res = await state.supabaseClient.auth.signUp({
+            email: email,
+            password: password,
+            options: {
+              data: {
+                kid_name: kidName || state.kidName,
+                stars: state.stars
+              }
+            }
+          });
+        } else {
+          res = await state.supabaseClient.auth.signInWithPassword({
+            email: email,
+            password: password
+          });
+        }
+
+        if (res.error) {
+          alert((isSignUp ? 'Đăng ký' : 'Đăng nhập') + ' thất bại: ' + res.error.message);
+          return;
+        }
+
+        const user = res.data.user;
+        if (user) {
+          state.supabaseUser = { id: user.id, email: user.email };
+          if (kidName) state.kidName = kidName;
+          saveState();
+          await loadCloudProgress();
+          alert((isSignUp ? 'Tạo tài khoản' : 'Đăng nhập') + ' thành công! Dữ liệu bài học đã được đồng bộ với Supabase.');
+          navigate('home');
+        }
+      } catch (err) {
+        alert("Lỗi: " + (err.message || err));
+      }
+    }
+
+    async function handleCloudSync() {
+      if (!state.supabaseUser) return;
+      await loadCloudProgress();
+      // Đồng bộ các bài học hiện tại lên cloud
+      for (const lKey of state.completedLessons) {
+        const parts = lKey.split('_l');
+        if (parts.length === 2) {
+          await syncLessonToSupabase(parts[0], parseInt(parts[1], 10));
+        }
+      }
+      state.syncStatus = `Đã đồng bộ đầy đủ ${state.completedLessons.length} bài học!`;
+      render();
+    }
+
+    async function handleCloudLogout() {
+      if (state.supabaseClient) {
+        try { await state.supabaseClient.auth.signOut(); } catch(e){}
+      }
+      state.supabaseUser = null;
+      saveState();
+      render();
+      alert("Đã đăng xuất tài khoản Supabase!");
+    }
+
     function nextOnboard() {
       if (state.onboardStep < 2) {
         state.onboardStep++;
@@ -1569,6 +1834,10 @@
     }
 
     // Initialize
+    initSupabase();
+    if (state.supabaseUser) {
+      loadCloudProgress();
+    }
     render();
   </script>
 </body>
