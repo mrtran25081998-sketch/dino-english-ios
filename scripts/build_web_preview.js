@@ -93,11 +93,12 @@ const htmlTemplate = `<!doctype html>
       flex-direction: column;
     }
 
-    /* Dynamic Island (Pinned at top) */
+    /* Dynamic Island (Floating over header at top) */
     .dynamic-island {
-      flex-shrink: 0;
-      position: relative;
-      margin: 8px auto 4px;
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
       width: 124px;
       height: 32px;
       background: #000;
@@ -107,6 +108,7 @@ const htmlTemplate = `<!doctype html>
       align-items: center;
       justify-content: space-between;
       padding: 0 12px;
+      pointer-events: none;
     }
     .island-camera {
       width: 10px;
@@ -343,7 +345,7 @@ const htmlTemplate = `<!doctype html>
       line-height: 1.2;
     }
 
-    /* Header Nav (Sticky / Fixed at top when scrolling) */
+    /* Header Nav (Sticky / Fixed at top when scrolling, Clean White Background) */
     .top-header {
       position: sticky;
       top: 0;
@@ -353,12 +355,10 @@ const htmlTemplate = `<!doctype html>
       justify-content: space-between;
       min-height: 52px;
       margin: 0 -18px 12px;
-      padding: 10px 18px 10px;
-      background: rgba(145, 222, 255, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1.5px solid rgba(75, 175, 115, 0.22);
-      box-shadow: 0 4px 14px rgba(25, 85, 50, 0.07);
+      padding: 46px 18px 12px;
+      background: #ffffff;
+      border-bottom: 1.5px solid #e0ebe4;
+      box-shadow: 0 4px 16px rgba(20, 60, 40, 0.05);
     }
     .back-btn {
       background: #fff;
@@ -540,14 +540,14 @@ const htmlTemplate = `<!doctype html>
       }
       .screen-wrapper {
         border-radius: 0 !important;
-        padding-top: max(env(safe-area-inset-top), 52px) !important;
+        padding-top: 0 !important;
       }
       .app-viewport {
         padding: 0 16px 20px !important;
       }
       .top-header {
         margin: 0 -16px 10px !important;
-        padding: 8px 16px 10px !important;
+        padding: max(env(safe-area-inset-top), 52px) 16px 12px !important;
       }
       .dynamic-island {
         display: none !important;
@@ -841,7 +841,7 @@ const htmlTemplate = `<!doctype html>
           ];
           const curr = slides[state.onboardStep];
           html = \`
-            <div style="text-align:center; padding:10px 0;">
+            <div style="text-align:center; padding:48px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg(curr.mascot, 'big')}</div>
               <div class="dino-card">
@@ -859,7 +859,7 @@ const htmlTemplate = `<!doctype html>
 
         case 'login':
           html = \`
-            <div style="text-align:center; padding:10px 0;">
+            <div style="text-align:center; padding:48px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg('welcome', 'small')}</div>
               <div class="dino-card">
@@ -1187,7 +1187,7 @@ const htmlTemplate = `<!doctype html>
           const curLesson = getLesson(state.currentTopicId, state.currentLessonId);
 
           html = \`
-            <div style="text-align:center; padding:10px 0 20px;">
+            <div style="text-align:center; padding:48px 0 20px;">
               \${getDinoImg('reward', 'big')}
               
               <div class="dino-card" style="margin-bottom:14px;">
