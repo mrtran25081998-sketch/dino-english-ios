@@ -922,6 +922,16 @@ const htmlTemplate = `<!doctype html>
       activeChild: null,
       showPassword: false,
       showConfirmPassword: false,
+      signupFormData: {
+        fullName: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+      },
+      loginFormData: {
+        email: '',
+        password: ''
+      },
       pendingVerifyEmail: '',
       selectedAvatar: 'welcome',
       selectedAgeGroup: '6-8',
@@ -1329,7 +1339,7 @@ const htmlTemplate = `<!doctype html>
 
                 <div class="form-group">
                   <label class="form-label">Email Phụ Huynh</label>
-                  <input id="loginEmail" type="email" class="form-input" placeholder="ba_me@example.com" value="\${state.pendingVerifyEmail || ''}">
+                  <input id="loginEmail" type="email" class="form-input" placeholder="ba_me@example.com" value="\${state.loginFormData?.email || state.pendingVerifyEmail || ''}" oninput="state.loginFormData.email=this.value">
                 </div>
 
                 <div class="form-group">
@@ -1338,8 +1348,8 @@ const htmlTemplate = `<!doctype html>
                     <a href="javascript:void(0)" onclick="state.authError=''; navigate('forgot_password')" style="font-size:12px; color:#239446; font-weight:800; text-decoration:none;">Quên mật khẩu?</a>
                   </div>
                   <div class="input-wrapper">
-                    <input id="loginPassword" type="\${state.showPassword ? 'text' : 'password'}" class="form-input" placeholder="Nhập mật khẩu" style="padding-right:42px;">
-                    <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('password')">
+                    <input id="loginPassword" type="\${state.showPassword ? 'text' : 'password'}" class="form-input" placeholder="Nhập mật khẩu" style="padding-right:42px;" value="\${state.loginFormData?.password || ''}" oninput="state.loginFormData.password=this.value">
+                    <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('login')">
                       \${state.showPassword ? '🙈' : '👁️'}
                     </button>
                   </div>
@@ -1386,18 +1396,18 @@ const htmlTemplate = `<!doctype html>
 
                 <div class="form-group">
                   <label class="form-label">Họ và Tên Phụ Huynh</label>
-                  <input id="signupFullName" type="text" class="form-input" placeholder="Ví dụ: Nguyễn Văn A">
+                  <input id="signupFullName" type="text" class="form-input" placeholder="Ví dụ: Nguyễn Văn A" value="\${state.signupFormData?.fullName || ''}" oninput="state.signupFormData.fullName=this.value">
                 </div>
 
                 <div class="form-group">
                   <label class="form-label">Email Phụ Huynh</label>
-                  <input id="signupEmail" type="email" class="form-input" placeholder="ba_me@example.com">
+                  <input id="signupEmail" type="email" class="form-input" placeholder="ba_me@example.com" value="\${state.signupFormData?.email || ''}" oninput="state.signupFormData.email=this.value">
                 </div>
 
                 <div class="form-group">
                   <label class="form-label">Mật Khẩu</label>
                   <div class="input-wrapper">
-                    <input id="signupPassword" type="\${state.showPassword ? 'text' : 'password'}" class="form-input" placeholder="Tối thiểu 6 ký tự" style="padding-right:42px;">
+                    <input id="signupPassword" type="\${state.showPassword ? 'text' : 'password'}" class="form-input" placeholder="Tối thiểu 6 ký tự" style="padding-right:42px;" value="\${state.signupFormData?.password || ''}" oninput="state.signupFormData.password=this.value">
                     <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('password')">
                       \${state.showPassword ? '🙈' : '👁️'}
                     </button>
@@ -1407,7 +1417,7 @@ const htmlTemplate = `<!doctype html>
                 <div class="form-group">
                   <label class="form-label">Xác Nhận Mật Khẩu</label>
                   <div class="input-wrapper">
-                    <input id="signupConfirmPassword" type="\${state.showConfirmPassword ? 'text' : 'password'}" class="form-input" placeholder="Nhập lại mật khẩu" style="padding-right:42px;">
+                    <input id="signupConfirmPassword" type="\${state.showConfirmPassword ? 'text' : 'password'}" class="form-input" placeholder="Nhập lại mật khẩu" style="padding-right:42px;" value="\${state.signupFormData?.confirmPassword || ''}" oninput="state.signupFormData.confirmPassword=this.value">
                     <button type="button" class="toggle-pwd-btn" onclick="togglePasswordVisibility('confirm')">
                       \${state.showConfirmPassword ? '🙈' : '👁️'}
                     </button>
@@ -2233,10 +2243,28 @@ const htmlTemplate = `<!doctype html>
 
     // Helper functions & Supabase Auth Actions
     function togglePasswordVisibility(which) {
+      let inputEl, btnEl;
       if (which === 'confirm') {
+        inputEl = document.getElementById('signupConfirmPassword');
         state.showConfirmPassword = !state.showConfirmPassword;
-      } else {
+        btnEl = inputEl?.parentElement?.querySelector('.toggle-pwd-btn');
+      } else if (which === 'login') {
+        inputEl = document.getElementById('loginPassword');
         state.showPassword = !state.showPassword;
+        btnEl = inputEl?.parentElement?.querySelector('.toggle-pwd-btn');
+      } else {
+        inputEl = document.getElementById('signupPassword');
+        state.showPassword = !state.showPassword;
+        btnEl = inputEl?.parentElement?.querySelector('.toggle-pwd-btn');
+      }
+
+      if (inputEl) {
+        const isPwd = inputEl.type === 'password';
+        inputEl.type = isPwd ? 'text' : 'password';
+        if (btnEl) {
+          btnEl.innerText = isPwd ? '🙈' : '👁️';
+        }
+        return; // Không gọi render(): Giữ nguyên 100% dữ liệu đã nhập trong tất cả các ô!
       }
       render();
     }
@@ -2248,9 +2276,11 @@ const htmlTemplate = `<!doctype html>
     }
 
     async function handleLogin() {
-      const email = document.getElementById('loginEmail')?.value.trim();
-      const password = document.getElementById('loginPassword')?.value.trim();
-      const anonKey = document.getElementById('loginAnonKey')?.value.trim();
+      const email = (document.getElementById('loginEmail')?.value || '').trim();
+      const password = (document.getElementById('loginPassword')?.value || '').trim();
+      const anonKey = (document.getElementById('loginAnonKey')?.value || '').trim();
+
+      state.loginFormData = { email, password };
 
       if (!email || !password) {
         state.authError = "Vui lòng nhập đầy đủ Email và Mật khẩu!";
@@ -2300,11 +2330,14 @@ const htmlTemplate = `<!doctype html>
     }
 
     async function handleSignUp() {
-      const fullName = document.getElementById('signupFullName')?.value.trim();
-      const email = document.getElementById('signupEmail')?.value.trim();
-      const password = document.getElementById('signupPassword')?.value.trim();
-      const confirmPassword = document.getElementById('signupConfirmPassword')?.value.trim();
+      const fullName = (document.getElementById('signupFullName')?.value || '').trim();
+      const email = (document.getElementById('signupEmail')?.value || '').trim();
+      const password = (document.getElementById('signupPassword')?.value || '').trim();
+      const confirmPassword = (document.getElementById('signupConfirmPassword')?.value || '').trim();
       const termsAccepted = document.getElementById('signupTerms')?.checked;
+
+      // Lưu ngay vào state để khi render lỗi thì toàn bộ dữ liệu người dùng nhập vẫn còn nguyên!
+      state.signupFormData = { fullName, email, password, confirmPassword };
 
       if (!fullName) {
         state.authError = "Vui lòng nhập họ và tên phụ huynh!";
