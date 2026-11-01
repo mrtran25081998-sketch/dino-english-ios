@@ -96,13 +96,13 @@ const htmlTemplate = `<!doctype html>
     /* Dynamic Island (Floating over header at top) */
     .dynamic-island {
       position: absolute;
-      top: 7px;
+      top: 8px;
       left: 50%;
       transform: translateX(-50%);
-      width: 116px;
-      height: 26px;
+      width: 120px;
+      height: 28px;
       background: #000;
-      border-radius: 16px;
+      border-radius: 18px;
       z-index: 1000;
       display: flex;
       align-items: center;
@@ -353,9 +353,9 @@ const htmlTemplate = `<!doctype html>
       display: flex;
       align-items: center;
       justify-content: space-between;
-      min-height: 52px;
-      margin: 0 -18px 12px;
-      padding: 44px 18px 12px;
+      min-height: 56px;
+      margin: 0 -18px 14px;
+      padding: 56px 18px 18px;
       background: #ffffff;
       border-bottom: 1.5px solid #e0ebe4;
       box-shadow: 0 4px 16px rgba(20, 60, 40, 0.05);
@@ -551,8 +551,8 @@ const htmlTemplate = `<!doctype html>
         padding: 0 16px 20px !important;
       }
       .top-header {
-        margin: 0 -16px 10px !important;
-        padding: max(env(safe-area-inset-top), 48px) 16px 12px !important;
+        margin: 0 -16px 14px !important;
+        padding: max(env(safe-area-inset-top), 56px) 16px 18px !important;
       }
       .top-header.home-header {
         background: transparent !important;
@@ -869,7 +869,7 @@ const htmlTemplate = `<!doctype html>
 
         case 'login':
           html = \`
-            <div style="text-align:center; padding:44px 0 10px;">
+            <div style="text-align:center; padding:56px 0 10px;">
               <div class="brand-title">Dino <em>English</em></div>
               <div class="mascot-box">\${getDinoImg('welcome', 'small')}</div>
               <div class="dino-card">
@@ -1197,7 +1197,7 @@ const htmlTemplate = `<!doctype html>
           const curLesson = getLesson(state.currentTopicId, state.currentLessonId);
 
           html = \`
-            <div style="text-align:center; padding:44px 0 20px;">
+            <div style="text-align:center; padding:56px 0 20px;">
               \${getDinoImg('reward', 'big')}
               
               <div class="dino-card" style="margin-bottom:14px;">
