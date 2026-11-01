@@ -77,6 +77,34 @@ public final class SupabaseService {
         
         return (userId, token)
     }
+    // MARK: - XÁC THỰC MÃ OTP (VERIFY EMAIL CODE)
+    public func verifyOTP(email: String, token: String) async throws -> Bool {
+        guard let url = URL(string: "\(Self.projectURL)/auth/v1/verify") else {
+            throw URLError(.badURL)
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue(anonKey, forHTTPHeaderField: "apikey")
+        
+        let body: [String: Any] = [
+            "email": email,
+            "token": token,
+            "type": "signup"
+        ]
+        request.httpBody = try JSONSerialization.data(withJSONObject: body)
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+            let errorText = String(data: data, encoding: .utf8) ?? "Mã xác thực không hợp lệ hoặc đã hết hạn"
+            throw NSError(domain: "SupabaseError", code: 400, userInfo: [NSLocalizedDescriptionKey: errorText])
+        }
+        
+        // Pass xác thực, giải phóng session tạm để người dùng chuyển về màn hình đăng nhập
+        self.signOut()
+        return true
+    }
     
     // MARK: - ĐĂNG NHẬP
     public func signIn(email: String, password: String) async throws -> (userId: String, token: String) {

@@ -966,6 +966,18 @@ const htmlTemplate = `<!doctype html>
         return;
       }
 
+      if (window.location.hash.includes('type=signup') || window.location.hash.includes('type=email_change')) {
+        try {
+          if (state.supabaseClient) await state.supabaseClient.auth.signOut();
+        } catch(e){}
+        window.location.hash = '';
+        state.authSuccess = "🎉 Xác thực tài khoản thành công! Vui lòng đăng nhập để bắt đầu học.";
+        state.authError = '';
+        state.view = 'login';
+        render();
+        return;
+      }
+
       initSupabase();
       if (state.supabaseClient) {
         try {
@@ -1423,23 +1435,45 @@ const htmlTemplate = `<!doctype html>
 
         case 'verify_email':
           html = \`
-            <div style="text-align:center; padding:32px 0 16px;">
-              <div class="mascot-box">\${getDinoImg('happy', 'big')}</div>
+            <div style="text-align:center; padding:24px 0 16px;">
+              <div class="mascot-box">\${getDinoImg('happy', 'medium')}</div>
               <div class="dino-card" style="text-align:center;">
-                <h2 style="color:#1e7a3d; margin:6px 0 8px; font-size:22px;">Kiểm Tra Email ✉️</h2>
-                <p style="color:#577464; font-size:14px; line-height:1.5; margin:0 0 12px;">
-                  Chúng tôi đã gửi email xác thực đến địa chỉ:<br>
-                  <b style="color:#1b6334; font-size:15px;">\${state.pendingVerifyEmail || 'email của bạn'}</b>
+                <h2 style="color:#1e7a3d; margin:4px 0 6px; font-size:22px; font-weight:900;">Xác Thực Tài Khoản ✉️</h2>
+                <p style="color:#577464; font-size:13px; line-height:1.5; margin:0 0 12px;">
+                  Mã xác thực đã được gửi đến email:<br>
+                  <b style="color:#1b6334; font-size:14px;">\${state.pendingVerifyEmail || 'email của bạn'}</b>
                 </p>
-                <div style="background:#f4fbf5; border:1px solid #a8e5be; border-radius:14px; padding:12px; margin-bottom:14px; font-size:13px; color:#3d6550; text-align:left; line-height:1.4;">
-                  👉 <b>Hướng dẫn:</b> Vui lòng mở hòm thư của bạn (kiểm tra cả mục Thư rác / Spam) và nhấn vào nút <b>Confirm your mail</b> để kích hoạt tài khoản.
+
+                \${state.authError ? \`<div class="error-banner" style="text-align:left; margin-bottom:12px;"><span>⚠️</span> \${state.authError}</div>\` : ''}
+                \${state.authSuccess ? \`<div class="success-banner" style="text-align:left; margin-bottom:12px;"><span>✅</span> \${state.authSuccess}</div>\` : ''}
+
+                <!-- Ô nhập mã xác thực OTP -->
+                <div style="margin:16px 0 14px; text-align:center;">
+                  <label style="display:block; font-size:13px; font-weight:800; color:#275a3a; margin-bottom:8px;">
+                    Nhập mã xác thực (OTP):
+                  </label>
+                  <input id="otpCodeInput" type="text" inputmode="numeric" maxlength="10"
+                    placeholder="• • • • • •"
+                    style="width:90%; max-width:280px; font-size:26px; font-weight:900; letter-spacing:6px; text-align:center; padding:10px 12px; border-radius:14px; border:2px solid #34a853; background:#f4fbf5; color:#185a2c; outline:none; font-family:monospace;"
+                    onkeyup="if(event.key==='Enter') handleVerifyOtp()">
                 </div>
-                <button class="dino-btn green" style="width:100%; margin-bottom:8px;" onclick="handleResendVerification()">
-                  Gửi Lại Email Xác Thực 🔄
+
+                <div style="background:#f4fbf5; border:1px solid #a8e5be; border-radius:12px; padding:10px 12px; margin-bottom:16px; font-size:12px; color:#3d6550; text-align:left; line-height:1.4;">
+                  💡 <b>Mẹo:</b> Kiểm tra hộp thư Đến hoặc mục <b>Spam / Thư rác</b> để lấy mã xác thực hoặc nhấn trực tiếp vào nút kích hoạt trong email.
+                </div>
+
+                <button class="dino-btn green" style="width:100%; margin-bottom:10px; font-size:16px;" onclick="handleVerifyOtp()" \${state.isSubmitting ? 'disabled' : ''}>
+                  \${state.isSubmitting ? '⏳ Đang Xác Thực...' : 'Xác Thực Tài Khoản ➔'}
                 </button>
-                <button class="dino-outline-btn" style="width:100%;" onclick="navigate('login')">
-                  Quay Lại Đăng Nhập ➔
-                </button>
+
+                <div style="display:flex; gap:8px;">
+                  <button class="dino-outline-btn" style="flex:1; font-size:13px; padding:10px;" onclick="handleResendVerification()">
+                    Gửi Lại Mã 🔄
+                  </button>
+                  <button class="dino-outline-btn" style="flex:1; font-size:13px; padding:10px;" onclick="state.authError=''; state.authSuccess=''; navigate('login')">
+                    Về Đăng Nhập
+                  </button>
+                </div>
               </div>
             </div>
           \`;
@@ -2355,9 +2389,73 @@ const htmlTemplate = `<!doctype html>
           email: state.pendingVerifyEmail,
           options: { emailRedirectTo: redirectUrl }
         });
-        alert("Đã gửi lại email xác thực! Vui lòng kiểm tra hòm thư của bạn.");
+        state.authSuccess = "Đã gửi lại mã xác thực! Vui lòng kiểm tra email của bạn.";
+        state.authError = '';
+        render();
       } catch (e) {
-        alert("Lỗi gửi lại email: " + (e.message || e));
+        state.authError = "Lỗi gửi lại mã: " + (e.message || e);
+        render();
+      }
+    }
+
+    async function handleVerifyOtp() {
+      const codeInput = document.getElementById('otpCodeInput');
+      const token = (codeInput ? codeInput.value : '').trim().replace(/\s+/g, '');
+      if (!token || token.length < 4) {
+        state.authError = "Vui lòng nhập đầy đủ mã xác thực được gửi về email!";
+        render();
+        return;
+      }
+
+      state.isSubmitting = true;
+      state.authError = '';
+      state.authSuccess = '';
+      render();
+
+      try {
+        initSupabase();
+        if (!state.supabaseClient) throw new Error("Chưa khởi tạo kết nối Supabase!");
+
+        // 1. Thử xác thực với type: 'signup'
+        let res = await state.supabaseClient.auth.verifyOtp({
+          email: state.pendingVerifyEmail,
+          token: token,
+          type: 'signup'
+        });
+
+        // 2. Fallback sang type: 'email' nếu type 'signup' trả lỗi
+        if (res.error) {
+          const retry = await state.supabaseClient.auth.verifyOtp({
+            email: state.pendingVerifyEmail,
+            token: token,
+            type: 'email'
+          });
+          if (!retry.error) {
+            res = retry;
+          }
+        }
+
+        if (res.error) {
+          state.authError = "Mã xác thực không chính xác hoặc đã hết hạn (" + (res.error.message || 'Lỗi OTP') + ")! Vui lòng thử lại.";
+          state.isSubmitting = false;
+          render();
+          return;
+        }
+
+        // Đã xác thực thành công (Pass)!
+        // Theo yêu cầu của người dùng: "tôi nhập mã trên app pass thì về màn hình đăng nhập"
+        try {
+          await state.supabaseClient.auth.signOut();
+        } catch(e){}
+
+        state.authSuccess = "🎉 Xác thực tài khoản thành công! Vui lòng đăng nhập để bắt đầu học.";
+        state.authError = '';
+        state.isSubmitting = false;
+        navigate('login');
+      } catch (err) {
+        state.authError = "Lỗi xác thực: " + (err.message || err);
+        state.isSubmitting = false;
+        render();
       }
     }
 
