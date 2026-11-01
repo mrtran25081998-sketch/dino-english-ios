@@ -11,7 +11,7 @@ public final class SupabaseService {
     // Khóa anon public key (có thể ghi đè qua UserDefaults hoặc file config)
     public var anonKey: String {
         get {
-            UserDefaults.standard.string(forKey: "DINO_SUPABASE_ANON_KEY") ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy_anon_key"
+            UserDefaults.standard.string(forKey: "DINO_SUPABASE_ANON_KEY") ?? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzYWFsbWV1ZHVpeXFicHRucm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NzE0OTgsImV4cCI6MjEwOTA0NzQ5OH0.y29cwhH60cdwJPcQSZ88ryU3b9gTNAO-BViMeHCUN-0"
         }
         set {
             UserDefaults.standard.set(newValue, forKey: "DINO_SUPABASE_ANON_KEY")

@@ -895,7 +895,7 @@
       speechRate: 0.85,
       // Supabase Backend Integration (Project: wsaalmeuduiyqbptnrmy)
       supabaseUrl: 'https://wsaalmeuduiyqbptnrmy.supabase.co',
-      supabaseKey: localStorage.getItem('dino_supabase_key') || '',
+      supabaseKey: (localStorage.getItem('dino_supabase_key') && localStorage.getItem('dino_supabase_key').length > 20) ? localStorage.getItem('dino_supabase_key') : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzYWFsbWV1ZHVpeXFicHRucm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NzE0OTgsImV4cCI6MjEwOTA0NzQ5OH0.y29cwhH60cdwJPcQSZ88ryU3b9gTNAO-BViMeHCUN-0',
       supabaseUser: JSON.parse(localStorage.getItem('dino_supabase_user') || 'null'),
       supabaseClient: null,
       parentProfile: null,
