@@ -908,7 +908,11 @@ const htmlTemplate = `<!doctype html>
     let state = {
       view: savedUser ? 'home' : (onboardCompleted ? 'login' : 'onboard'),
       onboardStep: 0,
-      kidName: localStorage.getItem('dino_kid_name') || 'Bé Na',
+      kidName: (function() {
+        const n = localStorage.getItem('dino_kid_name');
+        if (!n || n.includes('Ã') || n.includes('')) return 'Bé Na';
+        return n;
+      })(),
       stars: parseInt(localStorage.getItem('dino_stars') || '15', 10),
       streak: 3,
       completedLessons: JSON.parse(localStorage.getItem('dino_completed_lessons') || '[]'),
@@ -1738,27 +1742,89 @@ const htmlTemplate = `<!doctype html>
           const currentLesson = getLesson(state.currentTopicId, state.currentLessonId);
           const lvl = getEvolutionLevel();
           html = \`
-            <div class="top-header home-header">
-              <div>
-                <span style="font-size:12px; color:#5c7d6b; font-weight:700; line-height:1.1; display:block;">Xin chào,</span>
-                <div style="font-size:20px; font-weight:900; color:#239446; line-height:1.2;">\${state.kidName}! 👋</div>
+            <!-- Header trang chủ: Avatar bé, Lời chào, Quà tặng & Cài đặt -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0 6px;">
+              <div style="display:flex; align-items:center; gap:10px;">
+                <!-- Avatar tròn của bé với huy hiệu sao -->
+                <div style="position:relative; width:52px; height:52px; flex-shrink:0; cursor:pointer;" onclick="navigate('profile')">
+                  <div style="width:52px; height:52px; border-radius:50%; border:3px solid #fff; box-shadow:0 4px 10px rgba(35,148,70,0.18); overflow:hidden; background:linear-gradient(135deg, #dcfce7, #bbf7d0); display:flex; align-items:center; justify-content:center;">
+                    \${getDinoImg(state.selectedAvatar || 'welcome', '')}
+                  </div>
+                  <div style="position:absolute; bottom:-1px; right:-2px; background:#ffd233; color:#7a4f00; font-size:10px; font-weight:900; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; border:2px solid #fff; box-shadow:0 2px 4px rgba(0,0,0,0.15);">⭐</div>
+                </div>
+
+                <div>
+                  <span style="font-size:13px; color:#3d634d; font-weight:800; line-height:1.1; display:block;">Xin chào,</span>
+                  <div style="font-size:22px; font-weight:900; color:#24a148; line-height:1.2; text-shadow:0 1px 0 #fff;">\${(!state.kidName || state.kidName.includes('Ã')) ? 'Bé Na' : state.kidName}!</div>
+                </div>
               </div>
-              <div style="display:flex; gap:8px;">
-                <span class="badge-star">⭐ \${state.stars}</span>
-                <span class="badge-star" style="background:#ffe6d0; border-color:#ffb37a; color:#b54c00;">🔥 \${state.streak}</span>
+
+              <!-- 2 Nút tròn: Quà tặng 🎁 & Cài đặt ⚙️ -->
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button class="header-circle-btn" onclick="openDailyGift()" title="Quà tặng hàng ngày" style="width:40px; height:40px; border-radius:50%; background:#fff; border:1.5px solid #eef5f0; box-shadow:0 3px 8px rgba(0,0,0,0.08); font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.15s; outline:none;">
+                  🎁
+                </button>
+                <button class="header-circle-btn" onclick="navigate('profile')" title="Cài đặt" style="width:40px; height:40px; border-radius:50%; background:#fff; border:1.5px solid #eef5f0; box-shadow:0 3px 8px rgba(0,0,0,0.08); font-size:18px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:transform 0.15s; outline:none;">
+                  ⚙️
+                </button>
               </div>
             </div>
 
-            <!-- Thẻ "Tiếp tục học / Học ngay" với ảnh nền phong cảnh đồng cỏ 3D -->
-            <div class="dino-card" style="position:relative; overflow:hidden; border:2.5px solid #8fe0a2; box-shadow:0 6px 18px rgba(35,148,70,0.18); border-radius:24px; padding:16px 14px; margin:10px 0 16px; display:flex; align-items:center; justify-content:space-between; background:${bannerHocNgayDataUrl ? `url('${bannerHocNgayDataUrl}') center / cover no-repeat,` : ''} #eafae8;">
+            <!-- Khung thống kê học tập (Chuỗi ngày - Hôm nay - Sao) -->
+            <div style="background:rgba(255,255,255,0.96); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-radius:20px; border:1.5px solid #fff; box-shadow:0 4px 14px rgba(25, 80, 45, 0.08); padding:10px 14px; margin-top:6px; margin-bottom:12px; display:flex; align-items:center; justify-content:space-between; gap:10px;">
+              <!-- 1. Chuỗi ngày học -->
+              <div style="display:flex; align-items:center; gap:6px; min-width:88px;">
+                <span style="font-size:24px; line-height:1;">🔥</span>
+                <div>
+                  <div style="font-size:10px; font-weight:800; color:#ff5722; text-transform:none; line-height:1;">Chuỗi ngày học</div>
+                  <div style="margin-top:2px; line-height:1.1;">
+                    <b style="font-size:18px; font-weight:900; color:#e64a19;">\${state.streak || 3}</b>
+                    <span style="font-size:11px; font-weight:700; color:#687b70;">ngày liên tiếp</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Vạch ngăn cách dọc -->
+              <div style="width:1px; height:32px; background:#edf4ef;"></div>
+
+              <!-- 2. Tiến độ hôm nay (Segmented Bar 5 vạch) -->
+              <div style="flex:1; min-width:0; padding:0 2px;">
+                <div style="font-size:12px; font-weight:800; color:#2c4f3a; margin-bottom:5px;">
+                  Hôm nay: <b style="color:#239446; font-weight:900;">3/5</b> bài
+                </div>
+                <!-- 5 Vạch tiến độ bo góc -->
+                <div style="display:flex; gap:4px; height:8px;">
+                  <div style="flex:1; background:#28a745; border-radius:5px;"></div>
+                  <div style="flex:1; background:#28a745; border-radius:5px;"></div>
+                  <div style="flex:1; background:#28a745; border-radius:5px;"></div>
+                  <div style="flex:1; background:#e2ede6; border-radius:5px;"></div>
+                  <div style="flex:1; background:#e2ede6; border-radius:5px;"></div>
+                </div>
+              </div>
+
+              <!-- Vạch ngăn cách dọc -->
+              <div style="width:1px; height:32px; background:#edf4ef;"></div>
+
+              <!-- 3. Số sao tích lũy -->
+              <div style="background:#fff9e6; border:1px solid #ffe8a3; border-radius:14px; padding:6px 10px; display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:44px;">
+                <span style="font-size:18px; line-height:1; filter:drop-shadow(0 2px 4px rgba(245,158,11,0.3));">⭐</span>
+                <b style="font-size:14px; font-weight:900; color:#855400; margin-top:2px;">\${state.stars || 15}</b>
+              </div>
+            </div>
+
+            <!-- Thẻ "Tiếp tục học / Học ngay" chuẩn giao diện hình ảnh -->
+            <div class="dino-card" style="position:relative; overflow:hidden; border:2.5px solid #8fe0a2; box-shadow:0 6px 18px rgba(35,148,70,0.18); border-radius:24px; padding:16px 14px; margin:0 0 16px; display:flex; align-items:center; justify-content:space-between; background:${bannerHocNgayDataUrl ? `url('${bannerHocNgayDataUrl}') center / cover no-repeat,` : ''} #eafae8;">
               <div style="position:relative; z-index:2; max-width:62%;">
-                <span style="background:#239446; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(35,148,70,0.3);">TIẾP TỤC HỌC</span>
-                <h3 style="margin:6px 0 2px; font-size:18px; font-weight:900; color:#145226; text-shadow:0 1px 3px rgba(255,255,255,0.9);">\${currentTopic.nameVi}: Bài \${currentLesson.lessonId}</h3>
-                <p style="margin:0; font-size:13px; font-weight:700; color:#236138; text-shadow:0 1px 2px rgba(255,255,255,0.9);">\${currentLesson.title}</p>
-                <button class="dino-btn" style="padding:8px 16px; font-size:14px; margin-top:10px; width:auto; box-shadow:0 4px 10px rgba(35,148,70,0.35); font-weight:900;" onclick="navigate('activity_hub', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">Học ngay ▶</button>
+                <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
+                  <span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(40,167,69,0.3);">Tiếp tục học</span>
+                  <span style="background:#8b5cf6; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(139,92,246,0.3);">⭐ Bài \${currentLesson.lessonId}/8</span>
+                </div>
+                <h3 style="margin:2px 0 2px; font-size:19px; font-weight:900; color:#145226; text-shadow:0 1px 3px rgba(255,255,255,0.9);">Unit \${currentLesson.lessonId}: \${currentTopic.nameEn || currentLesson.title}</h3>
+                <p style="margin:0 0 8px; font-size:13px; font-weight:700; color:#236138; text-shadow:0 1px 2px rgba(255,255,255,0.9);">\${currentLesson.title}</p>
+                <button class="dino-btn" style="background:linear-gradient(180deg, #ffae11, #f59e0b); color:#fff; padding:8px 18px; font-size:15px; width:auto; box-shadow:0 4px 10px rgba(245,158,11,0.45); font-weight:900; border-radius:20px;" onclick="navigate('activity_hub', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">Học ngay ▶</button>
               </div>
               <div style="position:relative; z-index:2; flex-shrink:0;">
-                \${getDinoImg('study', 'small')}
+                \${getDinoImg('welcome', 'small')}
               </div>
             </div>
 
@@ -2996,6 +3062,20 @@ const htmlTemplate = `<!doctype html>
         state.completedActivities = [];
         saveState();
         navigate('home');
+      }
+    }
+
+    function openDailyGift() {
+      const today = new Date().toDateString();
+      const lastClaimed = localStorage.getItem('dino_gift_date');
+      if (lastClaimed === today) {
+        alert("🎁 Bé đã nhận phần quà chăm chỉ của ngày hôm nay rồi! Ngày mai nhớ quay lại học để mở quà tiếp nhé!");
+      } else {
+        localStorage.setItem('dino_gift_date', today);
+        state.stars += 5;
+        saveState();
+        render();
+        alert("🎉 Chúc mừng bé yêu! Hộp Quà May Mắn đã mở: Tặng bé +5 ⭐ tích lũy chăm chỉ!");
       }
     }
 
