@@ -890,9 +890,13 @@ const htmlTemplate = `<!doctype html>
     // Full 1,200 Words Database
     const DINO_DB = ${JSON.stringify(contentDb)};
 
-    // App State
+    // App State - Tự động ghi nhớ đăng nhập và trạng thái Onboarding
+    const savedUser = JSON.parse(localStorage.getItem('dino_supabase_user') || 'null');
+    const onboardCompleted = localStorage.getItem('dino_onboard_completed') === 'true';
+    const rememberedEmail = localStorage.getItem('dino_remember_email') || '';
+
     let state = {
-      view: 'onboard', // onboard, login, signup, verify_email, forgot_password, reset_password, child_setup, parent_dashboard, home, topics, lessons, activity_hub, vocab, pron, game, song, reward, growth, profile
+      view: savedUser ? 'home' : (onboardCompleted ? 'login' : 'onboard'),
       onboardStep: 0,
       kidName: localStorage.getItem('dino_kid_name') || 'Bé Na',
       stars: parseInt(localStorage.getItem('dino_stars') || '15', 10),
@@ -914,7 +918,7 @@ const htmlTemplate = `<!doctype html>
       // Supabase Backend Integration (Project: wsaalmeuduiyqbptnrmy)
       supabaseUrl: 'https://wsaalmeuduiyqbptnrmy.supabase.co',
       supabaseKey: (localStorage.getItem('dino_supabase_key') && localStorage.getItem('dino_supabase_key').length > 20) ? localStorage.getItem('dino_supabase_key') : 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndzYWFsbWV1ZHVpeXFicHRucm15Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0NzE0OTgsImV4cCI6MjEwOTA0NzQ5OH0.y29cwhH60cdwJPcQSZ88ryU3b9gTNAO-BViMeHCUN-0',
-      supabaseUser: JSON.parse(localStorage.getItem('dino_supabase_user') || 'null'),
+      supabaseUser: savedUser,
       supabaseClient: null,
       parentProfile: null,
       children: [],
@@ -929,7 +933,7 @@ const htmlTemplate = `<!doctype html>
         confirmPassword: ''
       },
       loginFormData: {
-        email: '',
+        email: rememberedEmail,
         password: ''
       },
       pendingVerifyEmail: '',
@@ -993,7 +997,17 @@ const htmlTemplate = `<!doctype html>
         try {
           const { data: { session } } = await state.supabaseClient.auth.getSession();
           if (session && session.user) {
+            localStorage.setItem('dino_onboard_completed', 'true');
             await handleSessionSuccess(session.user);
+          } else {
+            if (state.supabaseUser) {
+              state.supabaseUser = null;
+              saveState();
+            }
+            if (localStorage.getItem('dino_onboard_completed') === 'true' && state.view === 'onboard') {
+              state.view = 'login';
+              render();
+            }
           }
         } catch (err) {
           console.warn("Session check error:", err);
@@ -1001,6 +1015,7 @@ const htmlTemplate = `<!doctype html>
 
         state.supabaseClient.auth.onAuthStateChange(async (event, session) => {
           if (event === 'SIGNED_IN' && session && session.user) {
+            localStorage.setItem('dino_onboard_completed', 'true');
             await handleSessionSuccess(session.user);
           } else if (event === 'SIGNED_OUT') {
             state.supabaseUser = null;
@@ -1008,6 +1023,7 @@ const htmlTemplate = `<!doctype html>
             state.children = [];
             state.activeChild = null;
             saveState();
+            localStorage.setItem('dino_onboard_completed', 'true');
             navigate('login');
           } else if (event === 'PASSWORD_RECOVERY') {
             state.view = 'reset_password';
@@ -1019,6 +1035,7 @@ const htmlTemplate = `<!doctype html>
 
     async function handleSessionSuccess(user) {
       state.supabaseUser = { id: user.id, email: user.email };
+      localStorage.setItem('dino_onboard_completed', 'true');
       saveState();
 
       try {
@@ -1319,7 +1336,7 @@ const htmlTemplate = `<!doctype html>
                 \${slides.map((_, i) => \`<div style="width:\${i===state.onboardStep?28:10}px; height:9px; border-radius:10px; background:\${i===state.onboardStep?'#2a974b':'#c7ded0'}; transition:width 0.2s;"></div>\`).join('')}
               </div>
               <button class="dino-btn" onclick="nextOnboard()">\${state.onboardStep === 2 ? 'Bắt Đầu Ngay 🚀' : 'Tiếp Theo ➔'}</button>
-              <button class="dino-outline-btn" onclick="navigate('login')">Bỏ qua giới thiệu</button>
+              <button class="dino-outline-btn" onclick="localStorage.setItem('dino_onboard_completed','true'); navigate('login')">Bỏ qua giới thiệu</button>
             </div>
           \`;
           break;
@@ -1355,12 +1372,12 @@ const htmlTemplate = `<!doctype html>
                   </div>
                 </div>
 
-                <!-- Anon Key Settings (pre-filled or customizable) -->
-                <div style="margin:10px 0 14px; background:#f4fbf5; border:1px dashed #9dd8ad; border-radius:12px; padding:8px 10px;">
-                  <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; font-weight:800; color:#2d6342;">
-                    <span>🛡️ Supabase Project: <b>wsaalmeuduiyqbptnrmy</b></span>
-                  </div>
-                  <input id="loginAnonKey" type="text" class="form-input" style="font-size:11px; font-family:monospace; padding:6px 8px; margin-top:4px; height:32px;" placeholder="Dán publishable anon key từ Supabase" value="\${state.supabaseKey}">
+                <!-- Ghi nhớ đăng nhập -->
+                <div style="display:flex; align-items:center; margin:12px 0 16px;">
+                  <label style="display:flex; align-items:center; gap:8px; font-size:13px; color:#3d6550; font-weight:700; cursor:pointer;">
+                    <input id="rememberMe" type="checkbox" checked style="accent-color:#28a44c; width:18px; height:18px; cursor:pointer;">
+                    Ghi nhớ đăng nhập trên thiết bị này
+                  </label>
                 </div>
 
                 <button class="dino-btn green" style="width:100%; margin-top:4px;" onclick="handleLogin()" \${state.isSubmitting ? 'disabled' : ''}>
@@ -2271,6 +2288,7 @@ const htmlTemplate = `<!doctype html>
 
     function guestLogin() {
       state.kidName = state.kidName || 'Bé Na';
+      localStorage.setItem('dino_onboard_completed', 'true');
       saveState();
       navigate('home');
     }
@@ -2278,7 +2296,7 @@ const htmlTemplate = `<!doctype html>
     async function handleLogin() {
       const email = (document.getElementById('loginEmail')?.value || '').trim();
       const password = (document.getElementById('loginPassword')?.value || '').trim();
-      const anonKey = (document.getElementById('loginAnonKey')?.value || '').trim();
+      const rememberMe = document.getElementById('rememberMe')?.checked ?? true;
 
       state.loginFormData = { email, password };
 
@@ -2288,14 +2306,15 @@ const htmlTemplate = `<!doctype html>
         return;
       }
 
-      if (anonKey) {
-        state.supabaseKey = anonKey;
-        saveState();
+      if (rememberMe) {
+        localStorage.setItem('dino_remember_email', email);
+      } else {
+        localStorage.removeItem('dino_remember_email');
       }
 
       initSupabase();
       if (!state.supabaseClient) {
-        state.authError = "Vui lòng nhập Supabase Publishable Anon Key để kết nối!";
+        state.authError = "Chưa kết nối được với hệ thống xác thực!";
         render();
         return;
       }
@@ -2319,6 +2338,7 @@ const htmlTemplate = `<!doctype html>
         }
 
         if (data && data.user) {
+          localStorage.setItem('dino_onboard_completed', 'true');
           await handleSessionSuccess(data.user);
         }
       } catch (err) {
@@ -2736,6 +2756,7 @@ const htmlTemplate = `<!doctype html>
         state.onboardStep++;
         render();
       } else {
+        localStorage.setItem('dino_onboard_completed', 'true');
         navigate('login');
       }
     }
@@ -2746,6 +2767,7 @@ const htmlTemplate = `<!doctype html>
         state.kidName = input.value.trim();
         saveState();
       }
+      localStorage.setItem('dino_onboard_completed', 'true');
       navigate('home');
     }
 
