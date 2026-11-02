@@ -14,7 +14,17 @@ if (!match) {
 const dinoAssetsJson = match[1];
 const contentDb = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
 
-console.log("Building complete Web Simulator with 1,200 words and 14 3D mascots...");
+// Tải 2 ảnh nền do người dùng cung cấp
+const appBgPath = path.resolve(__dirname, '..', 'assets', 'images', 'app_background.png');
+const bannerHocNgayPath = path.resolve(__dirname, '..', 'assets', 'images', 'banner_hoc_ngay.png');
+
+const appBgBase64 = fs.existsSync(appBgPath) ? fs.readFileSync(appBgPath).toString('base64') : '';
+const bannerHocNgayBase64 = fs.existsSync(bannerHocNgayPath) ? fs.readFileSync(bannerHocNgayPath).toString('base64') : '';
+
+const appBgDataUrl = appBgBase64 ? `data:image/png;base64,${appBgBase64}` : '';
+const bannerHocNgayDataUrl = bannerHocNgayBase64 ? `data:image/png;base64,${bannerHocNgayBase64}` : '';
+
+console.log("Building complete Web Simulator with 1,200 words, custom 3D backgrounds and 14 mascots...");
 
 const htmlTemplate = `<!doctype html>
 <html lang="vi">
@@ -85,7 +95,7 @@ const htmlTemplate = `<!doctype html>
     .screen-wrapper {
       width: 100%;
       height: 100%;
-      background: linear-gradient(180deg, #83d9ff 0%, #e1faff 34%, #e6ffd8 100%);
+      background: ${appBgDataUrl ? `url('${appBgDataUrl}') center top / cover no-repeat,` : ''} linear-gradient(180deg, #83d9ff 0%, #e1faff 34%, #e6ffd8 100%);
       border-radius: 44px;
       overflow: hidden;
       position: relative;
@@ -1739,14 +1749,17 @@ const htmlTemplate = `<!doctype html>
               </div>
             </div>
 
-            <div class="dino-card" style="background:#eafae8; display:flex; align-items:center; justify-content:space-between; padding:14px;">
-              <div>
-                <span style="background:#28a44c; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px;">TIẾP TỤC HỌC</span>
-                <h3 style="margin:6px 0 2px; font-size:18px; color:#18592d;">\${currentTopic.nameVi}: Bài \${currentLesson.lessonId}</h3>
-                <p style="margin:0; font-size:13px; color:#557763;">\${currentLesson.title}</p>
-                <button class="dino-btn" style="padding:8px 14px; font-size:14px; margin-top:8px; width:auto;" onclick="navigate('activity_hub', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">Học ngay ▶</button>
+            <!-- Thẻ "Tiếp tục học / Học ngay" với ảnh nền phong cảnh đồng cỏ 3D -->
+            <div class="dino-card" style="position:relative; overflow:hidden; border:2.5px solid #8fe0a2; box-shadow:0 6px 18px rgba(35,148,70,0.18); border-radius:24px; padding:16px 14px; margin:10px 0 16px; display:flex; align-items:center; justify-content:space-between; background:${bannerHocNgayDataUrl ? `url('${bannerHocNgayDataUrl}') center / cover no-repeat,` : ''} #eafae8;">
+              <div style="position:relative; z-index:2; max-width:62%;">
+                <span style="background:#239446; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(35,148,70,0.3);">TIẾP TỤC HỌC</span>
+                <h3 style="margin:6px 0 2px; font-size:18px; font-weight:900; color:#145226; text-shadow:0 1px 3px rgba(255,255,255,0.9);">\${currentTopic.nameVi}: Bài \${currentLesson.lessonId}</h3>
+                <p style="margin:0; font-size:13px; font-weight:700; color:#236138; text-shadow:0 1px 2px rgba(255,255,255,0.9);">\${currentLesson.title}</p>
+                <button class="dino-btn" style="padding:8px 16px; font-size:14px; margin-top:10px; width:auto; box-shadow:0 4px 10px rgba(35,148,70,0.35); font-weight:900;" onclick="navigate('activity_hub', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">Học ngay ▶</button>
               </div>
-              \${getDinoImg('study', 'small')}
+              <div style="position:relative; z-index:2; flex-shrink:0;">
+                \${getDinoImg('study', 'small')}
+              </div>
             </div>
 
             <h3 style="margin:16px 0 10px; color:#1e6a39; font-size:18px;">Bé muốn học gì hôm nay?</h3>

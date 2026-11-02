@@ -58,34 +58,43 @@ public struct HomeView: View {
                     }
                     .padding(.horizontal, 4)
                     
-                    // Thẻ "Tiếp tục bài học" nổi bật
+                    // Thẻ "Tiếp tục bài học" nổi bật với ảnh nền phong cảnh đồng cỏ 3D
                     if let topic = model.currentSelectedTopic, let lesson = model.currentSelectedLesson {
                         NavigationLink(destination: ActivityHubView(topic: topic, lesson: lesson)) {
-                            Dino3DCard(backgroundColor: Color(red: 0.92, green: 0.99, blue: 0.91)) {
+                            ZStack {
+                                Image("banner_hoc_ngay")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(maxWidth: .infinity, maxHeight: 165)
+                                    .clipped()
+                                
                                 HStack(spacing: 14) {
                                     VStack(alignment: .leading, spacing: 6) {
                                         Text("TIẾP TỤC HÀNH TRÌNH")
                                             .font(.system(size: 11, weight: .black, design: .rounded))
-                                            .foregroundStyle(DinoStyle.green)
+                                            .foregroundStyle(Color.white)
                                             .padding(.horizontal, 8)
                                             .padding(.vertical, 3)
-                                            .background(DinoStyle.green.opacity(0.15), in: Capsule())
+                                            .background(DinoStyle.green, in: Capsule())
                                         
                                         Text("\(topic.nameVi): Bài \(lesson.lessonId)")
                                             .font(.system(size: 20, weight: .heavy, design: .rounded))
-                                            .foregroundStyle(DinoStyle.textDark)
+                                            .foregroundStyle(Color(red: 0.08, green: 0.32, blue: 0.15))
                                         
                                         Text(lesson.title)
-                                            .font(.system(size: 14, weight: .medium, design: .rounded))
-                                            .foregroundStyle(DinoStyle.textMuted)
+                                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                                            .foregroundStyle(Color(red: 0.14, green: 0.38, blue: 0.22))
                                         
                                         HStack(spacing: 6) {
                                             Text("Học ngay")
                                                 .font(.system(size: 15, weight: .heavy, design: .rounded))
-                                                .foregroundStyle(DinoStyle.yellowDark)
+                                                .foregroundStyle(Color.white)
                                             Image(systemName: "play.circle.fill")
-                                                .foregroundStyle(DinoStyle.yellow)
+                                                .foregroundStyle(Color.white)
                                         }
+                                        .padding(.horizontal, 14)
+                                        .padding(.vertical, 6)
+                                        .background(DinoStyle.green, in: Capsule())
                                         .padding(.top, 4)
                                     }
                                     
@@ -93,7 +102,14 @@ public struct HomeView: View {
                                     
                                     DinoMascotView(.study, height: 110)
                                 }
+                                .padding(16)
                             }
+                            .clipShape(RoundedRectangle(cornerRadius: 24))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 24)
+                                    .stroke(Color(red: 0.52, green: 0.85, blue: 0.6), lineWidth: 2)
+                            )
+                            .shadow(color: Color.black.opacity(0.08), radius: 8, y: 4)
                         }
                         .buttonStyle(.plain)
                     }
