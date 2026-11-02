@@ -164,7 +164,8 @@ public struct HomeView: View {
                                 Image("banner_hoc_ngay")
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
-                                    .frame(maxWidth: .infinity, maxHeight: 165)
+                                    .frame(maxWidth: .infinity)
+                                    .frame(minHeight: 165)
                                     .clipped()
                                 
                                 HStack(spacing: 12) {

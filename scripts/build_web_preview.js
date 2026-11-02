@@ -144,6 +144,9 @@ const htmlTemplate = `<!doctype html>
       flex-direction: column;
       scrollbar-width: none;
     }
+    .app-viewport > * {
+      flex-shrink: 0;
+    }
     .app-viewport::-webkit-scrollbar { display: none; }
 
     /* 3D Pastel UI Components */
@@ -1813,17 +1816,17 @@ const htmlTemplate = `<!doctype html>
             </div>
 
             <!-- Thẻ "Tiếp tục học / Học ngay" chuẩn giao diện hình ảnh -->
-            <div class="dino-card" style="position:relative; overflow:hidden; border:2.5px solid #8fe0a2; box-shadow:0 6px 18px rgba(35,148,70,0.18); border-radius:24px; padding:16px 14px; margin:0 0 16px; display:flex; align-items:center; justify-content:space-between; background:${bannerHocNgayDataUrl ? `url('${bannerHocNgayDataUrl}') center / cover no-repeat,` : ''} #eafae8;">
-              <div style="position:relative; z-index:2; max-width:62%;">
+            <div class="dino-card" style="position:relative; overflow:hidden; border:2.5px solid #8fe0a2; box-shadow:0 6px 18px rgba(35,148,70,0.18); border-radius:24px; padding:16px; margin:0 0 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; min-height:165px; box-sizing:border-box; background:${bannerHocNgayDataUrl ? `url('${bannerHocNgayDataUrl}') center / cover no-repeat,` : ''} #eafae8;">
+              <div style="position:relative; z-index:2; max-width:62%; display:flex; flex-direction:column; justify-content:center;">
                 <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
-                  <span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(40,167,69,0.3);">Tiếp tục học</span>
-                  <span style="background:#8b5cf6; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(139,92,246,0.3);">⭐ Bài \${currentLesson.lessonId}/8</span>
+                  <span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(40,167,69,0.3); line-height:1.2;">Tiếp tục học</span>
+                  <span style="background:#8b5cf6; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(139,92,246,0.3); line-height:1.2;">⭐ Bài \${currentLesson.lessonId}/8</span>
                 </div>
-                <h3 style="margin:2px 0 2px; font-size:19px; font-weight:900; color:#145226; text-shadow:0 1px 3px rgba(255,255,255,0.9);">Unit \${currentLesson.lessonId}: \${currentTopic.nameEn || currentLesson.title}</h3>
-                <p style="margin:0 0 8px; font-size:13px; font-weight:700; color:#236138; text-shadow:0 1px 2px rgba(255,255,255,0.9);">\${currentLesson.title}</p>
-                <button class="dino-btn" style="background:linear-gradient(180deg, #ffae11, #f59e0b); color:#fff; padding:8px 18px; font-size:15px; width:auto; box-shadow:0 4px 10px rgba(245,158,11,0.45); font-weight:900; border-radius:20px;" onclick="navigate('activity_hub', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">Học ngay ▶</button>
+                <h3 style="margin:2px 0; font-size:19px; font-weight:900; color:#145226; text-shadow:0 1px 3px rgba(255,255,255,0.9); line-height:1.25;">Unit \${currentLesson.lessonId}: \${currentTopic.nameEn || currentLesson.title}</h3>
+                <p style="margin:0 0 6px; font-size:13px; font-weight:700; color:#236138; text-shadow:0 1px 2px rgba(255,255,255,0.9); line-height:1.2;">\${currentLesson.title}</p>
+                <button class="dino-btn" style="margin-top:4px; margin-bottom:0; background:linear-gradient(180deg, #ffae11, #f59e0b); color:#fff; padding:7px 18px; font-size:14px; width:auto; align-self:flex-start; box-shadow:0 3px 0 #d48a0d; font-weight:900; border-radius:20px; line-height:1.2;" onclick="navigate('activity_hub', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">Học ngay ▶</button>
               </div>
-              <div style="position:relative; z-index:2; flex-shrink:0;">
+              <div style="position:relative; z-index:2; flex-shrink:0; display:flex; align-items:center; justify-content:center; width:110px;">
                 \${getDinoImg('welcome', 'small')}
               </div>
             </div>
