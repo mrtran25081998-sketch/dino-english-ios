@@ -1262,7 +1262,7 @@
         state.completedLessons.push(lKey);
       }
       saveState();
-      syncLessonToSupabase(topicId, lessonId);
+      syncLessonToSupabase(topicId, lessonId, activityKey, points);
     }
 
     function updateNav() {
@@ -1829,33 +1829,122 @@
         case 'activity_hub':
           const hubTopic = getTopic(state.currentTopicId);
           const hubLesson = getLesson(state.currentTopicId, state.currentLessonId);
+
+          const vocabKey = `${hubTopic.id}_l${hubLesson.lessonId}_vocab`;
+          const pronKey = `${hubTopic.id}_l${hubLesson.lessonId}_pron`;
+          const gameKey = `${hubTopic.id}_l${hubLesson.lessonId}_game`;
+          const songKey = `${hubTopic.id}_l${hubLesson.lessonId}_song`;
+
+          const isVocabDone = state.completedActivities.includes(vocabKey);
+          const isPronDone = state.completedActivities.includes(pronKey);
+          const isGameDone = state.completedActivities.includes(gameKey);
+          const isSongDone = state.completedActivities.includes(songKey) ||
+                             state.completedActivities.includes(`${hubTopic.id}_song`) ||
+                             state.completedActivities.includes(`${hubTopic.id}_l1_song`);
+
+          const completedCount = (isVocabDone ? 1 : 0) + (isPronDone ? 1 : 0) + (isGameDone ? 1 : 0) + (isSongDone ? 1 : 0);
+          const progressPercent = Math.round((completedCount / 4) * 100);
+
           html = `
             <div class="top-header">
               <button class="back-btn" onclick="navigate('lessons', {topicId:'${hubTopic.id}'})">←</button>
               <h2 style="margin:0; font-size:18px; color:#1e6a39;">Bài ${hubLesson.lessonId}: ${hubLesson.title}</h2>
               <span class="badge-star">⭐ ${state.stars}</span>
             </div>
-            <div class="dino-card" style="text-align:center;">
-              ${getDinoImg('study', 'small')}
-              <h3 style="color:#239446; margin:6px 0 4px;">${hubTopic.nameVi} · Bài ${hubLesson.lessonId}</h3>
-              <p style="color:#638372; font-size:13px; margin:0;">Chọn 1 trong 4 hoạt động để rèn luyện và nhận sao:</p>
+
+            <!-- Thẻ tiến độ tổng quan bài học -->
+            <div class="dino-card" style="text-align:center; padding:14px 14px 12px; margin-bottom:12px;">
+              <div style="display:flex; justify-content:center; margin-bottom:4px;">
+                ${getDinoImg(completedCount === 4 ? 'level4' : (completedCount > 0 ? 'study' : 'welcome'), 'small')}
+              </div>
+              <h3 style="color:#239446; margin:4px 0 2px; font-size:18px; font-weight:900;">${hubTopic.nameVi} · Bài ${hubLesson.lessonId}</h3>
+              
+              <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0 4px; font-size:13px; font-weight:800; color:#325c43;">
+                <span>Tiến độ bài học:</span>
+                <span style="color:${completedCount === 4 ? '#198754' : '#239446'}; font-weight:900;">
+                  ${completedCount}/4 phần (${progressPercent}%) ${completedCount === 4 ? '🎉' : ''}
+                </span>
+              </div>
+              
+              <div class="progress-bar" style="height:10px; margin:0 0 6px; background:#e2ede5; border-radius:12px; overflow:hidden;">
+                <div class="progress-fill" style="width:${progressPercent}%; background:linear-gradient(90deg, #34d399, #10b981); height:100%; transition:width 0.3s ease;"></div>
+              </div>
+
+              <p style="color:#638372; font-size:12px; margin:0;">
+                ${completedCount === 4 
+                  ? '🌟 Bé đã hoàn thành xuất sắc tất cả 4 hoạt động! Có thể học lại bất cứ lúc nào.' 
+                  : 'Chọn hoạt động để học, hoàn thành sẽ xuất hiện dấu tích xanh:'}
+              </p>
             </div>
+
+            <!-- 4 Thẻ hoạt động kèm dấu tích xanh khi hoàn thành -->
             <div style="display:flex; flex-direction:column; gap:10px;">
-              <div class="tile-card" style="border-color:#30a953;" onclick="navigate('vocab', {topicId:'${hubTopic.id}', lessonId:${hubLesson.lessonId}})">
-                <b style="color:#28a44c; font-size:17px;">📖 1. Học Từ Vựng (Flashcards)</b>
-                <p style="margin:4px 0 0; font-size:13px; color:#688877;">10 Thẻ minh họa, phát âm và phiên âm IPA (+5 ⭐)</p>
+              <!-- 1. Từ Vựng (Flashcards) -->
+              <div class="tile-card" style="border-color:${isVocabDone ? '#28a745' : '#30a953'}; background:${isVocabDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('vocab', {topicId:'${hubTopic.id}', lessonId:${hubLesson.lessonId}})">
+                <div style="flex:1;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <b style="color:${isVocabDone ? '#1e7a3d' : '#28a44c'}; font-size:16px;">📖 1. Học Từ Vựng (Flashcards)</b>
+                    ${isVocabDone ? `<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>` : ''}
+                  </div>
+                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">10 Thẻ minh họa, phát âm và phiên âm IPA (+5 ⭐)</p>
+                </div>
+                <div>
+                  ${isVocabDone 
+                    ? `<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>`
+                    : `<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>`
+                  }
+                </div>
               </div>
-              <div class="tile-card" style="border-color:#2a82e4;" onclick="navigate('pron', {topicId:'${hubTopic.id}', lessonId:${hubLesson.lessonId}})">
-                <b style="color:#207ee8; font-size:17px;">🎤 2. Luyện Phát Âm (Nghe & Nói)</b>
-                <p style="margin:4px 0 0; font-size:13px; color:#688877;">Tập phát âm qua micro theo mẫu giọng chuẩn (+5 ⭐)</p>
+
+              <!-- 2. Luyện Phát Âm (Nghe & Nói) -->
+              <div class="tile-card" style="border-color:${isPronDone ? '#28a745' : '#2a82e4'}; background:${isPronDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('pron', {topicId:'${hubTopic.id}', lessonId:${hubLesson.lessonId}})">
+                <div style="flex:1;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <b style="color:${isPronDone ? '#1e7a3d' : '#207ee8'}; font-size:16px;">🎤 2. Luyện Phát Âm (Nghe & Nói)</b>
+                    ${isPronDone ? `<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>` : ''}
+                  </div>
+                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">Tập phát âm qua micro theo mẫu giọng chuẩn (+5 ⭐)</p>
+                </div>
+                <div>
+                  ${isPronDone 
+                    ? `<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>`
+                    : `<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>`
+                  }
+                </div>
               </div>
-              <div class="tile-card" style="border-color:#8e44ec;" onclick="navigate('game', {topicId:'${hubTopic.id}', lessonId:${hubLesson.lessonId}})">
-                <b style="color:#8a3de8; font-size:17px;">🎮 3. Trò Chơi Đố Vui 3D</b>
-                <p style="margin:4px 0 0; font-size:13px; color:#688877;">Chọn đúng nghĩa của các từ trong bài (+10 ⭐)</p>
+
+              <!-- 3. Trò Chơi Đố Vui 3D -->
+              <div class="tile-card" style="border-color:${isGameDone ? '#28a745' : '#8e44ec'}; background:${isGameDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('game', {topicId:'${hubTopic.id}', lessonId:${hubLesson.lessonId}})">
+                <div style="flex:1;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <b style="color:${isGameDone ? '#1e7a3d' : '#8a3de8'}; font-size:16px;">🎮 3. Trò Chơi Đố Vui 3D</b>
+                    ${isGameDone ? `<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>` : ''}
+                  </div>
+                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">Chọn đúng nghĩa của các từ trong bài (+10 ⭐)</p>
+                </div>
+                <div>
+                  ${isGameDone 
+                    ? `<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>`
+                    : `<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>`
+                  }
+                </div>
               </div>
-              <div class="tile-card" style="border-color:#eb4b5d;" onclick="navigate('song', {topicId:'${hubTopic.id}'})">
-                <b style="color:#e03447; font-size:17px;">🎵 4. Bài Hát Theo Chủ Đề</b>
-                <p style="margin:4px 0 0; font-size:13px; color:#688877;">Hát từng câu theo giai điệu vui vẻ (+5 ⭐)</p>
+
+              <!-- 4. Bài Hát Theo Chủ Đề -->
+              <div class="tile-card" style="border-color:${isSongDone ? '#28a745' : '#eb4b5d'}; background:${isSongDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('song', {topicId:'${hubTopic.id}'})">
+                <div style="flex:1;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <b style="color:${isSongDone ? '#1e7a3d' : '#e03447'}; font-size:16px;">🎵 4. Bài Hát Theo Chủ Đề</b>
+                    ${isSongDone ? `<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>` : ''}
+                  </div>
+                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">Hát từng câu theo giai điệu vui vẻ (+5 ⭐)</p>
+                </div>
+                <div>
+                  ${isSongDone 
+                    ? `<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>`
+                    : `<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>`
+                  }
+                </div>
               </div>
             </div>
           `;

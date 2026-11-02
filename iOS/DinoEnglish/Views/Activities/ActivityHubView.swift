@@ -11,31 +11,87 @@ public struct ActivityHubView: View {
         self.lesson = lesson
     }
     
+    // Kiểm tra trạng thái hoàn thành từng hoạt động
+    private var isVocabDone: Bool {
+        model.completedActivityIDs.contains("\(topic.id)_l\(lesson.lessonId)_vocab")
+    }
+    private var isPronDone: Bool {
+        model.completedActivityIDs.contains("\(topic.id)_l\(lesson.lessonId)_pron")
+    }
+    private var isGameDone: Bool {
+        model.completedActivityIDs.contains("\(topic.id)_l\(lesson.lessonId)_game")
+    }
+    private var isSongDone: Bool {
+        model.completedActivityIDs.contains("\(topic.id)_l\(lesson.lessonId)_song") ||
+        model.completedActivityIDs.contains("\(topic.id)_song")
+    }
+    
+    private var completedActivitiesCount: Int {
+        (isVocabDone ? 1 : 0) + (isPronDone ? 1 : 0) + (isGameDone ? 1 : 0) + (isSongDone ? 1 : 0)
+    }
+    
+    private var progressRatio: Double {
+        Double(completedActivitiesCount) / 4.0
+    }
+    
     public var body: some View {
         ZStack {
             DinoBackground()
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
-                    // Header bài học với linh vật 3D
+                    // Header bài học với linh vật 3D và thanh tiến độ
                     Dino3DCard(backgroundColor: topic.themeColor.opacity(0.12)) {
-                        HStack(spacing: 16) {
-                            DinoMascotView(.study, height: 110)
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("\(topic.nameVi): Bài \(lesson.lessonId)")
-                                    .font(.system(size: 20, weight: .black, design: .rounded))
-                                    .foregroundStyle(topic.themeColor)
+                        VStack(spacing: 12) {
+                            HStack(spacing: 16) {
+                                DinoMascotView(completedActivitiesCount == 4 ? .level4 : (completedActivitiesCount > 0 ? .study : .welcome), height: 100)
                                 
-                                Text(lesson.title)
-                                    .font(.system(size: 15, weight: .bold, design: .rounded))
-                                    .foregroundStyle(DinoStyle.textDark)
-                                
-                                Text("\(lesson.wordCount) từ vựng · Hoàn thành các hoạt động để nhận sao!")
-                                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                                    .foregroundStyle(DinoStyle.textMuted)
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("\(topic.nameVi): Bài \(lesson.lessonId)")
+                                        .font(.system(size: 20, weight: .black, design: .rounded))
+                                        .foregroundStyle(topic.themeColor)
+                                    
+                                    Text(lesson.title)
+                                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                                        .foregroundStyle(DinoStyle.textDark)
+                                    
+                                    Text("\(lesson.wordCount) từ vựng · Hoàn thành các hoạt động để nhận sao!")
+                                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                                        .foregroundStyle(DinoStyle.textMuted)
+                                }
+                                Spacer()
                             }
-                            Spacer()
+                            
+                            // Thanh tiến độ 4 hoạt động
+                            VStack(spacing: 6) {
+                                HStack {
+                                    Text("Tiến độ bài học:")
+                                        .font(.system(size: 13, weight: .heavy, design: .rounded))
+                                        .foregroundStyle(DinoStyle.textDark)
+                                    Spacer()
+                                    Text("\(completedActivitiesCount)/4 phần (\(Int(progressRatio * 100))%) \(completedActivitiesCount == 4 ? "🎉" : "")")
+                                        .font(.system(size: 13, weight: .black, design: .rounded))
+                                        .foregroundStyle(completedActivitiesCount == 4 ? DinoStyle.green : topic.themeColor)
+                                }
+                                
+                                GeometryReader { geo in
+                                    ZStack(alignment: .leading) {
+                                        Capsule()
+                                            .fill(Color(red: 0.88, green: 0.93, blue: 0.89))
+                                            .frame(height: 10)
+                                        
+                                        Capsule()
+                                            .fill(LinearGradient(
+                                                colors: [Color(red: 0.2, green: 0.83, blue: 0.6), Color(red: 0.06, green: 0.72, blue: 0.51)],
+                                                startPoint: .leading,
+                                                endPoint: .trailing
+                                            ))
+                                            .frame(width: max(geo.size.width * progressRatio, 0), height: 10)
+                                            .animation(.spring(response: 0.4), value: progressRatio)
+                                    }
+                                }
+                                .frame(height: 10)
+                            }
                         }
                     }
                     
@@ -53,7 +109,8 @@ public struct ActivityHubView: View {
                             icon: "character.book.closed.fill",
                             color: DinoStyle.green,
                             mascot: .study,
-                            starsReward: "+5 ⭐"
+                            starsReward: "+5 ⭐",
+                            isCompleted: isVocabDone
                         )
                     }
                     .buttonStyle(.plain)
@@ -66,7 +123,8 @@ public struct ActivityHubView: View {
                             icon: "mic.fill",
                             color: DinoStyle.blue,
                             mascot: .speak,
-                            starsReward: "+5 ⭐"
+                            starsReward: "+5 ⭐",
+                            isCompleted: isPronDone
                         )
                     }
                     .buttonStyle(.plain)
@@ -79,7 +137,8 @@ public struct ActivityHubView: View {
                             icon: "gamecontroller.fill",
                             color: DinoStyle.purple,
                             mascot: .game,
-                            starsReward: "+10 ⭐"
+                            starsReward: "+10 ⭐",
+                            isCompleted: isGameDone
                         )
                     }
                     .buttonStyle(.plain)
@@ -93,7 +152,8 @@ public struct ActivityHubView: View {
                                 icon: "music.note.list",
                                 color: DinoStyle.coral,
                                 mascot: .song,
-                                starsReward: "+5 ⭐"
+                                starsReward: "+5 ⭐",
+                                isCompleted: isSongDone
                             )
                         }
                         .buttonStyle(.plain)
@@ -119,39 +179,49 @@ private struct HubActionCard: View {
     let color: Color
     let mascot: DinoMascot
     let starsReward: String
+    var isCompleted: Bool = false
     
     var body: some View {
         ZStack {
             // Đáy đổ bóng 3D
             RoundedRectangle(cornerRadius: 22)
-                .fill(color.opacity(0.35))
+                .fill((isCompleted ? DinoStyle.green : color).opacity(0.35))
                 .offset(y: 4)
             
             // Mặt chính
             RoundedRectangle(cornerRadius: 22)
-                .fill(Color.white)
+                .fill(isCompleted ? Color(red: 0.96, green: 0.99, blue: 0.97) : Color.white)
                 .overlay(
                     RoundedRectangle(cornerRadius: 22)
-                        .stroke(color.opacity(0.35), lineWidth: 2)
+                        .stroke(isCompleted ? DinoStyle.green : color.opacity(0.35), lineWidth: 2)
                 )
             
             HStack(spacing: 14) {
                 // Biểu tượng tròn
                 ZStack {
                     Circle()
-                        .fill(color.opacity(0.18))
+                        .fill((isCompleted ? DinoStyle.green : color).opacity(0.18))
                         .frame(width: 54, height: 54)
                     
                     Image(systemName: icon)
                         .font(.system(size: 26, weight: .bold))
-                        .foregroundStyle(color)
+                        .foregroundStyle(isCompleted ? DinoStyle.green : color)
                 }
                 
                 VStack(alignment: .leading, spacing: 4) {
-                    HStack {
+                    HStack(spacing: 6) {
                         Text(title)
-                            .font(.system(size: 17, weight: .heavy, design: .rounded))
-                            .foregroundStyle(color)
+                            .font(.system(size: 16, weight: .heavy, design: .rounded))
+                            .foregroundStyle(isCompleted ? DinoStyle.green : color)
+                        
+                        if isCompleted {
+                            Text("✓ ĐÃ XONG")
+                                .font(.system(size: 10, weight: .black, design: .rounded))
+                                .foregroundStyle(Color.white)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 2)
+                                .background(DinoStyle.green, in: Capsule())
+                        }
                         
                         Spacer()
                         
@@ -167,6 +237,18 @@ private struct HubActionCard: View {
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundStyle(DinoStyle.textMuted)
                         .lineLimit(2)
+                }
+                
+                // Dấu tích xanh tròn bên phải
+                if isCompleted {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 26, weight: .bold))
+                        .foregroundStyle(DinoStyle.green)
+                        .shadow(color: DinoStyle.green.opacity(0.3), radius: 4, y: 2)
+                } else {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 14, weight: .bold))
+                        .foregroundStyle(DinoStyle.textMuted.opacity(0.5))
                 }
             }
             .padding(16)
