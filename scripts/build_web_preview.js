@@ -1900,10 +1900,7 @@ const htmlTemplate = `<!doctype html>
               <!-- 1. Từ Vựng (Flashcards) -->
               <div class="tile-card" style="border-color:\${isVocabDone ? '#28a745' : '#30a953'}; background:\${isVocabDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('vocab', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
                 <div style="flex:1;">
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <b style="color:\${isVocabDone ? '#1e7a3d' : '#28a44c'}; font-size:16px;">📖 1. Học Từ Vựng (Flashcards)</b>
-                    \${isVocabDone ? \`<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>\` : ''}
-                  </div>
+                  <b style="color:\${isVocabDone ? '#1e7a3d' : '#28a44c'}; font-size:16px;">📖 1. Học Từ Vựng (Flashcards)</b>
                   <p style="margin:4px 0 0; font-size:13px; color:#688877;">10 Thẻ minh họa, phát âm và phiên âm IPA (+5 ⭐)</p>
                 </div>
                 <div>
@@ -1917,10 +1914,7 @@ const htmlTemplate = `<!doctype html>
               <!-- 2. Luyện Phát Âm (Nghe & Nói) -->
               <div class="tile-card" style="border-color:\${isPronDone ? '#28a745' : '#2a82e4'}; background:\${isPronDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('pron', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
                 <div style="flex:1;">
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <b style="color:\${isPronDone ? '#1e7a3d' : '#207ee8'}; font-size:16px;">🎤 2. Luyện Phát Âm (Nghe & Nói)</b>
-                    \${isPronDone ? \`<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>\` : ''}
-                  </div>
+                  <b style="color:\${isPronDone ? '#1e7a3d' : '#207ee8'}; font-size:16px;">🎤 2. Luyện Phát Âm (Nghe & Nói)</b>
                   <p style="margin:4px 0 0; font-size:13px; color:#688877;">Tập phát âm qua micro theo mẫu giọng chuẩn (+5 ⭐)</p>
                 </div>
                 <div>
@@ -1934,10 +1928,7 @@ const htmlTemplate = `<!doctype html>
               <!-- 3. Trò Chơi Đố Vui 3D -->
               <div class="tile-card" style="border-color:\${isGameDone ? '#28a745' : '#8e44ec'}; background:\${isGameDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('game', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
                 <div style="flex:1;">
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <b style="color:\${isGameDone ? '#1e7a3d' : '#8a3de8'}; font-size:16px;">🎮 3. Trò Chơi Đố Vui 3D</b>
-                    \${isGameDone ? \`<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>\` : ''}
-                  </div>
+                  <b style="color:\${isGameDone ? '#1e7a3d' : '#8a3de8'}; font-size:16px;">🎮 3. Trò Chơi Đố Vui 3D</b>
                   <p style="margin:4px 0 0; font-size:13px; color:#688877;">Chọn đúng nghĩa của các từ trong bài (+10 ⭐)</p>
                 </div>
                 <div>
@@ -1951,10 +1942,7 @@ const htmlTemplate = `<!doctype html>
               <!-- 4. Bài Hát Theo Chủ Đề -->
               <div class="tile-card" style="border-color:\${isSongDone ? '#28a745' : '#eb4b5d'}; background:\${isSongDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('song', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
                 <div style="flex:1;">
-                  <div style="display:flex; align-items:center; gap:8px;">
-                    <b style="color:\${isSongDone ? '#1e7a3d' : '#e03447'}; font-size:16px;">🎵 4. Bài Hát Theo Chủ Đề</b>
-                    \${isSongDone ? \`<span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:2px 8px; border-radius:12px; letter-spacing:0.5px;">✓ ĐÃ XONG</span>\` : ''}
-                  </div>
+                  <b style="color:\${isSongDone ? '#1e7a3d' : '#e03447'}; font-size:16px;">🎵 4. Bài Hát Theo Chủ Đề</b>
                   <p style="margin:4px 0 0; font-size:13px; color:#688877;">Hát từng câu theo giai điệu vui vẻ (+5 ⭐)</p>
                 </div>
                 <div>

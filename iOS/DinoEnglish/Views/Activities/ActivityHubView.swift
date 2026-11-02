@@ -214,15 +214,6 @@ private struct HubActionCard: View {
                             .font(.system(size: 16, weight: .heavy, design: .rounded))
                             .foregroundStyle(isCompleted ? DinoStyle.green : color)
                         
-                        if isCompleted {
-                            Text("✓ ĐÃ XONG")
-                                .font(.system(size: 10, weight: .black, design: .rounded))
-                                .foregroundStyle(Color.white)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2)
-                                .background(DinoStyle.green, in: Capsule())
-                        }
-                        
                         Spacer()
                         
                         Text(starsReward)
