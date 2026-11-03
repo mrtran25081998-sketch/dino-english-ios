@@ -85,6 +85,7 @@ public struct HomeView: View {
                         }
                     }
                     .padding(.horizontal, 4)
+                    .padding(.top, 24)
                     
                     // 2. Khung thống kê học tập (Chuỗi ngày - Hôm nay - Sao) chuẩn theo thiết kế
                     HStack(spacing: 10) {

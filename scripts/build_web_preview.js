@@ -1745,8 +1745,8 @@ const htmlTemplate = `<!doctype html>
           const currentLesson = getLesson(state.currentTopicId, state.currentLessonId);
           const lvl = getEvolutionLevel();
           html = \`
-            <!-- Header trang chủ: Avatar bé, Lời chào, Quà tặng & Cài đặt -->
-            <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 0 6px;">
+            <!-- Header trang chủ: Avatar bé, Lời chào, Quà tặng & Cài đặt (Được đẩy xuống 66px để hoàn toàn thông thoáng dưới Dynamic Island & viền bo) -->
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:66px 0 8px;">
               <div style="display:flex; align-items:center; gap:10px;">
                 <!-- Avatar tròn của bé với huy hiệu sao -->
                 <div style="position:relative; width:52px; height:52px; flex-shrink:0; cursor:pointer;" onclick="navigate('profile')">
