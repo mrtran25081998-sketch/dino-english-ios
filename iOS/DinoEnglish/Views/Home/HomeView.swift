@@ -232,58 +232,40 @@ public struct HomeView: View {
                         .buttonStyle(.plain)
                     }
                     
-                    // 4 Hoạt động học tập chính
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Bé muốn học gì hôm nay?")
-                            .font(.system(size: 19, weight: .heavy, design: .rounded))
-                            .foregroundStyle(DinoStyle.textDark)
-                        
-                        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                            if let topic = model.currentSelectedTopic, let lesson = model.currentSelectedLesson {
-                                ActivityTile(
-                                    title: "Từ vựng",
-                                    subtitle: "10 Thẻ học 3D",
-                                    icon: "character.book.closed.fill",
-                                    color: DinoStyle.green,
-                                    mascot: .study,
-                                    destination: AnyView(VocabularyFlashcardView(lesson: lesson))
-                                )
-                                
-                                ActivityTile(
-                                    title: "Phát âm",
-                                    subtitle: "Luyện nói chuẩn",
-                                    icon: "mic.fill",
-                                    color: DinoStyle.blue,
-                                    mascot: .speak,
-                                    destination: AnyView(PronunciationPracticeView(lesson: lesson))
-                                )
-                                
-                                ActivityTile(
-                                    title: "Trò chơi",
-                                    subtitle: "Chọn đúng hình",
-                                    icon: "gamecontroller.fill",
-                                    color: DinoStyle.purple,
-                                    mascot: .game,
-                                    destination: AnyView(GameQuizView(lesson: lesson))
-                                )
-                                
-                                ActivityTile(
-                                    title: "Bài hát",
-                                    subtitle: "Giai điệu vui",
-                                    icon: "music.note.list",
-                                    color: DinoStyle.coral,
-                                    mascot: .song,
-                                    destination: AnyView(SongPlayerView(song: topic.song ?? DinoSong(topicId: topic.id, title: "English Song", lines: ["Hello friends!"], linesVi: ["Xin chào các bạn!"])))
-                                )
-                            }
+                    // 4 Hoạt động học tập chính xếp thành 1 hàng ngang chuẩn theo yêu cầu
+                    if let topic = model.currentSelectedTopic, let lesson = model.currentSelectedLesson {
+                        HStack(spacing: 8) {
+                            ActivityTile(
+                                title: "Từ vựng",
+                                icon: "book.fill",
+                                color: DinoStyle.green,
+                                destination: AnyView(VocabularyFlashcardView(lesson: lesson))
+                            )
+                            
+                            ActivityTile(
+                                title: "Phát âm",
+                                icon: "mic.fill",
+                                color: DinoStyle.blue,
+                                destination: AnyView(PronunciationPracticeView(lesson: lesson))
+                            )
+                            
+                            ActivityTile(
+                                title: "Trò chơi",
+                                icon: "gamecontroller.fill",
+                                color: DinoStyle.purple,
+                                destination: AnyView(GameQuizView(lesson: lesson))
+                            )
+                            
+                            ActivityTile(
+                                title: "Bài hát",
+                                icon: "music.note",
+                                color: DinoStyle.coral,
+                                destination: AnyView(SongPlayerView(song: topic.song ?? DinoSong(topicId: topic.id, title: "English Song", lines: ["Hello friends!"], linesVi: ["Xin chào các bạn!"])))
+                            )
                         }
                     }
                     
-                    // Cột mốc Dino trưởng thành
-                    VStack(alignment: .leading, spacing: 10) {
-                        Text("Dino lớn lên cùng bé")
-                            .font(.system(size: 19, weight: .heavy, design: .rounded))
-                            .foregroundStyle(DinoStyle.textDark)
+                    // Cột mốc Dino trưởng thành (đã bỏ 2 phần tiêu đề)
                         
                         NavigationLink(destination: DinoGrowthView()) {
                             Dino3DCard(backgroundColor: Color.white) {
@@ -326,7 +308,6 @@ public struct HomeView: View {
                             }
                         }
                         .buttonStyle(.plain)
-                    }
                     
                     Spacer(minLength: 20)
                 }
@@ -339,46 +320,43 @@ public struct HomeView: View {
     }
 }
 
-/// Thẻ chức năng 4 hoạt động chính
+/// Thẻ chức năng 4 hoạt động chính xếp 1 hàng ngang
 private struct ActivityTile: View {
     let title: String
-    let subtitle: String
     let icon: String
     let color: Color
-    let mascot: DinoMascot
     let destination: AnyView
     
     var body: some View {
         NavigationLink(destination: destination) {
-            ZStack(alignment: .topTrailing) {
-                RoundedRectangle(cornerRadius: 22)
-                    .fill(color.opacity(0.12))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 22)
-                            .stroke(color.opacity(0.35), lineWidth: 2)
-                    )
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Image(systemName: icon)
-                            .font(.system(size: 24, weight: .bold))
-                            .foregroundStyle(color)
-                        Spacer()
-                    }
+            VStack(spacing: 6) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(color.opacity(0.12))
+                        .frame(width: 44, height: 44)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(color.opacity(0.35), lineWidth: 1.5)
+                        )
                     
-                    Spacer(minLength: 0)
-                    
-                    Text(title)
-                        .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    Image(systemName: icon)
+                        .font(.system(size: 20, weight: .bold))
                         .foregroundStyle(color)
-                    
-                    Text(subtitle)
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        .foregroundStyle(DinoStyle.textMuted)
                 }
-                .padding(14)
+                
+                Text(title)
+                    .font(.system(size: 12, weight: .heavy, design: .rounded))
+                    .foregroundStyle(color)
+                    .lineLimit(1)
             }
-            .frame(height: 115)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 10)
+            .background(Color.white.opacity(0.92), in: RoundedRectangle(cornerRadius: 18))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18)
+                    .stroke(Color.white, lineWidth: 1.5)
+            )
+            .shadow(color: Color.black.opacity(0.04), radius: 6, y: 2)
         }
         .buttonStyle(.plain)
     }

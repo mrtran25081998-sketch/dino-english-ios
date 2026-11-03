@@ -1831,31 +1831,25 @@ const htmlTemplate = `<!doctype html>
               </div>
             </div>
 
-            <h3 style="margin:16px 0 10px; color:#1e6a39; font-size:18px;">Bé muốn học gì hôm nay?</h3>
-            <div class="grid-2">
-              <div class="tile-card" style="border-color:#b9e7c5;" onclick="navigate('vocab', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">
-                <div style="font-size:28px;">📖</div>
-                <b style="color:#239446; font-size:16px;">Từ vựng</b>
-                <div style="font-size:12px; color:#688776;">10 Thẻ 3D & IPA</div>
+            <!-- 4 Thẻ hoạt động sắp xếp thành 1 hàng chuẩn theo yêu cầu -->
+            <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:8px; margin:0 0 16px;">
+              <div class="tile-card" style="border-color:#a8e8bc; background:linear-gradient(135deg, #f7fdf9, #ebfaf0); padding:12px 4px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; box-shadow:0 3px 0 #9ddfb1; border-radius:18px;" onclick="navigate('vocab', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">
+                <span style="font-size:26px; line-height:1; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">📖</span>
+                <b style="color:#186c35; font-size:13px; font-weight:900;">Từ vựng</b>
               </div>
-              <div class="tile-card" style="border-color:#b5d9ff;" onclick="navigate('pron', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">
-                <div style="font-size:28px;">🎤</div>
-                <b style="color:#1d7cd6; font-size:16px;">Phát âm</b>
-                <div style="font-size:12px; color:#688776;">Nghe & Luyện nói</div>
+              <div class="tile-card" style="border-color:#aed5ff; background:linear-gradient(135deg, #f7fbff, #eaf3ff); padding:12px 4px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; box-shadow:0 3px 0 #9bc8fc; border-radius:18px;" onclick="navigate('pron', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">
+                <span style="font-size:26px; line-height:1; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">🎤</span>
+                <b style="color:#11579d; font-size:13px; font-weight:900;">Phát âm</b>
               </div>
-              <div class="tile-card" style="border-color:#dcc6ff;" onclick="navigate('game', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">
-                <div style="font-size:28px;">🎮</div>
-                <b style="color:#7837d9; font-size:16px;">Trò chơi</b>
-                <div style="font-size:12px; color:#688776;">Đố vui phản xạ</div>
+              <div class="tile-card" style="border-color:#d7baff; background:linear-gradient(135deg, #faf7ff, #f2eaff); padding:12px 4px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; box-shadow:0 3px 0 #c7a1fc; border-radius:18px;" onclick="navigate('game', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">
+                <span style="font-size:26px; line-height:1; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">🎮</span>
+                <b style="color:#571ba6; font-size:13px; font-weight:900;">Trò chơi</b>
               </div>
-              <div class="tile-card" style="border-color:#ffccd2;" onclick="navigate('song', {topicId:'\${currentTopic.id}'})">
-                <div style="font-size:28px;">🎵</div>
-                <b style="color:#df3447; font-size:16px;">Bài hát</b>
-                <div style="font-size:12px; color:#688776;">Giai điệu vui nhộn</div>
+              <div class="tile-card" style="border-color:#ffb8c4; background:linear-gradient(135deg, #fff7f8, #ffeef1); padding:12px 4px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:6px; box-shadow:0 3px 0 #fa9eaf; border-radius:18px;" onclick="navigate('song', {topicId:'\${currentTopic.id}'})">
+                <span style="font-size:26px; line-height:1; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.1));">🎵</span>
+                <b style="color:#a8192a; font-size:13px; font-weight:900;">Bài hát</b>
               </div>
             </div>
-
-            <h3 style="margin:18px 0 8px; color:#1e6a39; font-size:18px;">Dino lớn lên cùng bé</h3>
             <div class="dino-card" style="display:flex; gap:14px; align-items:center;" onclick="navigate('growth')">
               \${getDinoImg(getMilestoneMascot(), 'tiny')}
               <div style="flex:1;">
