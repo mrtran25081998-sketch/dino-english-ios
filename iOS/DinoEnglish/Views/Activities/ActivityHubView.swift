@@ -95,17 +95,11 @@ public struct ActivityHubView: View {
                         }
                     }
                     
-                    Text("Chọn hoạt động bé muốn làm:")
-                        .font(.system(size: 17, weight: .heavy, design: .rounded))
-                        .foregroundStyle(DinoStyle.textDark)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 4)
-                    
                     // 1. TỪ VỰNG
                     NavigationLink(destination: VocabularyFlashcardView(lesson: lesson)) {
                         HubActionCard(
-                            title: "Từ Vựng · Flashcards",
-                            subtitle: "Xem 10 thẻ hình ảnh, phiên âm IPA và nghe đọc chuẩn",
+                            title: "Từ vựng",
+                            subtitle: "10 thẻ học",
                             icon: "character.book.closed.fill",
                             color: DinoStyle.green,
                             mascot: .study,
@@ -118,8 +112,8 @@ public struct ActivityHubView: View {
                     // 2. PHÁT ÂM
                     NavigationLink(destination: PronunciationPracticeView(lesson: lesson)) {
                         HubActionCard(
-                            title: "Phát Âm · Nghe & Nói",
-                            subtitle: "Nghe phát âm chuẩn và luyện nói qua micro cùng Dino",
+                            title: "Phát âm",
+                            subtitle: "Luyện nói chuẩn",
                             icon: "mic.fill",
                             color: DinoStyle.blue,
                             mascot: .speak,
@@ -132,8 +126,8 @@ public struct ActivityHubView: View {
                     // 3. TRÒ CHƠI
                     NavigationLink(destination: GameQuizView(lesson: lesson)) {
                         HubActionCard(
-                            title: "Trò Chơi · Chọn Đúng Hình",
-                            subtitle: "Đố vui phản xạ 3D với các từ vừa học trong bài",
+                            title: "Trò chơi",
+                            subtitle: "Đố vui 3D",
                             icon: "gamecontroller.fill",
                             color: DinoStyle.purple,
                             mascot: .game,
@@ -147,8 +141,8 @@ public struct ActivityHubView: View {
                     if let song = topic.song {
                         NavigationLink(destination: SongPlayerView(song: song)) {
                             HubActionCard(
-                                title: "Bài Hát · Giai Điệu Vui",
-                                subtitle: song.title,
+                                title: "Bài hát",
+                                subtitle: "Giai điệu vui",
                                 icon: "music.note.list",
                                 color: DinoStyle.coral,
                                 mascot: .song,
@@ -184,65 +178,85 @@ private struct HubActionCard: View {
     var body: some View {
         ZStack {
             // Đáy đổ bóng 3D
-            RoundedRectangle(cornerRadius: 22)
-                .fill((isCompleted ? DinoStyle.green : color).opacity(0.35))
+            RoundedRectangle(cornerRadius: 20)
+                .fill((isCompleted ? DinoStyle.green : Color(red: 0.75, green: 0.88, blue: 0.79)).opacity(0.4))
                 .offset(y: 4)
             
             // Mặt chính
-            RoundedRectangle(cornerRadius: 22)
+            RoundedRectangle(cornerRadius: 20)
                 .fill(isCompleted ? Color(red: 0.96, green: 0.99, blue: 0.97) : Color.white)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 22)
-                        .stroke(isCompleted ? DinoStyle.green : color.opacity(0.35), lineWidth: 2)
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(isCompleted ? DinoStyle.green.opacity(0.6) : Color(red: 0.88, green: 0.94, blue: 0.9), lineWidth: 2)
                 )
             
-            HStack(spacing: 14) {
-                // Biểu tượng tròn
+            HStack(spacing: 12) {
+                // Biểu tượng squircle 3D
                 ZStack {
-                    Circle()
-                        .fill((isCompleted ? DinoStyle.green : color).opacity(0.18))
-                        .frame(width: 54, height: 54)
+                    RoundedRectangle(cornerRadius: 15)
+                        .fill(color.opacity(0.16))
+                        .frame(width: 48, height: 48)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(color.opacity(0.25), lineWidth: 1.5)
+                        )
                     
                     Image(systemName: icon)
-                        .font(.system(size: 26, weight: .bold))
-                        .foregroundStyle(isCompleted ? DinoStyle.green : color)
+                        .font(.system(size: 22, weight: .heavy))
+                        .foregroundStyle(color)
                 }
                 
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 6) {
-                        Text(title)
-                            .font(.system(size: 16, weight: .heavy, design: .rounded))
-                            .foregroundStyle(isCompleted ? DinoStyle.green : color)
-                        
-                        Spacer()
-                        
-                        Text(starsReward)
-                            .font(.system(size: 12, weight: .black, design: .rounded))
-                            .foregroundStyle(Color(red: 0.65, green: 0.42, blue: 0.02))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 3)
-                            .background(DinoStyle.yellowLight.opacity(0.6), in: Capsule())
-                    }
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(title)
+                        .font(.system(size: 16, weight: .black, design: .rounded))
+                        .foregroundStyle(DinoStyle.textDark)
                     
-                    Text(subtitle)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
-                        .foregroundStyle(DinoStyle.textMuted)
-                        .lineLimit(2)
+                    HStack(spacing: 6) {
+                        Text(starsReward)
+                            .font(.system(size: 11, weight: .heavy, design: .rounded))
+                            .foregroundStyle(Color(red: 0.65, green: 0.42, blue: 0.02))
+                            .padding(.horizontal, 7)
+                            .padding(.vertical, 2)
+                            .background(DinoStyle.yellowLight.opacity(0.8), in: Capsule())
+                        
+                        Text(subtitle)
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .foregroundStyle(DinoStyle.textMuted)
+                    }
                 }
                 
-                // Dấu tích xanh tròn bên phải
+                Spacer()
+                
+                // Dấu tích hoặc mũi tên
                 if isCompleted {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 26, weight: .bold))
-                        .foregroundStyle(DinoStyle.green)
-                        .shadow(color: DinoStyle.green.opacity(0.3), radius: 4, y: 2)
+                    ZStack {
+                        Circle()
+                            .fill(LinearGradient(
+                                colors: [Color(red: 0.2, green: 0.83, blue: 0.6), Color(red: 0.06, green: 0.72, blue: 0.51)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ))
+                            .frame(width: 36, height: 36)
+                        
+                        Image(systemName: "checkmark")
+                            .font(.system(size: 16, weight: .black))
+                            .foregroundStyle(.white)
+                    }
+                    .shadow(color: DinoStyle.green.opacity(0.35), radius: 4, y: 2)
                 } else {
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundStyle(DinoStyle.textMuted.opacity(0.5))
+                    ZStack {
+                        Circle()
+                            .fill(Color(red: 0.94, green: 0.96, blue: 0.95))
+                            .frame(width: 36, height: 36)
+                        
+                        Image(systemName: "arrow.right")
+                            .font(.system(size: 13, weight: .heavy))
+                            .foregroundStyle(Color(red: 0.4, green: 0.5, blue: 0.45))
+                    }
                 }
             }
-            .padding(16)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
         }
         .padding(.bottom, 4)
     }

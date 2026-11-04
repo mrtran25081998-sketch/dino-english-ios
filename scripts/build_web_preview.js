@@ -401,6 +401,118 @@ const htmlTemplate = `<!doctype html>
     .tile-card:hover { transform: translateY(-2px); }
     .tile-card:active { transform: translateY(2px); }
 
+    /* 3D Modern Activity Hub Cards */
+    .hub-activity-card {
+      background: #ffffff;
+      border: 2px solid #e0efe5;
+      border-radius: 20px;
+      padding: 12px 14px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #bfe0ca, 0 6px 14px rgba(32, 90, 52, 0.07);
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+      position: relative;
+      user-select: none;
+    }
+    .hub-activity-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 0 #afd6bc, 0 10px 18px rgba(32, 90, 52, 0.1);
+    }
+    .hub-activity-card:active {
+      transform: translateY(3px);
+      box-shadow: 0 1px 0 #afd6bc, 0 3px 6px rgba(32, 90, 52, 0.06);
+    }
+    .hub-activity-card.completed {
+      background: linear-gradient(180deg, #ffffff 0%, #f3fcf6 100%);
+      border-color: #6ed193;
+      box-shadow: 0 4px 0 #52c27c, 0 6px 14px rgba(40, 167, 69, 0.12);
+    }
+    .hub-activity-card.completed:active {
+      box-shadow: 0 1px 0 #52c27c;
+    }
+    .hub-icon-box {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.9);
+    }
+    .hub-icon-box.vocab {
+      background: linear-gradient(145deg, #ffe082, #f59e0b);
+      box-shadow: 0 4px 10px rgba(245, 158, 11, 0.32);
+    }
+    .hub-icon-box.pron {
+      background: linear-gradient(145deg, #7dd3fc, #0284c7);
+      box-shadow: 0 4px 10px rgba(2, 132, 199, 0.32);
+    }
+    .hub-icon-box.game {
+      background: linear-gradient(145deg, #d8b4fe, #9333ea);
+      box-shadow: 0 4px 10px rgba(147, 51, 234, 0.32);
+    }
+    .hub-icon-box.song {
+      background: linear-gradient(145deg, #f472b6, #e11d48);
+      box-shadow: 0 4px 10px rgba(225, 29, 72, 0.32);
+    }
+    .hub-card-title {
+      font-size: 16px;
+      font-weight: 900;
+      color: #1e3a2b;
+      margin: 0 0 4px 0;
+      line-height: 1.2;
+    }
+    .hub-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .hub-reward-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      background: #fef3c7;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 8px;
+      border: 1px solid #fde68a;
+    }
+    .hub-desc-chip {
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .hub-action-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+    .hub-action-circle.done {
+      background: linear-gradient(135deg, #34d399, #10b981);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 18px;
+      box-shadow: 0 3px 8px rgba(16, 185, 129, 0.35);
+    }
+    .hub-action-circle.pending {
+      background: #f1f5f9;
+      color: #64748b;
+      font-weight: 900;
+      font-size: 14px;
+      border: 1.5px solid #e2e8f0;
+    }
+
     /* Progress bar */
     .progress-bar {
       height: 12px;
@@ -2000,68 +2112,70 @@ const htmlTemplate = `<!doctype html>
                 <div class="progress-fill" style="width:\${hubProgressPercent}%; background:linear-gradient(90deg, #34d399, #10b981); height:100%; transition:width 0.3s ease;"></div>
               </div>
 
-              <p style="color:#638372; font-size:12px; margin:0;">
-                \${hubCompletedCount === 4 
-                  ? '🌟 Bé đã hoàn thành xuất sắc tất cả 4 hoạt động! Có thể học lại bất cứ lúc nào.' 
-                  : 'Chọn hoạt động để học, hoàn thành sẽ xuất hiện dấu tích xanh:'}
-              </p>
+              \${hubCompletedCount === 4 
+                ? '<div style="margin-top:6px; color:#16a34a; font-size:12px; font-weight:800;">🌟 Hoàn thành xuất sắc tất cả 4 hoạt động!</div>' 
+                : ''}
             </div>
 
-            <!-- 4 Thẻ hoạt động kèm dấu tích xanh khi hoàn thành -->
+            <!-- 4 Thẻ hoạt động 3D gọn gàng, giảm thiểu text -->
             <div style="display:flex; flex-direction:column; gap:10px;">
-              <!-- 1. Từ Vựng (Flashcards) -->
-              <div class="tile-card" style="border-color:\${isVocabDone ? '#28a745' : '#30a953'}; background:\${isVocabDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('vocab', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+              <!-- 1. Từ vựng -->
+              <div class="hub-activity-card \${isVocabDone ? 'completed' : ''}" onclick="navigate('vocab', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+                <div class="hub-icon-box vocab">🔤</div>
                 <div style="flex:1;">
-                  <b style="color:\${isVocabDone ? '#1e7a3d' : '#28a44c'}; font-size:16px;">📖 1. Học Từ Vựng (Flashcards)</b>
-                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">10 Thẻ minh họa, phát âm và phiên âm IPA (+5 ⭐)</p>
+                  <h4 class="hub-card-title">Từ vựng</h4>
+                  <div class="hub-meta-row">
+                    <span class="hub-reward-chip">⭐ +5</span>
+                    <span class="hub-desc-chip">10 thẻ học</span>
+                  </div>
                 </div>
-                <div>
-                  \${isVocabDone 
-                    ? \`<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>\`
-                    : \`<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>\`
-                  }
+                <div class="hub-action-circle \${isVocabDone ? 'done' : 'pending'}">
+                  \${isVocabDone ? '✓' : '➔'}
                 </div>
               </div>
 
-              <!-- 2. Luyện Phát Âm (Nghe & Nói) -->
-              <div class="tile-card" style="border-color:\${isPronDone ? '#28a745' : '#2a82e4'}; background:\${isPronDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('pron', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+              <!-- 2. Phát âm -->
+              <div class="hub-activity-card \${isPronDone ? 'completed' : ''}" onclick="navigate('pron', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+                <div class="hub-icon-box pron">🎙️</div>
                 <div style="flex:1;">
-                  <b style="color:\${isPronDone ? '#1e7a3d' : '#207ee8'}; font-size:16px;">🎤 2. Luyện Phát Âm (Nghe & Nói)</b>
-                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">Tập phát âm qua micro theo mẫu giọng chuẩn (+5 ⭐)</p>
+                  <h4 class="hub-card-title">Phát âm</h4>
+                  <div class="hub-meta-row">
+                    <span class="hub-reward-chip">⭐ +5</span>
+                    <span class="hub-desc-chip">Luyện nói</span>
+                  </div>
                 </div>
-                <div>
-                  \${isPronDone 
-                    ? \`<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>\`
-                    : \`<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>\`
-                  }
+                <div class="hub-action-circle \${isPronDone ? 'done' : 'pending'}">
+                  \${isPronDone ? '✓' : '➔'}
                 </div>
               </div>
 
-              <!-- 3. Trò Chơi Đố Vui 3D -->
-              <div class="tile-card" style="border-color:\${isGameDone ? '#28a745' : '#8e44ec'}; background:\${isGameDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('game', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+              <!-- 3. Trò chơi -->
+              <div class="hub-activity-card \${isGameDone ? 'completed' : ''}" onclick="navigate('game', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+                <div class="hub-icon-box game">🎮</div>
                 <div style="flex:1;">
-                  <b style="color:\${isGameDone ? '#1e7a3d' : '#8a3de8'}; font-size:16px;">🎮 3. Trò Chơi Đố Vui 3D</b>
-                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">Chọn đúng nghĩa của các từ trong bài (+10 ⭐)</p>
+                  <h4 class="hub-card-title">Trò chơi</h4>
+                  <div class="hub-meta-row">
+                    <span class="hub-reward-chip">⭐ +10</span>
+                    <span class="hub-desc-chip">Đố vui 3D</span>
+                  </div>
                 </div>
-                <div>
-                  \${isGameDone 
-                    ? \`<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>\`
-                    : \`<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>\`
-                  }
+                <div class="hub-action-circle \${isGameDone ? 'done' : 'pending'}">
+                  \${isGameDone ? '✓' : '➔'}
                 </div>
               </div>
 
-              <!-- 4. Bài Hát Theo Chủ Đề -->
-              <div class="tile-card" style="border-color:\${isSongDone ? '#28a745' : '#eb4b5d'}; background:\${isSongDone ? '#f4fbf6' : '#fff'}; display:flex; align-items:center; justify-content:space-between; gap:12px;" onclick="navigate('song', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+              <!-- 4. Bài hát -->
+              <div class="hub-activity-card \${isSongDone ? 'completed' : ''}" onclick="navigate('song', {topicId:'\${hubTopic.id}', lessonId:\${hubLesson.lessonId}})">
+                <div class="hub-icon-box song">🎵</div>
                 <div style="flex:1;">
-                  <b style="color:\${isSongDone ? '#1e7a3d' : '#e03447'}; font-size:16px;">🎵 4. Bài Hát Theo Chủ Đề</b>
-                  <p style="margin:4px 0 0; font-size:13px; color:#688877;">Hát từng câu theo giai điệu vui vẻ (+5 ⭐)</p>
+                  <h4 class="hub-card-title">Bài hát</h4>
+                  <div class="hub-meta-row">
+                    <span class="hub-reward-chip">⭐ +5</span>
+                    <span class="hub-desc-chip">Giai điệu vui</span>
+                  </div>
                 </div>
-                <div>
-                  \${isSongDone 
-                    ? \`<div style="width:34px; height:34px; border-radius:50%; background:#28a745; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:19px; box-shadow:0 3px 6px rgba(40,167,69,0.35); flex-shrink:0;">✓</div>\`
-                    : \`<div style="width:34px; height:34px; border-radius:50%; background:#f0f5f2; color:#557763; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; flex-shrink:0;">➔</div>\`
-                  }
+                <div class="hub-action-circle \${isSongDone ? 'done' : 'pending'}">
+                  \${isSongDone ? '✓' : '➔'}
                 </div>
               </div>
             </div>
