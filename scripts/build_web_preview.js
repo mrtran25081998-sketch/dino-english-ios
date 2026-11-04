@@ -938,7 +938,10 @@ const htmlTemplate = `<!doctype html>
       onboardStep: 0,
       kidName: (function() {
         const n = localStorage.getItem('dino_kid_name');
-        if (!n || n.includes('Ã') || n.includes('')) return 'Bé Na';
+        if (!n || n.includes('Ã') || n.includes('Yêu') || n.includes('YÃ') || n === 'Bé Yêu') {
+          try { localStorage.setItem('dino_kid_name', 'Bé Na'); } catch(e){}
+          return 'Bé Na';
+        }
         return n;
       })(),
       stars: parseInt(localStorage.getItem('dino_stars') || '15', 10),
@@ -1112,12 +1115,24 @@ const htmlTemplate = `<!doctype html>
       }
     }
 
+    function getDisplayKidName() {
+      const raw = state.kidName || (state.activeChild ? state.activeChild.display_name : '') || '';
+      if (!raw || raw.includes('Ã') || raw.includes('Yêu') || raw.includes('YÃ') || raw === 'Bé Yêu' || raw === 'BÃ© YÃªu') {
+        state.kidName = 'Bé Na';
+        try { localStorage.setItem('dino_kid_name', 'Bé Na'); } catch(e){}
+        return 'Bé Na';
+      }
+      return raw;
+    }
+
     async function setActiveChild(childId) {
       state.activeChildId = childId;
       const kid = state.children.find(k => k.id === childId);
       if (kid) {
         state.activeChild = kid;
-        state.kidName = kid.display_name;
+        const rawName = kid.display_name || '';
+        state.kidName = (!rawName || rawName.includes('Ã') || rawName.includes('Yêu') || rawName.includes('YÃ') || rawName === 'Bé Yêu' || rawName === 'BÃ© YÃªu') ? 'Bé Na' : rawName;
+        try { localStorage.setItem('dino_kid_name', state.kidName); } catch(e){}
       }
       localStorage.setItem('dino_active_child_id', childId);
 
@@ -1783,7 +1798,7 @@ const htmlTemplate = `<!doctype html>
 
                 <div>
                   <span style="font-size:13px; color:#3d634d; font-weight:800; line-height:1.1; display:block;">Xin chào,</span>
-                  <div style="font-size:22px; font-weight:900; color:#24a148; line-height:1.2; text-shadow:0 1px 0 #fff;">\${(!state.kidName || state.kidName.includes('Ã')) ? 'Bé Na' : state.kidName}!</div>
+                  <div style="font-size:22px; font-weight:900; color:#24a148; line-height:1.2; text-shadow:0 1px 0 #fff;">\${getDisplayKidName()}!</div>
                 </div>
               </div>
 
@@ -2358,7 +2373,7 @@ const htmlTemplate = `<!doctype html>
               <div class="mascot-box" style="margin:0 auto 8px;">
                 \${getDinoImg(state.activeChild?.avatar_url || 'welcome', 'small')}
               </div>
-              <h3 style="color:#1e7a3d; margin:0 0 4px; font-size:20px; font-weight:900;">\${state.kidName}</h3>
+              <h3 style="color:#1e7a3d; margin:0 0 4px; font-size:20px; font-weight:900;">\${getDisplayKidName()}</h3>
               <div style="display:inline-block; background:#eafbee; border:1px solid #84d89a; color:#1e7a3d; font-size:12px; font-weight:800; padding:3px 10px; border-radius:12px; margin-bottom:12px;">
                 Nhóm tuổi: \${state.activeChild?.age_group || '6–8 tuổi'} · Cột mốc Cấp \${getEvolutionLevel()} / 20
               </div>
@@ -2386,37 +2401,7 @@ const htmlTemplate = `<!doctype html>
               </div>
             </div>
 
-            <!-- THẺ ĐỒNG BỘ CLOUD SUPABASE (PROJECT: wsaalmeuduiyqbptnrmy) -->
-            <div class="dino-card" style="border:2px solid \${state.supabaseUser ? '#28a44c' : '#57a0d3'}; background:\${state.supabaseUser ? '#f2fbf5' : '#f4faff'};">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                <b style="color:\${state.supabaseUser ? '#1e7a3d' : '#1d6fa5'}; font-size:16px;">☁️ Supabase Cloud Sync</b>
-                <span style="font-size:11px; font-weight:800; background:\${state.supabaseUser ? '#28a44c' : '#57a0d3'}; color:#fff; padding:2px 8px; border-radius:10px;">
-                  \${state.supabaseUser ? 'ĐÃ KẾT NỐI' : 'CHƯA ĐĂNG NHẬP'}
-                </span>
-              </div>
-
-              \${state.supabaseUser ? \`
-                <div style="font-size:13px; color:#3d6550; margin-bottom:6px;">
-                  Tài khoản: <b>\${state.supabaseUser.email}</b>
-                </div>
-                <div style="font-size:12px; color:#5c836f; margin-bottom:10px;">
-                  Đã ghi nhớ: <b>\${state.completedLessons.length} bài học</b> & <b>\${state.stars} sao</b>.
-                </div>
-                \${state.syncStatus ? \`<div style="font-size:12px; color:#1e7a3d; margin-bottom:8px; font-weight:700;">\${state.syncStatus}</div>\` : ''}
-                <div style="display:flex; gap:8px;">
-                  <button class="dino-btn green" style="flex:2; font-size:13px; padding:8px;" onclick="handleCloudSync()">🔄 Đồng Bộ Ngay</button>
-                  <button class="dino-outline-btn" style="flex:1; font-size:13px; padding:8px; color:#d42638; border-color:#f09ea7;" onclick="handleCloudLogout()">Đăng Xuất</button>
-                </div>
-              \` : \`
-                <p style="font-size:12px; color:#577464; margin:0 0 10px; line-height:1.4;">
-                  Đăng nhập tài khoản phụ huynh để lưu vĩnh viễn tiến độ học của bé và tiếp tục học trên các thiết bị khác!
-                </p>
-                <button class="dino-btn blue" style="font-size:13px; padding:10px;" onclick="navigate('login')">
-                  🔐 Đăng Nhập / Đăng Ký Supabase ➔
-                </button>
-              \`}
-            </div>
-
+            <!-- Cài đặt tốc độ giọng đọc -->
             <div class="dino-card">
               <h4 style="margin:0 0 10px; color:#1e6a39;">Cài đặt tốc độ giọng đọc</h4>
               <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px;">
@@ -2427,9 +2412,14 @@ const htmlTemplate = `<!doctype html>
               <input type="range" min="0.5" max="1.1" step="0.05" value="\${state.speechRate}" style="width:100%;" onchange="state.speechRate=parseFloat(this.value)">
             </div>
 
-            <button class="dino-outline-btn" style="color:#d42638; border-color:#f09ea7;" onclick="resetAllProgress()">
-              ⚠️ Đặt lại toàn bộ tiến độ học tập
-            </button>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+              <button class="dino-outline-btn" style="color:#d42638; border-color:#f09ea7;" onclick="handleCloudLogout()">
+                🚪 Đăng Xuất Tài Khoản
+              </button>
+              <button class="dino-outline-btn" style="color:#718e7e; border-color:#cce0d4; font-size:12px;" onclick="resetAllProgress()">
+                ⚠️ Đặt lại toàn bộ tiến độ học tập
+              </button>
+            </div>
           \`;
           break;
       }
