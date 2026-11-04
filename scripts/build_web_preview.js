@@ -139,7 +139,7 @@ const htmlTemplate = `<!doctype html>
       flex: 1;
       overflow-y: auto;
       overflow-x: hidden;
-      padding: 0 18px 24px;
+      padding: 0 18px 84px;
       display: flex;
       flex-direction: column;
       scrollbar-width: none;
@@ -416,33 +416,22 @@ const htmlTemplate = `<!doctype html>
       transition: width 0.3s;
     }
 
-    /* Bottom Navigation Tab Bar (Fixed at Screen Bottom) */
+    /* Floating Capsule Bottom Navigation Dock Bar */
     .tab-bar {
-      flex-shrink: 0;
-      position: relative;
-      width: 100%;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-top: 1.5px solid #d0ebd4;
+      position: absolute;
+      bottom: 12px;
+      left: 14px;
+      right: 14px;
+      background: #ffffff;
+      border: 2px solid rgba(255, 255, 255, 0.95);
+      border-radius: 36px;
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      padding: 8px 6px 14px;
+      padding: 6px 8px;
       z-index: 500;
-      box-shadow: 0 -4px 18px rgba(18, 64, 38, 0.08);
+      box-shadow: 0 10px 28px rgba(18, 64, 38, 0.16), 0 2px 8px rgba(0, 0, 0, 0.05);
       box-sizing: border-box;
-    }
-    .tab-bar::after {
-      content: '';
-      position: absolute;
-      bottom: 4px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 120px;
-      height: 4px;
-      background: #1e3a2b;
-      border-radius: 2px;
-      opacity: 0.35;
+      align-items: center;
     }
     .home-indicator {
       position: absolute;
@@ -465,19 +454,51 @@ const htmlTemplate = `<!doctype html>
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 2px;
+      gap: 3px;
       font-size: 11px;
       font-weight: 800;
       color: #608271;
       cursor: pointer;
       padding: 2px 0;
+      border-radius: 20px;
+      transition: all 0.2s ease;
     }
-    .tab-btn.active {
-      color: #26a84f;
+    .tab-icon-box {
+      width: 44px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 14px;
+      transition: all 0.2s ease;
+      font-size: 22px;
+      line-height: 1;
     }
-    .tab-btn span {
-      font-size: 20px;
-      line-height: 1.2;
+    .tab-btn.tab-home { color: #186c35; }
+    .tab-btn.tab-learn { color: #1d7cd6; }
+    .tab-btn.tab-explore { color: #7837d9; }
+    .tab-btn.tab-profile { color: #d97706; }
+
+    .tab-btn.active .tab-icon-box {
+      background: #ffffff;
+      border: 1.5px solid #e2e8f0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+    .tab-btn.tab-home.active .tab-icon-box {
+      border-color: #d1f2db;
+      background: #f2fcf5;
+    }
+    .tab-btn.tab-learn.active .tab-icon-box {
+      border-color: #cde4ff;
+      background: #f0f7ff;
+    }
+    .tab-btn.tab-explore.active .tab-icon-box {
+      border-color: #e5d6ff;
+      background: #f8f4ff;
+    }
+    .tab-btn.tab-profile.active .tab-icon-box {
+      border-color: #fde68a;
+      background: #fffbeb;
     }
 
     /* Header Nav (Sticky / Fixed at top when scrolling, Clean White Background, Exactly 80px Total Height) */
@@ -875,19 +896,23 @@ const htmlTemplate = `<!doctype html>
       <!-- App Screen Content Root -->
       <div class="app-viewport" id="appViewport"></div>
 
-      <!-- Bottom Nav Bar (Permanently Fixed to iPhone Bottom) -->
+      <!-- Floating Dock Bottom Nav Bar -->
       <div class="tab-bar" id="tabBar" style="display:none;">
-        <button class="tab-btn active" onclick="navigate('home')">
-          <span>🏠</span>Trang chủ
+        <button class="tab-btn tab-home active" onclick="navigate('home')">
+          <div class="tab-icon-box">🏠</div>
+          <span>Trang chủ</span>
         </button>
-        <button class="tab-btn" onclick="navigate('topics')">
-          <span>📚</span>Chủ đề
+        <button class="tab-btn tab-learn" onclick="navigate('topics')">
+          <div class="tab-icon-box">📖</div>
+          <span>Học</span>
         </button>
-        <button class="tab-btn" onclick="navigate('growth')">
-          <span>🦖</span>Dino
+        <button class="tab-btn tab-explore" onclick="navigate('growth')">
+          <div class="tab-icon-box">🪐</div>
+          <span>Khám phá</span>
         </button>
-        <button class="tab-btn" onclick="navigate('profile')">
-          <span>😊</span>Hồ sơ
+        <button class="tab-btn tab-profile" onclick="navigate('profile')">
+          <div class="tab-icon-box">😊</div>
+          <span>Hồ sơ</span>
         </button>
       </div>
 
@@ -1815,9 +1840,9 @@ const htmlTemplate = `<!doctype html>
               </div>
             </div>
 
-            <!-- Thẻ "Tiếp tục học / Học ngay" chuẩn giao diện hình ảnh -->
-            <div class="dino-card" style="position:relative; overflow:hidden; border:2.5px solid #8fe0a2; box-shadow:0 6px 18px rgba(35,148,70,0.18); border-radius:24px; padding:16px; margin:0 0 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; min-height:165px; box-sizing:border-box; background:${bannerHocNgayDataUrl ? `url('${bannerHocNgayDataUrl}') center / cover no-repeat,` : ''} #eafae8;">
-              <div style="position:relative; z-index:2; max-width:62%; display:flex; flex-direction:column; justify-content:center;">
+            <!-- Thẻ "Tiếp tục học / Học ngay" chuẩn giao diện hình ảnh với Dino to nổi bật -->
+            <div class="dino-card" style="position:relative; overflow:hidden; border:2.5px solid #8fe0a2; box-shadow:0 6px 18px rgba(35,148,70,0.18); border-radius:24px; padding:16px 14px 14px 16px; margin:0 0 16px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; min-height:172px; box-sizing:border-box; background:${bannerHocNgayDataUrl ? `url('${bannerHocNgayDataUrl}') center / cover no-repeat,` : ''} #eafae8;">
+              <div style="position:relative; z-index:2; max-width:58%; display:flex; flex-direction:column; justify-content:center;">
                 <div style="display:flex; align-items:center; gap:6px; margin-bottom:6px;">
                   <span style="background:#28a745; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(40,167,69,0.3); line-height:1.2;">Tiếp tục học</span>
                   <span style="background:#8b5cf6; color:#fff; font-size:10px; font-weight:900; padding:3px 8px; border-radius:10px; box-shadow:0 2px 4px rgba(139,92,246,0.3); line-height:1.2;">⭐ Bài \${currentLesson.lessonId}/8</span>
@@ -1826,8 +1851,8 @@ const htmlTemplate = `<!doctype html>
                 <p style="margin:0 0 6px; font-size:13px; font-weight:700; color:#236138; text-shadow:0 1px 2px rgba(255,255,255,0.9); line-height:1.2;">\${currentLesson.title}</p>
                 <button class="dino-btn" style="margin-top:4px; margin-bottom:0; background:linear-gradient(180deg, #ffae11, #f59e0b); color:#fff; padding:7px 18px; font-size:14px; width:auto; align-self:flex-start; box-shadow:0 3px 0 #d48a0d; font-weight:900; border-radius:20px; line-height:1.2;" onclick="navigate('activity_hub', {topicId:'\${currentTopic.id}', lessonId:\${currentLesson.lessonId}})">Học ngay ▶</button>
               </div>
-              <div style="position:relative; z-index:2; flex-shrink:0; display:flex; align-items:center; justify-content:center; width:110px;">
-                \${getDinoImg('welcome', 'small')}
+              <div style="position:relative; z-index:2; flex-shrink:0; display:flex; align-items:flex-end; justify-content:center; width:135px; height:155px; margin-right:-10px; margin-bottom:-10px;">
+                <img src="\${DINO_ASSETS['welcome']}" class="mascot-img" style="height:152px; max-width:142px; object-fit:contain; filter:drop-shadow(0 10px 16px rgba(35,120,60,0.35)); transform:scale(1.1); transform-origin:bottom center;" alt="Dino">
               </div>
             </div>
 

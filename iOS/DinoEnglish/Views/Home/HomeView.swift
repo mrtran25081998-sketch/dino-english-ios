@@ -216,9 +216,8 @@ public struct HomeView: View {
                                         .padding(.top, 4)
                                     }
                                     
-                                    Spacer()
-                                    
-                                    DinoMascotView(.welcome, height: 115)
+                                    DinoMascotView(.welcome, height: 145)
+                                        .offset(y: 4)
                                 }
                                 .padding(16)
                             }

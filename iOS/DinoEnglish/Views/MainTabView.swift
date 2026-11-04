@@ -20,7 +20,7 @@ public struct MainTabView: View {
                 TopicListView()
             }
             .tabItem {
-                Label("Chủ đề", systemImage: "book.fill")
+                Label("Học", systemImage: "book.fill")
             }
             .tag(1)
             
@@ -28,7 +28,7 @@ public struct MainTabView: View {
                 DinoGrowthView()
             }
             .tabItem {
-                Label("Dino", systemImage: "star.fill")
+                Label("Khám phá", systemImage: "sparkles")
             }
             .tag(2)
             
