@@ -14,36 +14,7 @@ public struct LessonListView: View {
             DinoBackground()
             
             ScrollView(showsIndicators: false) {
-                VStack(spacing: 14) {
-                    // Header thông tin chủ đề
-                    Dino3DCard(backgroundColor: topic.themeColor.opacity(0.12)) {
-                        HStack(spacing: 16) {
-                            ZStack {
-                                Circle()
-                                    .fill(topic.themeColor.opacity(0.25))
-                                    .frame(width: 60, height: 60)
-                                Image(systemName: topic.icon)
-                                    .font(.system(size: 30, weight: .bold))
-                                    .foregroundStyle(topic.themeColor)
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text(topic.nameVi)
-                                    .font(.system(size: 22, weight: .black, design: .rounded))
-                                    .foregroundStyle(topic.themeColor)
-                                
-                                Text(topic.description)
-                                    .font(.system(size: 13, weight: .medium, design: .rounded))
-                                    .foregroundStyle(DinoStyle.textMuted)
-                                
-                                Text("Tổng cộng: 10 bài học · 100 từ vựng")
-                                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                                    .foregroundStyle(DinoStyle.textDark)
-                            }
-                            Spacer()
-                        }
-                    }
-                    
+                VStack(spacing: 12) {
                     // Danh sách 10 bài học
                     VStack(spacing: 12) {
                         ForEach(topic.lessons) { lesson in

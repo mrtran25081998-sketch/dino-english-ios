@@ -1938,11 +1938,7 @@ const htmlTemplate = `<!doctype html>
               <h2 style="margin:0; font-size:20px; color:\${t.colorHex};">\${t.nameVi}</h2>
               <span class="badge-star">⭐ \${state.stars}</span>
             </div>
-            <div class="dino-card" style="background:\${t.colorHex}15; border-color:\${t.colorHex}44; margin-top:4px;">
-              <h3 style="margin:0 0 4px; color:\${t.colorHex}; font-size:18px;">\${t.nameVi} (\${t.nameEn})</h3>
-              <p style="margin:0; font-size:13px; color:#5b7c6b;">\${t.description}</p>
-            </div>
-            <h4 style="margin:14px 0 8px; color:#1e6a39;">10 Bài Học Trong Chủ Đề:</h4>
+            <h4 style="margin:10px 0 10px; color:#1e6a39; font-size:16px;">10 Bài Học Trong Chủ Đề:</h4>
             \${t.lessons.map(l => {
               const isUnlocked = l.lessonId === 1 || state.completedLessons.includes(\`\${t.id}_l\${l.lessonId-1}\`);
               const isDone = state.completedLessons.includes(\`\${t.id}_l\${l.lessonId}\`);
